@@ -11,7 +11,7 @@ public class ConsoleUI {
 			System.out.println("-----------------");
 			System.out.println(game.currentPlayerName());
 			System.out.println("Position : " + game.currentPlayerPosition());
-			System.out.println("Please hit enter to roll a die.");
+			System.out.println("Please hit enter to roll a die :D");
 
 			scan.nextLine();
 
