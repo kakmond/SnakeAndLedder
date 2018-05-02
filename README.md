@@ -1,6 +1,5 @@
 # Snake and Ladder game 
 
-in class material
-
-Software specification and Design pattern.
-
+## Member
+- Wongsathorn Panichkurkul 5910545817
+- Sathira Kittisukmongkol 5910545868
