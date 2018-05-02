@@ -21,10 +21,11 @@ public class Board {
 		int pos = getPiecePosition(piece);
 		squares[pos].removePiece(piece);
 		int next_pos = pos + steps;
-		addPiece(piece, next_pos);
-		if (next_pos == SIZE - 1) {
-			squares[next_pos].setGoal(true);
-		}
+		if (next_pos >= SIZE - 1) {
+			squares[SIZE - 1].setGoal(true);
+			addPiece(piece, SIZE - 1);
+		} else
+			addPiece(piece, next_pos);
 	}
 
 	public int getPiecePosition(Piece piece) {
@@ -38,4 +39,5 @@ public class Board {
 	public boolean pieceIsAtGoal(Piece piece) {
 		return squares[getPiecePosition(piece)].isGoal();
 	}
+
 }
