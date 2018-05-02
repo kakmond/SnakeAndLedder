@@ -5,13 +5,16 @@ import java.util.List;
 
 public class Square {
 
-	private List<Piece> pieces;
+	private List<Element> pieces;
+	private int x;
+	private int y;
 	private int number;
 	private boolean goal;
 
-	public Square(int number) {
-		this.number = number;
-		pieces = new ArrayList<Piece>();
+	public Square(int x, int y) {
+		this.x = x;
+		this.y = y;
+		pieces = new ArrayList<Element>();
 		goal = false;
 	}
 
@@ -19,15 +22,15 @@ public class Square {
 		this.goal = goal;
 	}
 
-	public void addPiece(Piece piece) {
+	public void addPiece(Element piece) {
 		pieces.add(piece);
 	}
 
-	public void removePiece(Piece piece) {
+	public void removePiece(Element piece) {
 		pieces.remove(piece);
 	}
 
-	public boolean hasPiece(Piece piece) {
+	public boolean hasPlayer(Player piece) {
 		return pieces.contains(piece);
 	}
 
@@ -35,7 +38,15 @@ public class Square {
 		return goal;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	public int getNumber() {
-		return number;
+		return this.number;
 	}
 }

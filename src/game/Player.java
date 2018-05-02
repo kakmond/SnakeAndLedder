@@ -1,12 +1,11 @@
 package game;
 
-public class Player {
+public class Player implements Element {
+
 	private String name;
-	private Piece piece;
 
 	public Player(String name) {
 		this.name = name;
-		piece = new Piece();
 	}
 
 	public int roll(Die die) {
@@ -19,10 +18,11 @@ public class Player {
 	}
 
 	public void movePiece(Board board, int steps) {
-		board.movePiece(piece, steps);
+		board.movePiece(this, steps);
 	}
 
-	public Piece getPiece() {
-		return this.piece;
+	@Override
+	public void performAction() {
+		// Do nothing.
 	}
 }
