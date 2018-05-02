@@ -1,26 +1,43 @@
 package gameUI;
 
 import javax.swing.*;
+
+import game.Game;
+
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
 
 public class SnakeUI extends JFrame implements Observer {
 
+	private Game game;
+	private Renderer renderer;
+
 	public SnakeUI() {
+		// this.game = game;
+		// this.game.setPlayer(4); // set เป็น 4 player ไปก่อน
+
+		JButton b = new JButton("Click Here");
+		b.setPreferredSize(new Dimension(40, 0));
+		b.setBounds(50, 100, 95, 30);
+		add(b, BorderLayout.WEST);
 
 		setLayout(new BorderLayout());
 		setTitle("Snakes and Ladders");
-		/* Set board */
-		JLabel background = new JLabel(new ImageIcon("src\\resources\\board.jpg"));
-		add(background, BorderLayout.CENTER);
+		renderer = new Renderer();
+		add(renderer, BorderLayout.CENTER);
+		addMouseListener(new MouseEvent());
 
 		setSize(1200, 700);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
+
 	}
 
 	public static void main(String args[]) {
-		new GameUI();
+		// new SnakeUI(new Game());
+		new SnakeUI();
 	}
 
 	@Override
@@ -30,12 +47,62 @@ public class SnakeUI extends JFrame implements Observer {
 
 	class Renderer extends JPanel {
 
-		private int mapSize;
+		private int blockWidth = 20;
+		// private int mapSize;
 
 		public Renderer() {
-			setPreferredSize(new Dimension(mapSize, mapSize));
+			JLabel background = new JLabel(new ImageIcon("src\\resources\\board.jpg"));
+			add(background);
 			setDoubleBuffered(true);
 		}
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			paintPlayer(g);
+		}
+
+		private void paintPlayer(Graphics g) {
+			g.setColor(Color.BLACK);
+			g.fillOval(295, 565, 25, 25);
+			g.setColor(Color.white);
+			g.fillOval(295, 565, 25, 25);
+		}
+	}
+
+	/** A Class for determine coordinate */
+	class MouseEvent implements MouseListener {
+
+		@Override
+		public void mouseClicked(java.awt.event.MouseEvent e) {
+			System.out.println("X: " + e.getX() + " Y:" + e.getY());
+
+		}
+
+		@Override
+		public void mousePressed(java.awt.event.MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(java.awt.event.MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(java.awt.event.MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(java.awt.event.MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 }

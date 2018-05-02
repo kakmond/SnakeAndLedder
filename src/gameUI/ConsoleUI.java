@@ -11,7 +11,8 @@ public class ConsoleUI {
 	public void start() {
 		System.out.print("How many player? ");
 		int numPlayer = scan.nextInt();
-		Game game = new Game(numPlayer);
+		Game game = new Game();
+		game.setPlayer(numPlayer);
 		while (!game.isEnd()) {
 			System.out.println("-----------------");
 			System.out.println(game.currentPlayerName());

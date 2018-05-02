@@ -1,6 +1,8 @@
 package game;
 
-public class Game {
+import java.util.Observable;
+
+public class Game extends Observable {
 
 	private Player[] players;
 	private Die die;
@@ -8,19 +10,19 @@ public class Game {
 	private boolean ended;
 	private int currentPlayerIndex;
 
-	public Game(int num) {
+	public Game() {
 		ended = false;
 		die = new Die();
 		board = new Board();
+		// TODO: สร้าง snake และ ladder และในคลาสนั้นจะมีจุดสิ้นสุด และปลายสุด
 		currentPlayerIndex = 0;
-		setPlayer(num);
 	}
 
 	public void setPlayer(int num) {
 		players = new Player[num];
 		for (int i = 0; i < num; i++) {
 			players[i] = new Player((i + 1) + "");
-			board.addPiece(players[i].getPiece(), 0);
+			board.addPiece(players[i], 0);
 		}
 	}
 
@@ -41,7 +43,7 @@ public class Game {
 	}
 
 	public void currentPlayerMove(int steps) {
-		this.board.movePiece(currentPlayer().getPiece(), steps);
+		this.board.movePiece(currentPlayer(), steps);
 	}
 
 	public String currentPlayerName() {
@@ -49,7 +51,7 @@ public class Game {
 	}
 
 	public int currentPlayerPosition() {
-		return board.getPiecePosition(currentPlayer().getPiece());
+		return board.getPlayerPosition(currentPlayer());
 	}
 
 	public int currentPlayerRollDice() {
@@ -57,6 +59,6 @@ public class Game {
 	}
 
 	public boolean currentPlayerWin() {
-		return board.pieceIsAtGoal(currentPlayer().getPiece());
+		return board.playerIsAtGoal(currentPlayer());
 	}
 }
