@@ -1,16 +1,13 @@
 package gameUI;
 
 import javax.swing.*;
-
 import java.awt.*;
-
-import java.awt.event.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameUI extends JFrame implements Observer {
+public class SnakeUI extends JFrame implements Observer {
 
-	public GameUI() {
+	public SnakeUI() {
 
 		setLayout(new BorderLayout());
 		setTitle("Snakes and Ladders");
