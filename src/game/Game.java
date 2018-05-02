@@ -16,8 +16,8 @@ public class Game {
 		die = new Die();
 		board = new Board();
 		currentPlayerIndex = 0;
-		
-		for(Player player : players) {
+
+		for (Player player : players) {
 			board.addPiece(player.getPiece(), 0);
 		}
 	}
