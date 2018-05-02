@@ -8,17 +8,19 @@ public class Game {
 	private boolean ended;
 	private int currentPlayerIndex;
 
-	public Game() {
-		players = new Player[2];
-		players[0] = new Player("P1");
-		players[1] = new Player("P2");
+	public Game(int num) {
 		ended = false;
 		die = new Die();
 		board = new Board();
 		currentPlayerIndex = 0;
+		setPlayer(num);
+	}
 
-		for (Player player : players) {
-			board.addPiece(player.getPiece(), 0);
+	public void setPlayer(int num) {
+		players = new Player[num];
+		for (int i = 0; i < num; i++) {
+			players[i] = new Player((i + 1) + "");
+			board.addPiece(players[i].getPiece(), 0);
 		}
 	}
 

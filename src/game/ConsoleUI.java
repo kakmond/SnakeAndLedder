@@ -6,12 +6,15 @@ public class ConsoleUI {
 
 	private Scanner scan = new Scanner(System.in);
 
-	public void start(Game game) {
+	public void start() {
+		System.out.print("How many player? ");
+		int numPlayer = scan.nextInt();
+		Game game = new Game(numPlayer);
 		while (!game.isEnd()) {
 			System.out.println("-----------------");
 			System.out.println(game.currentPlayerName());
 			System.out.println("Position : " + game.currentPlayerPosition());
-			System.out.println("Please hit enter to roll a die.");
+			System.out.println("Please hit enter to roll a die :D");
 
 			scan.nextLine();
 
@@ -28,7 +31,4 @@ public class ConsoleUI {
 		}
 	}
 
-	public static void main(String[] args) {
-		new ConsoleUI().start(new Game());
-	}
 }
