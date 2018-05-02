@@ -14,7 +14,8 @@ public class Board {
 	}
 
 	public void addPiece(Piece piece, int position) {
-		squares[position].addPiece(piece);
+		if (position < SIZE)
+			squares[position].addPiece(piece);
 	}
 
 	public void movePiece(Piece piece, int steps) {
@@ -22,7 +23,7 @@ public class Board {
 		squares[pos].removePiece(piece);
 		int next_pos = pos + steps;
 		addPiece(piece, next_pos);
-		if (next_pos == SIZE - 1) {
+		if (next_pos >= SIZE - 1) {
 			squares[next_pos].setGoal(true);
 		}
 	}
