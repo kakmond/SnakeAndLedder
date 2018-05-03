@@ -10,9 +10,9 @@ public class Board {
 		squares = new Square[Board.SIZE];
 		// TODO: initialize squares ตาม x,y
 
-//		 for (int i = 0; i < squares.length; i++) {
-//		 squares[i] = new Square(i);
-//		 }
+		// for (int i = 0; i < squares.length; i++) {
+		// squares[i] = new Square(i);
+		// }
 	}
 
 	public void addPiece(Element piece, int position) {
