@@ -11,7 +11,8 @@ public class Square {
 	private int number;
 	private boolean goal;
 
-	public Square(int x, int y) {
+	public Square(int position, int x, int y) {
+		this.number = position;
 		this.x = x;
 		this.y = y;
 		pieces = new ArrayList<Element>();

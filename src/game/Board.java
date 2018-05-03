@@ -2,17 +2,24 @@ package game;
 
 public class Board {
 
-	public static final int SIZE = 64;
+	public static final int SIZE = 10 * 10;
 
 	private Square[] squares;
 
 	public Board() {
 		squares = new Square[Board.SIZE];
-		// TODO: initialize squares ตาม x,y
-
-//		 for (int i = 0; i < squares.length; i++) {
-//		 squares[i] = new Square(i);
-//		 }
+		// TODO: initialize squares x,y and position
+		//
+		// 329,630 388,630 ,447,630
+		//
+		// int startX = 329;
+		// int startY = 630;
+		// for (int i = 0; i < squares.length; i++) {
+		// if(i%10==0){
+		// squares[i] = new Square(i, startX, startY);
+		// startX = startX + 59;
+		// }
+		// }
 	}
 
 	public void addPiece(Element piece, int position) {
