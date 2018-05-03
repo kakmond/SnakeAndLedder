@@ -1,6 +1,6 @@
 package game;
 
-public class Player implements Element {
+public class Player {
 
 	private String name;
 
@@ -17,12 +17,7 @@ public class Player implements Element {
 		return this.name;
 	}
 
-	public void movePiece(Board board, int steps) {
-		board.movePiece(this, steps);
-	}
-
-	@Override
-	public void performAction() {
-		// Do nothing.
-	}
+	// public void movePlayerByStep(Board board, int steps) {
+	// board.movePlayerByStep(this, steps);
+	// }
 }

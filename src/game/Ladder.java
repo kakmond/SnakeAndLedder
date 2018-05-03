@@ -2,29 +2,25 @@ package game;
 
 public class Ladder implements Element {
 
-	private Square topSq;
-	private Square bottomSq;
-	
-	public Ladder() {
-		
+	private Square top;
+	private Square bottom;
+
+	public Ladder(Square top, Square bottom) {
+		this.top = top;
+		this.bottom = bottom;
 	}
-	
-	public Ladder( Square topSq , Square bottomSq ) {
-		this.topSq = topSq;
-		this.bottomSq = bottomSq;
+
+	public Square getBottom() {
+		return bottom;
 	}
-	
-	public Square getTopSq() {
-		return topSq;
+
+	public Square getTop() {
+		return top;
 	}
-	
-	public Square getBottomSq() {
-		return bottomSq;
-	}
-	
+
 	@Override
-	public void performAction() {
-		// If player stops in bottomSq , He will move to topSq.
+	public int desinationPosition() {
+		return getTop().getNumber();
 	}
 
 }

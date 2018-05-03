@@ -29,53 +29,62 @@ public class Board {
 			countLeft = countLeft + 10;
 		}
 
-		// Set Snake position
-		Snake s50 = new Snake(squares[49], squares[4]);
-		Snake s43 = new Snake(squares[42], squares[16]);
-		Snake s56 = new Snake(squares[55], squares[7]);
-		Snake s73 = new Snake(squares[72], squares[15]);
-		Snake s87 = new Snake(squares[86], squares[49]);
-		Snake s84 = new Snake(squares[83], squares[57]);
-		Snake s98 = new Snake(squares[97], squares[40]);
+		// Set and add Snake position
+		Snake[] snakes = { new Snake(squares[49], squares[4]), new Snake(squares[42], squares[16]),
+				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[15]),
+				new Snake(squares[86], squares[49]), new Snake(squares[83], squares[57]),
+				new Snake(squares[97], squares[40]) };
+		for (Snake s : snakes)
+			addElement(s, s.getHead().getNumber());
 
-		// Set Ladder position
-		Ladder l23 = new Ladder(squares[22], squares[1]);
-		Ladder l59 = new Ladder(squares[58], squares[19]);
-		Ladder l45 = new Ladder(squares[44], squares[6]);
-		Ladder l96 = new Ladder(squares[95], squares[56]);
-		Ladder l72 = new Ladder(squares[71], squares[52]);
-		Ladder l92 = new Ladder(squares[91], squares[70]);
+		// Set and add Ladder position
+		Ladder[] ladders = { new Ladder(squares[22], squares[1]), new Ladder(squares[58], squares[19]),
+				new Ladder(squares[44], squares[6]), new Ladder(squares[95], squares[56]),
+				new Ladder(squares[71], squares[52]), new Ladder(squares[91], squares[70]) };
+		for (Ladder l : ladders)
+			addElement(l, l.getBottom().getNumber());
 
 	}
 
-	public void addPiece(Player piece, int position) {
-		squares[position].addPiece(piece);
+	public void addPlayer(Player player, int position) {
+		squares[position].addPlayer(player);
+
 	}
 
-	public void movePiece(Player piece, int steps) {
+	public void addElement(Element piece, int position) {
+		squares[position].addElement(piece);
+	}
+
+	public void movePlayerByElement(Player piece, int dest) {
 		int pos = getPlayerPosition(piece);
-		System.out.println("FOUND AT : " + pos);
-		System.out.println(squares[0].getNumber());
+		squares[pos].removePiece(piece);
+		addPlayer(piece, dest);
+	}
+
+	public void movePlayerByStep(Player piece, int steps) {
+		int pos = getPlayerPosition(piece);
 		squares[pos].removePiece(piece);
 		int next_pos = pos + steps;
 		if (next_pos >= SIZE - 1) {
 			squares[SIZE - 1].setGoal(true);
-			addPiece(piece, SIZE - 1);
+			addPlayer(piece, SIZE - 1);
 		} else
-			addPiece(piece, next_pos);
+			addPlayer(piece, next_pos);
 	}
 
 	public int getPlayerPosition(Player piece) {
-		for (Square s : squares) {
-			if (s.hasPlayer(piece)) {
+		for (Square s : squares)
+			if (s.hasPlayer(piece))
 				return s.getNumber();
-			}
-		}
 		return -1;
 	}
 
 	public boolean playerIsAtGoal(Player piece) {
 		return squares[getPlayerPosition(piece)].isGoal();
+	}
+
+	public Square getPlayerSquare(Player player) {
+		return squares[getPlayerPosition(player)];
 	}
 
 	public int getPlayerPostionX(Player player) {

@@ -2,29 +2,25 @@ package game;
 
 public class Snake implements Element {
 
-	private Square headSq;
-	private Square tailSq;
-	
-	public Snake() {
-		
+	private Square tail;
+	private Square head;
+
+	public Snake(Square head, Square tail) {
+		this.head = head;
+		this.tail = tail;
 	}
-	
-	public Snake( Square headSq , Square tailSq ) {
-		this.headSq = headSq;
-		this.tailSq = tailSq;
+
+	public Square getHead() {
+		return head;
 	}
-	
-	public Square getHeadSq() {
-		return headSq;
+
+	public Square getTail() {
+		return tail;
 	}
-	
-	public Square getTailSq() {
-		return tailSq;
-	}
-	
+
 	@Override
-	public void performAction() {
-		// If player stops in headSq , He will move to tailSq.
+	public int desinationPosition() {
+		return getTail().getNumber();
 	}
 
 }

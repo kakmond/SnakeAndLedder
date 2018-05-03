@@ -2,6 +2,6 @@ package game;
 
 public interface Element {
 
-	public void performAction();
+	public int desinationPosition();
 
 }

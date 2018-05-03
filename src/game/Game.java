@@ -10,34 +10,41 @@ public class Game extends Observable {
 	private boolean ended;
 	private int currentPlayerIndex;
 
-	private Thread gameThread = new Thread() {
-		@Override
-		public void run() {
-			super.run();
-			while (!ended) {
-				// singleGameLoop();
-			}
-		}
-	};
-
-	public void start() {
-		ended = false;
-		gameThread.start();
-	}
+	// private Thread gameThread = new Thread() {
+	// @Override
+	// public void run() {
+	// super.run();
+	// while (!ended) {
+	// // singleGameLoop();
+	// }
+	// }
+	// };
+	//
+	// public void start() {
+	// ended = false;
+	// gameThread.start();
+	// }
 
 	public Game() {
 		ended = false;
 		die = new Die();
 		board = new Board();
-		// TODO: สร้าง snake และ ladder และในคลาสนั้นจะมีจุดสิ้นสุด และปลายสุด
 		currentPlayerIndex = 0;
+	}
+
+	private void gameLogic() {
+		if (getCurrentPlayerSquare().isElement())
+			board.movePlayerByElement(currentPlayer(), getCurrentPlayerSquare().getElement().desinationPosition());
+		switchPlayer();
+		super.setChanged();
+		super.notifyObservers();
 	}
 
 	public void setPlayer(int num) {
 		players = new Player[num];
 		for (int i = 0; i < num; i++) {
 			players[i] = new Player((i + 1) + "");
-			board.addPiece(players[i], 0);
+			board.addPlayer(players[i], 0);
 			setChanged();
 			notifyObservers();
 		}
@@ -60,9 +67,8 @@ public class Game extends Observable {
 	}
 
 	public void currentPlayerMove(int steps) {
-		this.board.movePiece(currentPlayer(), steps);
-		super.setChanged();
-		super.notifyObservers();
+		this.board.movePlayerByStep(currentPlayer(), steps);
+		this.gameLogic();
 	}
 
 	public String currentPlayerName() {
@@ -79,6 +85,10 @@ public class Game extends Observable {
 
 	public boolean currentPlayerWin() {
 		return board.playerIsAtGoal(currentPlayer());
+	}
+
+	public Square getCurrentPlayerSquare() {
+		return board.getPlayerSquare(currentPlayer());
 	}
 
 	public int getCurrentPlayerPostionX() {
