@@ -16,7 +16,7 @@ public class SnakeUI extends JFrame implements Observer {
 
 	public SnakeUI() {
 		// this.game = game;
-		// this.game.setPlayer(4); // set à»ç¹ 4 player ä»¡èÍ¹
+		// this.game.setPlayer(4); // set ï¿½ï¿½ 4 player ä»¡ï¿½Í¹
 
 		JButton b = new JButton("Click Here");
 		b.setPreferredSize(new Dimension(40, 0));
@@ -51,7 +51,7 @@ public class SnakeUI extends JFrame implements Observer {
 		// private int mapSize;
 
 		public Renderer() {
-			JLabel background = new JLabel(new ImageIcon("src\\resources\\board.jpg"));
+			JLabel background = new JLabel(new ImageIcon("src//resources//board.jpg"));
 			add(background);
 			setDoubleBuffered(true);
 		}
