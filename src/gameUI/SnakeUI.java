@@ -69,6 +69,7 @@ public class SnakeUI extends JFrame implements Observer {
 			g.setColor(Color.BLUE);
 			g.fillOval(295, 565, 25, 25);
 		}
+		
 	}
 
 	/** A Class for determine coordinate */

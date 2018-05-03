@@ -31,6 +31,23 @@ public class Board {
 			countLeft = countLeft + 10;
 		}
 
+		// Set Snake position
+		Snake s50 = new Snake(squares[49], squares[4]);
+		Snake s43 = new Snake(squares[42], squares[16]);
+		Snake s56 = new Snake(squares[55], squares[7]);
+		Snake s73 = new Snake(squares[72], squares[15]);
+		Snake s87 = new Snake(squares[86], squares[49]);
+		Snake s84 = new Snake(squares[83], squares[57]);
+		Snake s98 = new Snake(squares[97], squares[40]);
+
+		// Set Ladder position
+		Ladder l23 = new Ladder(squares[22], squares[1]);
+		Ladder l59 = new Ladder(squares[58], squares[19]);
+		Ladder l45 = new Ladder(squares[44], squares[6]);
+		Ladder l96 = new Ladder(squares[95], squares[56]);
+		Ladder l72 = new Ladder(squares[71], squares[52]);
+		Ladder l92 = new Ladder(squares[91], squares[70]);
+
 	}
 
 	public void addPiece(Player piece, int position) {
