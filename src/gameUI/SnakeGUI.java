@@ -80,9 +80,6 @@ public class SnakeGUI extends JFrame implements Observer {
 
 	class Renderer extends JPanel {
 
-		private int blockWidth = 20;
-		// private int mapSize;
-
 		private JLabel imageDice = new JLabel("");
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
 		// TODO: define all side of dice.
@@ -132,7 +129,6 @@ public class SnakeGUI extends JFrame implements Observer {
 			g.setColor(Color.BLACK);
 			int x = game.getCurrentPlayerPostionX();
 			int y = game.getCurrentPlayerPostionY();
-			System.out.println("Get data: x= " + x + " Y= " + y);
 			g.fillOval(x, y, 25, 25);
 			g.setColor(Color.BLUE);
 			g.fillOval(x, y, 25, 25);
