@@ -83,30 +83,40 @@ public class SnakeGUI extends JFrame implements Observer {
 		private int blockWidth = 20;
 		// private int mapSize;
 
+		private JLabel imageDice = new JLabel("");
+		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
+		// TODO: define all side of dice.
+
 		public Renderer() {
 
+			super.setLayout(null);
 			JButton btnNewButton = new JButton("Roll");
+
 			btnNewButton.setPreferredSize(new Dimension(40, 0));
 			btnNewButton.setBounds(940, 506, 135, 67);
+			imageDice.setBounds(940, 299, 135, 194);
 
+			/** roll the dice */
+			// TODO: change the image icon follow by player rolling.
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
 					game.currentPlayerMove(face);
+					System.out.println(face);
+					// TODO: change the side of dice for all cases.
+					if (face == 1) {
+						imageDice.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg")));
+					}
 				}
 			});
+
+			add(imageDice);
 			add(btnNewButton);
 
-			super.setLayout(null);
-			JLabel lblNewLabel = new JLabel("");
-			lblNewLabel.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/board.jpg")));
-			lblNewLabel.setBounds(251, 0, 644, 647);
-			super.add(lblNewLabel);
-
-			JLabel label = new JLabel("");
-			label.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg")));
-			label.setBounds(940, 299, 135, 194);
-			add(label);
+			JLabel bg = new JLabel("");
+			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/board.jpg")));
+			bg.setBounds(251, 0, 644, 647);
+			add(bg);
 
 			setDoubleBuffered(true);
 		}
@@ -126,15 +136,6 @@ public class SnakeGUI extends JFrame implements Observer {
 			g.fillOval(x, y, 25, 25);
 			g.setColor(Color.BLUE);
 			g.fillOval(x, y, 25, 25);
-
-			// g.setColor(Color.BLACK);
-			// int x = 283 + 60*9;
-			// int y = 586 - 60*9;
-			// int x = 283 + 60 *0;
-			// int y = (586 - 60) - (60 * 8);
-			// g.fillOval(x, y, 25, 25);
-			// g.setColor(Color.BLUE);
-			// g.fillOval(x, y, 25, 25);
 		}
 	}
 
