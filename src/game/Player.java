@@ -17,7 +17,4 @@ public class Player {
 		return this.name;
 	}
 
-	// public void movePlayerByStep(Board board, int steps) {
-	// board.movePlayerByStep(this, steps);
-	// }
 }

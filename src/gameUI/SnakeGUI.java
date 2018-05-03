@@ -87,7 +87,6 @@ public class SnakeGUI extends JFrame implements Observer {
 		private ImageIcon dice4 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice4.jpeg"));
 		private ImageIcon dice5 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice5.jpeg"));
 		private ImageIcon dice6 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice6.jpeg"));
-		// TODO: define all side of dice.
 
 		public Renderer() {
 
@@ -99,13 +98,11 @@ public class SnakeGUI extends JFrame implements Observer {
 			imageDice.setBounds(940, 299, 135, 194);
 
 			/** roll the dice */
-			// TODO: change the image icon follow by player rolling.
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
 					game.currentPlayerMove(face);
 					System.out.println(face);
-					// TODO: change the side of dice for all cases.
 					if (face == 1) {
 						imageDice.setIcon(dice1);
 					}
@@ -165,12 +162,12 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		@Override
 		public void mousePressed(java.awt.event.MouseEvent e) {
-			
+
 		}
 
 		@Override
 		public void mouseReleased(java.awt.event.MouseEvent e) {
-			
+
 		}
 
 		@Override
@@ -180,7 +177,7 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		@Override
 		public void mouseExited(java.awt.event.MouseEvent e) {
-			
+
 		}
 
 	}
