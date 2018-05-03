@@ -23,11 +23,15 @@ public class Square {
 		this.goal = goal;
 	}
 
-	public void addPiece(Element piece) {
+	public void addPiece(Player piece) {
 		pieces.add(piece);
 	}
 
-	public void removePiece(Element piece) {
+	public void removePiece(Player piece) {
+		if (pieces.contains(piece))
+			System.out.println("CONTAIN!");
+		else
+			System.out.println("NOOO");
 		pieces.remove(piece);
 	}
 

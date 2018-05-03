@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import game.Game;
 import gameUI.SnakeUI.MouseEvent;
 import gameUI.SnakeUI.Renderer;
 
@@ -26,6 +27,7 @@ import java.awt.event.ActionEvent;
 public class SnakeGUI extends JFrame implements Observer {
 
 	private Renderer renderer;
+	private Game game;
 
 	/**
 	 * Launch the application.
@@ -54,44 +56,29 @@ public class SnakeGUI extends JFrame implements Observer {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		super.setSize(1200, 700);
-
-		JButton btnNewButton = new JButton("Roll");
-		btnNewButton.setPreferredSize(new Dimension(40, 0));
-		btnNewButton.setBounds(940, 506, 135, 67);
-
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
-		// super.getContentPane().setLayout(null);
-
-		super.getContentPane().add(btnNewButton);
-
-		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg")));
-		label.setBounds(940, 299, 135, 194);
-		super.getContentPane().add(label);
-
-		// super.getContentPane().setLayout(new BorderLayout());
+		game = new Game();
+		game.addObserver(this);
 
 		renderer = new Renderer();
 
-		super.add(renderer);
+		add(renderer);
 
-		super.addMouseListener(new MouseEvent());
+		game.setPlayer(1);
+
+		addMouseListener(new MouseEvent());
 
 		super.setResizable(false);
 		super.setSize(1200, 700);
 		super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		renderer.requestFocus();
+
 		super.setVisible(true);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		System.out.println("CALL FROM OBSERVABLE");
+		renderer.repaint();
 	}
 
 	class Renderer extends JPanel {
@@ -100,6 +87,30 @@ public class SnakeGUI extends JFrame implements Observer {
 		// private int mapSize;
 
 		public Renderer() {
+
+			JButton btnNewButton = new JButton("Roll");
+			btnNewButton.setPreferredSize(new Dimension(40, 0));
+			btnNewButton.setBounds(940, 506, 135, 67);
+
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int face = game.currentPlayerRollDice();
+					game.currentPlayerMove(face);
+				}
+			});
+			add(btnNewButton);
+
+			super.setLayout(null);
+			JLabel lblNewLabel = new JLabel("");
+			lblNewLabel.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/board.jpg")));
+			lblNewLabel.setBounds(251, 0, 644, 647);
+			super.add(lblNewLabel);
+
+			JLabel label = new JLabel("");
+			label.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg")));
+			label.setBounds(940, 299, 135, 194);
+			add(label);
+
 			setDoubleBuffered(true);
 		}
 
@@ -111,16 +122,14 @@ public class SnakeGUI extends JFrame implements Observer {
 		}
 
 		private void paintPlayer(Graphics g) {
-			JLabel lblNewLabel = new JLabel("");
-			lblNewLabel.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/board.jpg")));
-			lblNewLabel.setBounds(251, 0, 644, 647);
-			super.add(lblNewLabel);
 
-			System.out.println("TEST");
 			g.setColor(Color.BLACK);
-			g.fillOval(295, 565, 25, 25);
+			int x = game.getCurrentPlayerPostionX();
+			int y = game.getCurrentPlayerPostionY();
+			System.out.println("Get data: x= " + x + " Y= " + y);
+			g.fillOval(x, y, 25, 25);
 			g.setColor(Color.BLUE);
-			g.fillOval(295, 565, 25, 25);
+			g.fillOval(x, y, 25, 25);
 		}
 	}
 

@@ -16,27 +16,16 @@ public class SnakeUI extends JFrame implements Observer {
 
 	public SnakeUI() {
 		// this.game = game;
-		// this.game.setPlayer(4); // set à»ç¹ 4 player ä»¡èÍ¹
+		// this.game.setPlayer(4); // set ï¿½ï¿½ 4 player ä»¡ï¿½Í¹
+
+		// JButton b = new JButton("Click Here");
+		// b.setPreferredSize(new Dimension(40, 0));
+		// b.setBounds(50, 100, 95, 30);
+		// add(b, BorderLayout.WEST);
+
+		game = new Game();
 
 		setLayout(new BorderLayout());
-
-		JPanel newPanel = new JPanel(new BorderLayout());
-		JLabel label = new JLabel("Enter username:");
-		JTextField userName = new JTextField(20);
-
-		JButton b = new JButton("Click Here");
-		b.setPreferredSize(new Dimension(40, 0));
-		b.setBounds(50, 100, 95, 30);
-
-		ImageIcon imageIcon = new ImageIcon("src//resources//dice1.gif");
-		JLabel picLabel = new JLabel();
-		picLabel.setIcon(imageIcon);
-
-		newPanel.add(b, BorderLayout.NORTH);
-		newPanel.add(picLabel, BorderLayout.SOUTH);
-
-		add(newPanel, BorderLayout.CENTER);
-
 		setTitle("Snakes and Ladders");
 		renderer = new Renderer();
 		add(renderer, BorderLayout.CENTER);

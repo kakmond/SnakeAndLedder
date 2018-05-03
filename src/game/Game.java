@@ -38,6 +38,8 @@ public class Game extends Observable {
 		for (int i = 0; i < num; i++) {
 			players[i] = new Player((i + 1) + "");
 			board.addPiece(players[i], 0);
+			setChanged();
+			notifyObservers();
 		}
 	}
 
@@ -59,6 +61,8 @@ public class Game extends Observable {
 
 	public void currentPlayerMove(int steps) {
 		this.board.movePiece(currentPlayer(), steps);
+		super.setChanged();
+		super.notifyObservers();
 	}
 
 	public String currentPlayerName() {
@@ -75,5 +79,13 @@ public class Game extends Observable {
 
 	public boolean currentPlayerWin() {
 		return board.playerIsAtGoal(currentPlayer());
+	}
+
+	public int getCurrentPlayerPostionX() {
+		return board.getPlayerPostionX(currentPlayer());
+	}
+
+	public int getCurrentPlayerPostionY() {
+		return board.getPlayerPostionY(currentPlayer());
 	}
 }
