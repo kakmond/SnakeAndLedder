@@ -10,12 +10,26 @@ public class Game extends Observable {
 	private boolean ended;
 	private int currentPlayerIndex;
 
+	private Thread gameThread = new Thread() {
+		@Override
+		public void run() {
+			super.run();
+			while (!ended) {
+				// singleGameLoop();
+			}
+		}
+	};
+
+	public void start() {
+		ended = false;
+		gameThread.start();
+	}
+
 	public Game() {
 		ended = false;
 		die = new Die();
 		board = new Board();
 		// TODO: สร้าง snake และ ladder และในคลาสนั้นจะมีจุดสิ้นสุด และปลายสุด
-		
 		currentPlayerIndex = 0;
 	}
 

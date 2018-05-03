@@ -18,27 +18,37 @@ public class SnakeUI extends JFrame implements Observer {
 		// this.game = game;
 		// this.game.setPlayer(4); // set เป็น 4 player ไปก่อน
 
-//		JButton b = new JButton("Click Here");
-//		b.setPreferredSize(new Dimension(40, 0));
-//		b.setBounds(50, 100, 95, 30);
-//		add(b, BorderLayout.WEST);
-
 		setLayout(new BorderLayout());
+
+		JPanel newPanel = new JPanel(new BorderLayout());
+		JLabel label = new JLabel("Enter username:");
+		JTextField userName = new JTextField(20);
+
+		JButton b = new JButton("Click Here");
+		b.setPreferredSize(new Dimension(40, 0));
+		b.setBounds(50, 100, 95, 30);
+
+		ImageIcon imageIcon = new ImageIcon("src//resources//dice1.gif");
+		JLabel picLabel = new JLabel();
+		picLabel.setIcon(imageIcon);
+
+		newPanel.add(b, BorderLayout.NORTH);
+		newPanel.add(picLabel, BorderLayout.SOUTH);
+
+		add(newPanel, BorderLayout.CENTER);
+
 		setTitle("Snakes and Ladders");
 		renderer = new Renderer();
 		add(renderer, BorderLayout.CENTER);
 		addMouseListener(new MouseEvent());
+
+		// setLayout(new FlowLayout());
 
 		setResizable(false);
 		setSize(1200, 700);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
 
-	}
-
-	public static void main(String args[]) {
-		// new SnakeUI(new Game());
-		new SnakeUI();
 	}
 
 	@Override
@@ -64,6 +74,7 @@ public class SnakeUI extends JFrame implements Observer {
 		}
 
 		private void paintPlayer(Graphics g) {
+			System.out.println("TEST");
 			g.setColor(Color.BLACK);
 			g.fillOval(295, 565, 25, 25);
 			g.setColor(Color.BLUE);

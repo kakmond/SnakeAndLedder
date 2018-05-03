@@ -9,8 +9,6 @@ public class Main {
 		// ConsoleUI csole = new ConsoleUI();
 		// csole.start();
 
-		// SnakeUI ui = new SnakeUI(new Game());
-
+		 SnakeUI ui = new SnakeUI();
 	}
-
 }
