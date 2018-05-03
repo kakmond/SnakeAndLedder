@@ -82,6 +82,11 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		private JLabel imageDice = new JLabel("");
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
+		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
+		private ImageIcon dice3 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice3.jpeg"));
+		private ImageIcon dice4 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice4.jpeg"));
+		private ImageIcon dice5 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice5.jpeg"));
+		private ImageIcon dice6 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice6.jpeg"));
 		// TODO: define all side of dice.
 
 		public Renderer() {
@@ -102,7 +107,22 @@ public class SnakeGUI extends JFrame implements Observer {
 					System.out.println(face);
 					// TODO: change the side of dice for all cases.
 					if (face == 1) {
-						imageDice.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg")));
+						imageDice.setIcon(dice1);
+					}
+					if (face == 2) {
+						imageDice.setIcon(dice2);
+					}
+					if (face == 3) {
+						imageDice.setIcon(dice3);
+					}
+					if (face == 4) {
+						imageDice.setIcon(dice4);
+					}
+					if (face == 5) {
+						imageDice.setIcon(dice5);
+					}
+					if (face == 6) {
+						imageDice.setIcon(dice6);
 					}
 				}
 			});
@@ -140,31 +160,27 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		@Override
 		public void mouseClicked(java.awt.event.MouseEvent e) {
-			System.out.println("X: " + e.getX() + " Y:" + e.getY());
 
 		}
 
 		@Override
 		public void mousePressed(java.awt.event.MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public void mouseReleased(java.awt.event.MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void mouseEntered(java.awt.event.MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void mouseExited(java.awt.event.MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			
 		}
 
 	}
