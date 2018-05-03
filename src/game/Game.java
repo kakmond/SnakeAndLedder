@@ -94,8 +94,20 @@ public class Game extends Observable {
 	public int getCurrentPlayerPostionX() {
 		return board.getPlayerPostionX(currentPlayer());
 	}
+	
+	public int getCurrentPlayerPostionX( Player p ) {
+		return board.getPlayerPostionX( p );
+	}
 
 	public int getCurrentPlayerPostionY() {
 		return board.getPlayerPostionY(currentPlayer());
+	}
+	
+	public int getCurrentPlayerPostionY( Player p ) {
+		return board.getPlayerPostionY( p );
+	}
+	
+	public Player[] getPlayers() {
+		return players;
 	}
 }

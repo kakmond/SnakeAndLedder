@@ -1,6 +1,7 @@
 package gameUI;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import game.Game;
+import game.Player;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -60,7 +62,7 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		add(renderer);
 
-		game.setPlayer(1);
+		game.setPlayer(4);
 
 		addMouseListener(new MouseEvent());
 
@@ -148,14 +150,25 @@ public class SnakeGUI extends JFrame implements Observer {
 		}
 
 		private void paintPlayer(Graphics g) {
-
-			g.setColor(Color.BLACK);
-			int x = game.getCurrentPlayerPostionX();
-			int y = game.getCurrentPlayerPostionY();
-			System.out.println("Get data: x= " + x + " Y= " + y);
-			g.fillOval(x, y, 25, 25);
-			g.setColor(Color.BLUE);
-			g.fillOval(x, y, 25, 25);
+			/* old code */
+//			Color playerColor = game.currentPlayer().getColor();
+//			int x = game.getCurrentPlayerPostionX();
+//			int y = game.getCurrentPlayerPostionY();
+//			System.out.println("Get data: x= " + x + " Y= " + y);
+//			g.fillOval(x, y, 25, 25);
+//			g.setColor( playerColor );
+//			g.fillOval(x, y, 25, 25);
+			
+			/* new code */
+			for( Player p  : game.getPlayers() ) {
+				Color playerColor = p.getColor();
+				int x = game.getCurrentPlayerPostionX( p );
+				int y = game.getCurrentPlayerPostionY( p );
+				g.setColor( playerColor );
+				g.fillOval(x, y, 25, 25);
+				g.setColor( Color.black );
+				g.drawString( p.getName() , x+9, y+15);
+			}
 		}
 	}
 
