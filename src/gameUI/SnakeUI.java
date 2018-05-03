@@ -23,10 +23,12 @@ public class SnakeUI extends JFrame implements Observer {
 //		b.setBounds(50, 100, 95, 30);
 //		add(b, BorderLayout.WEST);
 
-		setLayout(new BorderLayout());
-		setTitle("Snakes and Ladders");
+		game = new Game();
+		
+		setLayout( new BorderLayout() );
+		setTitle( "Snakes and Ladders" );
 		renderer = new Renderer();
-		add(renderer, BorderLayout.CENTER);
+		add( renderer , BorderLayout.CENTER );
 		addMouseListener(new MouseEvent());
 
 		setResizable(false);
@@ -34,11 +36,6 @@ public class SnakeUI extends JFrame implements Observer {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
 
-	}
-
-	public static void main(String args[]) {
-		// new SnakeUI(new Game());
-		new SnakeUI();
 	}
 
 	@Override

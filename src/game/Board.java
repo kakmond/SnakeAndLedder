@@ -20,6 +20,27 @@ public class Board {
 		// startX = startX + 59;
 		// }
 		// }
+		
+		// Create Square in right Direction
+		int countRight = 1;
+		for( int y = 630 ; y >= 77 ; y = y - ( 2 * 59 ) ) {
+			for( int x = 328 ; x <= 893 ; x = x + 58 ) {
+					squares[countRight-1] = new Square(countRight, x, y);
+					countRight++;
+			}
+			countRight = countRight + 10;
+		}
+		
+		// Create Square in left Direction
+		int countLeft = 11;
+		for( int y = 558 ; y >= 77 ; y = y - ( 2 * 59 ) ) {
+			for( int x = 850 ; x >= 303 ; x = x - 58 ) {
+					squares[countLeft-1] = new Square(countLeft, x, y);
+					countLeft++;
+			}
+			countLeft = countLeft + 10;
+		}
+		
 	}
 
 	public void addPiece(Element piece, int position) {
@@ -27,12 +48,12 @@ public class Board {
 	}
 
 	public void movePiece(Player piece, int steps) {
-		// TODO: ÊÃéÒ§áÅÐàÃÕÂ¡ method àªç¤ÇèÒª¹ÍÐäÃ«Ñ¡ÍÂèÒ§ËÃ×ÍäÁè
+		// TODO: ï¿½ï¿½ï¿½Ò§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¡ method ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ã«Ñ¡ï¿½ï¿½ï¿½Ò§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		int pos = getPlayerPosition(piece);
 		squares[pos].removePiece(piece);
 		int next_pos = pos + steps;
 		if (next_pos >= SIZE - 1) {
-			squares[SIZE - 1].setGoal(true); // set goal ·Õè x,y µÓáË¹è§ÊØ´·éÒÂ
+			squares[SIZE - 1].setGoal(true); // set goal ï¿½ï¿½ï¿½ x,y ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½
 			addPiece(piece, SIZE - 1);
 		} else
 			addPiece(piece, next_pos);
