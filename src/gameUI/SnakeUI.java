@@ -18,10 +18,10 @@ public class SnakeUI extends JFrame implements Observer {
 		// this.game = game;
 		// this.game.setPlayer(4); // set �� 4 player 仡�͹
 
-		JButton b = new JButton("Click Here");
-		b.setPreferredSize(new Dimension(40, 0));
-		b.setBounds(50, 100, 95, 30);
-		add(b, BorderLayout.WEST);
+//		JButton b = new JButton("Click Here");
+//		b.setPreferredSize(new Dimension(40, 0));
+//		b.setBounds(50, 100, 95, 30);
+//		add(b, BorderLayout.WEST);
 
 		setLayout(new BorderLayout());
 		setTitle("Snakes and Ladders");
@@ -29,6 +29,7 @@ public class SnakeUI extends JFrame implements Observer {
 		add(renderer, BorderLayout.CENTER);
 		addMouseListener(new MouseEvent());
 
+		setResizable(false);
 		setSize(1200, 700);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -65,7 +66,7 @@ public class SnakeUI extends JFrame implements Observer {
 		private void paintPlayer(Graphics g) {
 			g.setColor(Color.BLACK);
 			g.fillOval(295, 565, 25, 25);
-			g.setColor(Color.white);
+			g.setColor(Color.BLUE);
 			g.fillOval(295, 565, 25, 25);
 		}
 	}
@@ -88,7 +89,6 @@ public class SnakeUI extends JFrame implements Observer {
 		@Override
 		public void mouseReleased(java.awt.event.MouseEvent e) {
 			// TODO Auto-generated method stub
-
 		}
 
 		@Override

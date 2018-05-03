@@ -15,6 +15,7 @@ public class Game extends Observable {
 		die = new Die();
 		board = new Board();
 		// TODO: สร้าง snake และ ladder และในคลาสนั้นจะมีจุดสิ้นสุด และปลายสุด
+		
 		currentPlayerIndex = 0;
 	}
 
