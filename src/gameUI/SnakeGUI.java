@@ -2,6 +2,7 @@ package gameUI;
 
 import java.awt.EventQueue;
 import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -14,10 +15,12 @@ import javax.swing.WindowConstants;
 import game.Game;
 import game.Player;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Timer;
@@ -94,7 +97,12 @@ public class SnakeGUI extends JFrame {
 		private int destX;
 		private int destY;
 
+		private Image[] hero = new Image[4];
+		private int[] paddingImage = { 0, -20, 7, -20 };
+
 		public Renderer() {
+
+			setHero();
 
 			game.setPlayer(4);
 
@@ -145,12 +153,6 @@ public class SnakeGUI extends JFrame {
 			add(imageDice);
 			add(btnNewButton);
 
-			// JLabel hero1 = new JLabel("");
-			// hero1.setIcon(new
-			// ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png")));
-			// hero1.setBounds(251, 0, 644, 600);
-			// add(hero1);
-
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
 			// bg.setBounds(251, 0, 644, 647);
@@ -163,31 +165,22 @@ public class SnakeGUI extends JFrame {
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			paintPlayer(g);
+			paintHero(g);
+			// g.drawImage(hero[2], (240 + 7) + 62 * 8, 563, this);
+			// g.drawImage(hero[0], 240 + 62 * 9, (563), this);
+			// g.drawImage(hero[1], (240 - 20) + 62 * 9, 563 - 62 * 5, this);
+			// g.drawImage(hero[3], (240 - 20) + 62 * 0, 563, this);
 		}
 
-		private void paintPlayer(Graphics g) {
+		private void paintHero(Graphics g) {
 			for (Player p : game.getPlayers()) {
-				if (p != game.currentPlayer()) {
-					Color playerColor = p.getColor();
-					int x = game.getPlayerPostionX(p);
-					int y = game.getPlayerPostionY(p);
-					g.setColor(playerColor);
-					g.fillOval(x, y, 25, 25);
-					g.setColor(Color.black);
-					g.drawString(p.getName(), x + 9, y + 15);
-				} else {
-					g.setColor(game.currentPlayer().getColor());
-					g.fillOval(startX, startY, 25, 25);
-					g.setColor(Color.black);
-					g.drawString(game.currentPlayer().getName(), startX + 9, startY + 15);
-				}
+				if (p != game.currentPlayer())
+					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
+							game.getPlayerPostionY(p), this);
+				else
+					g.drawImage(hero[p.getIndex()], startX + paddingImage[p.getIndex()], startY, this);
+
 			}
-			/* for test */
-			// g.fillOval((268) + 62 * 9, 605 - 63 - (63 * 0), 25, 25);
-			// g.setColor(Color.black);
-			// g.drawString(game.currentPlayer().getName(), startX + 9, startY +
-			// 15);
 		}
 
 		@Override
@@ -206,6 +199,16 @@ public class SnakeGUI extends JFrame {
 				repaint();
 			} else {
 				timer.stop();
+			}
+		}
+
+		private void setHero() {
+			try {
+				for (int i = 0; i < 4; i++) {
+					hero[i] = ImageIO.read(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 

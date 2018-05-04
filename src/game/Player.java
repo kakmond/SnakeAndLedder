@@ -10,6 +10,7 @@ public class Player {
 
 	private String name;
 	private Color color;
+	private int index;
 
 	/** for smooth running */
 	private int startX;
@@ -19,7 +20,8 @@ public class Player {
 
 	private DiceStrategy strategy;
 
-	public Player(String name) {
+	public Player(String name, int index) {
+		this.index = index;
 		this.strategy = new NormalDice();
 		this.name = name;
 		int r = (int) (Math.random() * 256);
@@ -36,6 +38,10 @@ public class Player {
 		int val = this.strategy.roll(die);
 		this.setStrategy(new NormalDice());
 		return val;
+	}
+
+	public int getIndex() {
+		return this.index;
 	}
 
 	public String getName() {

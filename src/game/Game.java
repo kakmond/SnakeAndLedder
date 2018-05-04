@@ -52,7 +52,8 @@ public class Game extends Observable implements Runnable {
 	public void setPlayer(int num) {
 		players = new Player[num];
 		for (int i = 0; i < num; i++) {
-			players[i] = new Player((i + 1) + "");
+			String nameTemp = (i + 1) + "";
+			players[i] = new Player(nameTemp, i);
 			board.addPlayer(players[i], 0);
 			players[i].setStartX(board.getPlayerPostionX(players[i]));
 			players[i].setStartY(board.getPlayerPostionY(players[i]));
