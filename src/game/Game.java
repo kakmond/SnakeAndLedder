@@ -141,7 +141,7 @@ public class Game extends Observable implements Runnable {
 					wait();
 				}
 				currentPlayerMoveByStep(currentPlayerDiceValue);
-				// gameLogic();
+				gameLogic();
 				switchPlayer();
 
 			} catch (InterruptedException e) {
