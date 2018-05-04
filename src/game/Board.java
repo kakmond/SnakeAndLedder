@@ -55,7 +55,7 @@ public class Board {
 		squares[position].addElement(piece);
 	}
 
-	public void movePlayerByElement(Player piece, int dest) {
+	public void movePlayerToDest(Player piece, int dest) {
 		int pos = getPlayerPosition(piece);
 		squares[pos].removePiece(piece);
 		addPlayer(piece, dest);

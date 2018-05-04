@@ -2,6 +2,9 @@ package game;
 
 import java.util.Observable;
 
+import strategy.BackwardDice;
+import strategy.FreezeDice;
+
 public class Game extends Observable implements Runnable {
 
 	private Player[] players;
@@ -10,31 +13,13 @@ public class Game extends Observable implements Runnable {
 	private boolean ended;
 	private int currentPlayerIndex;
 
-	// private boolean waitForInput = true;
+	private int currentPlayerDiceValue;
 
-	private Thread gameThread = new Thread() {
-		@Override
-		public void run() {
-			super.run();
-			while (!isEnd()) {
-				try {
-					System.out.println("WAITING!");
-					synchronized (this) {
-						super.wait();
-					}
-					System.out.println("NO MORE");
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					System.out.println("Interrubted!");
-				}
-			}
-		}
-	};
-
-	// public void start() {
-	// ended = false;
-	// gameThread.start();
-	// }
+	public static final int NO_COMMAND = 0;
+	public static final int SNAKE_COMMAND = 1;
+	public static final int LADDER_COMMAND = 2;
+	public static final int BACKWARD_COMMAND = 3;
+	public static final int FREEZE_COMMAND = 4;
 
 	public Game() {
 		ended = false;
@@ -44,11 +29,24 @@ public class Game extends Observable implements Runnable {
 	}
 
 	private void gameLogic() {
-		if (getCurrentPlayerSquare().isElement())
-			board.movePlayerByElement(currentPlayer(), getCurrentPlayerSquare().getElement().desinationPosition());
-		switchPlayer();
+		int commandID = NO_COMMAND;
+		Square currentPlayerSquare = getCurrentPlayerSquare();
+		if (currentPlayerSquare.isElement()) {
+			Element element = currentPlayerSquare.getElement();
+			commandID = element.getCommandID();
+			if (commandID == SNAKE_COMMAND) {
+				Snake snake = (Snake) element;
+				board.movePlayerToDest(currentPlayer(), snake.getTail().getNumber());
+			} else if (commandID == LADDER_COMMAND) {
+				Ladder ladder = (Ladder) element;
+				board.movePlayerToDest(currentPlayer(), ladder.getTop().getNumber());
+			} else if (commandID == BACKWARD_COMMAND)
+				currentPlayer().setStrategy(new BackwardDice());
+			else if (commandID == FREEZE_COMMAND)
+				currentPlayer().setStrategy(new FreezeDice());
+		}
 		super.setChanged();
-		super.notifyObservers();
+		super.notifyObservers(commandID);
 	}
 
 	public void setPlayer(int num) {
@@ -56,9 +54,11 @@ public class Game extends Observable implements Runnable {
 		for (int i = 0; i < num; i++) {
 			players[i] = new Player((i + 1) + "");
 			board.addPlayer(players[i], 0);
-			setChanged();
-			notifyObservers();
+			players[i].setStartX(board.getPlayerPostionX(players[i]));
+			players[i].setStartY(board.getPlayerPostionY(players[i]));
 		}
+		System.out.println("INIT");
+
 	}
 
 	public boolean isEnd() {
@@ -77,9 +77,17 @@ public class Game extends Observable implements Runnable {
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
 	}
 
-	public void currentPlayerMove(int steps) {
-		board.movePlayerByStep(currentPlayer(), steps);
-		this.gameLogic();
+	public void currentPlayerMoveByStep(int steps) throws InterruptedException {
+		for (int i = 0; i < steps; i++) {
+			currentPlayer().setStartX(getCurrentPlayerPostionX());
+			currentPlayer().setStartY(getCurrentPlayerPostionY());
+			board.movePlayerByStep(currentPlayer(), 1);
+			currentPlayer().setDestX(getCurrentPlayerPostionX());
+			currentPlayer().setDestY(getCurrentPlayerPostionY());
+			setChanged();
+			notifyObservers();
+			Thread.sleep(1000);
+		}
 	}
 
 	public String currentPlayerName() {
@@ -91,7 +99,8 @@ public class Game extends Observable implements Runnable {
 	}
 
 	public int currentPlayerRollDice() {
-		return currentPlayer().roll(die);
+		this.currentPlayerDiceValue = currentPlayer().roll(die);
+		return this.currentPlayerDiceValue;
 	}
 
 	public boolean currentPlayerWin() {
@@ -106,7 +115,7 @@ public class Game extends Observable implements Runnable {
 		return board.getPlayerPostionX(currentPlayer());
 	}
 
-	public int getCurrentPlayerPostionX(Player p) {
+	public int getPlayerPostionX(Player p) {
 		return board.getPlayerPostionX(p);
 	}
 
@@ -114,7 +123,7 @@ public class Game extends Observable implements Runnable {
 		return board.getPlayerPostionY(currentPlayer());
 	}
 
-	public int getCurrentPlayerPostionY(Player p) {
+	public int getPlayerPostionY(Player p) {
 		return board.getPlayerPostionY(p);
 	}
 
@@ -124,18 +133,19 @@ public class Game extends Observable implements Runnable {
 
 	@Override
 	public void run() {
-		while (!isEnd()) {
+		while (!isEnd())
 			try {
 				System.out.println("WAITING!");
 				synchronized (this) {
 					wait();
 				}
-				System.out.println("NO MORE");
+				currentPlayerMoveByStep(currentPlayerDiceValue);
+				// gameLogic();
+				switchPlayer();
 
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				System.out.println("Interrubted!");
 			}
-		}
 	}
 }

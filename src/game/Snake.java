@@ -19,8 +19,8 @@ public class Snake implements Element {
 	}
 
 	@Override
-	public int desinationPosition() {
-		return getTail().getNumber();
+	public int getCommandID() {
+		return Game.SNAKE_COMMAND;
 	}
 
 }

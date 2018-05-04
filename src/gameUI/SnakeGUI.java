@@ -20,9 +20,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 
-public class SnakeGUI extends JFrame implements Observer {
+public class SnakeGUI extends JFrame {
 
 	private Renderer renderer;
 	private Game game;
@@ -53,7 +54,6 @@ public class SnakeGUI extends JFrame implements Observer {
 	 */
 	public SnakeGUI(Game game) {
 		this.game = game;
-		game.addObserver(this);
 		initialize();
 	}
 
@@ -63,10 +63,9 @@ public class SnakeGUI extends JFrame implements Observer {
 	private void initialize() {
 
 		renderer = new Renderer();
+		game.addObserver(renderer);
 
 		add(renderer);
-
-		game.setPlayer(4);
 
 		addMouseListener(new MouseEvent());
 
@@ -78,13 +77,7 @@ public class SnakeGUI extends JFrame implements Observer {
 		super.setVisible(true);
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		System.out.println("CALL FROM OBSERVABLE");
-		renderer.repaint();
-	}
-
-	class Renderer extends JPanel {
+	class Renderer extends JPanel implements ActionListener, Observer {
 
 		private JLabel imageDice = new JLabel("");
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
@@ -94,7 +87,23 @@ public class SnakeGUI extends JFrame implements Observer {
 		private ImageIcon dice5 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice5.jpeg"));
 		private ImageIcon dice6 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice6.jpeg"));
 
+		private Timer timer;
+
+		private int startX;
+		private int startY;
+		private int destX;
+		private int destY;
+
 		public Renderer() {
+
+			game.setPlayer(4);
+
+			startX = game.currentPlayer().getStartX();
+			startY = game.currentPlayer().getStartY();
+
+			System.out.println("START IS " + startX + " " + startY);
+
+			timer = new Timer(5, this);
 
 			super.setLayout(null);
 			JButton btnNewButton = new JButton("Roll");
@@ -107,7 +116,7 @@ public class SnakeGUI extends JFrame implements Observer {
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
-					game.currentPlayerMove(face);
+					// game.currentPlayerMove(face);
 					synchronized (game) {
 						game.notify();
 					}
@@ -136,6 +145,12 @@ public class SnakeGUI extends JFrame implements Observer {
 			add(imageDice);
 			add(btnNewButton);
 
+			// JLabel hero1 = new JLabel("");
+			// hero1.setIcon(new
+			// ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png")));
+			// hero1.setBounds(251, 0, 644, 600);
+			// add(hero1);
+
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/board.jpg")));
 			bg.setBounds(251, 0, 644, 647);
@@ -151,17 +166,50 @@ public class SnakeGUI extends JFrame implements Observer {
 		}
 
 		private void paintPlayer(Graphics g) {
-
-			/* new code */
 			for (Player p : game.getPlayers()) {
-				Color playerColor = p.getColor();
-				int x = game.getCurrentPlayerPostionX(p);
-				int y = game.getCurrentPlayerPostionY(p);
-				g.setColor(playerColor);
-				g.fillOval(x, y, 25, 25);
-				g.setColor(Color.black);
-				g.drawString(p.getName(), x + 9, y + 15);
+				if (p != game.currentPlayer()) {
+					Color playerColor = p.getColor();
+					int x = game.getPlayerPostionX(p);
+					int y = game.getPlayerPostionY(p);
+					g.setColor(playerColor);
+					g.fillOval(x, y, 25, 25);
+					g.setColor(Color.black);
+					g.drawString(p.getName(), x + 9, y + 15);
+				} else {
+					g.setColor(game.currentPlayer().getColor());
+					g.fillOval(startX, startY, 25, 25);
+					g.setColor(Color.black);
+					g.drawString(game.currentPlayer().getName(), startX + 9, startY + 15);
+				}
 			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (startX < destX) {
+				startX++;
+				repaint();
+			} else if (startX > destX) {
+				startX--;
+				repaint();
+			} else if (startY > destY) {
+				startY--;
+				repaint();
+			} else if (startY < destY) {
+				startY++;
+				repaint();
+			} else {
+				timer.stop();
+			}
+		}
+
+		@Override
+		public void update(Observable o, Object arg) {
+			startX = game.currentPlayer().getStartX();
+			startY = game.currentPlayer().getStartY();
+			destX = game.currentPlayer().getDestX();
+			destY = game.currentPlayer().getDestY();
+			timer.start();
 		}
 	}
 
@@ -170,7 +218,7 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		@Override
 		public void mouseClicked(java.awt.event.MouseEvent e) {
-
+			System.out.println(e.getX() + " " + e.getY());
 		}
 
 		@Override

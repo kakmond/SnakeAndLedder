@@ -19,8 +19,8 @@ public class Ladder implements Element {
 	}
 
 	@Override
-	public int desinationPosition() {
-		return getTop().getNumber();
+	public int getCommandID() {
+		return Game.LADDER_COMMAND;
 	}
 
 }
