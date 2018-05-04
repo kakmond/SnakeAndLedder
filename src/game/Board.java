@@ -45,10 +45,19 @@ public class Board {
 			addElement(l, l.getBottom().getNumber());
 
 		// Set Freeze position
-		Freeze[] freezes;
+		Freeze[] freezes = {
+				new Freeze( squares[6] ),
+				new Freeze( squares[37] ),
+				new Freeze( squares[67] ),
+				new Freeze( squares[92] )
+		};
 		
 		// Set Backward position
-		Backward[] backwards;
+		Backward[] backwards = {
+				new Backward( squares[30] ),
+				new Backward( squares[57] ),
+				new Backward( squares[64] )
+		};
 		
 	}
 
