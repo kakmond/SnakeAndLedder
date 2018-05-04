@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.JFrame;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -80,9 +79,11 @@ public class SnakeGUI extends JFrame {
 		super.setVisible(true);
 	}
 
-	class Renderer extends JPanel implements ActionListener, Observer {
+	class Renderer extends JPanel implements Observer {
 
 		private JLabel imageDice = new JLabel("");
+
+		// TODO: Use for loop to collect all faces in array.
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
 		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
 		private ImageIcon dice3 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice3.jpeg"));
@@ -100,18 +101,18 @@ public class SnakeGUI extends JFrame {
 		private Image[] hero = new Image[4];
 		private int[] paddingImage = { 0, -20, 7, -20 };
 
+		private boolean isMoveDirectly = false;
+
 		public Renderer() {
+
+			timer = new Timer(5, new MoveByStep());
 
 			setHero();
 
-			game.setPlayer(4);
+			game.setPlayer(1);
 
 			startX = game.currentPlayer().getStartX();
 			startY = game.currentPlayer().getStartY();
-
-			System.out.println("START IS " + startX + " " + startY);
-
-			timer = new Timer(5, this);
 
 			super.setLayout(null);
 			JButton btnNewButton = new JButton("Roll");
@@ -122,12 +123,21 @@ public class SnakeGUI extends JFrame {
 
 			/** roll the dice */
 			btnNewButton.addActionListener(new ActionListener() {
+
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
-					// game.currentPlayerMove(face);
-					synchronized (game) {
-						game.notify();
-					}
+					game.currentPlayerMove(face);
+
+					/**
+					 * TODO:
+					 * 
+					 * Tell user if the face is 0 --> That means you are waiting
+					 * for the train.
+					 * 
+					 * Tell user if the face is less than 0 --> That means you
+					 * are drunk now.
+					 */
+
 					System.out.println(face);
 					if (face == 1) {
 						imageDice.setIcon(dice1);
@@ -155,7 +165,6 @@ public class SnakeGUI extends JFrame {
 
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
-			// bg.setBounds(251, 0, 644, 647);
 			bg.setBounds(250, 20, 644, 627);
 			add(bg);
 
@@ -165,48 +174,41 @@ public class SnakeGUI extends JFrame {
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
-			paintHero(g);
+			if (!isMoveDirectly)
+				paintHeroByStep(g);
+			else
+				paintHeroByDirectly(g);
 			// g.drawImage(hero[2], (240 + 7) + 62 * 8, 563, this);
 			// g.drawImage(hero[0], 240 + 62 * 9, (563), this);
 			// g.drawImage(hero[1], (240 - 20) + 62 * 9, 563 - 62 * 5, this);
 			// g.drawImage(hero[3], (240 - 20) + 62 * 0, 563, this);
 		}
 
-		private void paintHero(Graphics g) {
+		private void paintHeroByStep(Graphics g) {
 			for (Player p : game.getPlayers()) {
 				if (p != game.currentPlayer())
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
 				else
 					g.drawImage(hero[p.getIndex()], startX + paddingImage[p.getIndex()], startY, this);
-
 			}
 		}
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (startX < destX) {
-				startX++;
-				repaint();
-			} else if (startX > destX) {
-				startX--;
-				repaint();
-			} else if (startY > destY) {
-				startY--;
-				repaint();
-			} else if (startY < destY) {
-				startY++;
-				repaint();
-			} else {
-				timer.stop();
+		private void paintHeroByDirectly(Graphics g) {
+			for (Player p : game.getPlayers()) {
+				if (p != game.currentPlayer())
+					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
+							game.getPlayerPostionY(p), this);
+				else
+					g.drawImage(hero[p.getIndex()], game.getCurrentPlayerPostionX() + paddingImage[p.getIndex()],
+							game.getCurrentPlayerPostionY(), this);
 			}
 		}
 
 		private void setHero() {
 			try {
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i < 4; i++)
 					hero[i] = ImageIO.read(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
-				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -214,12 +216,80 @@ public class SnakeGUI extends JFrame {
 
 		@Override
 		public void update(Observable o, Object arg) {
+			// default moving.
+			isMoveDirectly = false;
 			startX = game.currentPlayer().getStartX();
 			startY = game.currentPlayer().getStartY();
 			destX = game.currentPlayer().getDestX();
 			destY = game.currentPlayer().getDestY();
-			timer.start();
+
+			if (arg == null)
+				timer.start();
+
+			else { /** check element */
+				int commandID = (int) arg;
+				if (commandID == Game.NO_COMMAND) {
+					// do nothing.
+				} else if (commandID == Game.SNAKE_COMMAND) {
+					isMoveDirectly = true;
+					repaint();
+					// TODO: tell user, you are facing with snake.
+				} else if (commandID == Game.LADDER_COMMAND) {
+					isMoveDirectly = true;
+					repaint();
+					// TODO: tell user, you are facing with ladder.
+				} else if (commandID == Game.FREEZE_COMMAND) {
+					// TODO: tell user, the train is coming.
+				} else if (commandID == Game.BACKWARD_COMMAND) {
+					// TODO: tell user, someone invited you to join the beer
+					// party.
+				}
+
+			}
 		}
+
+		class MoveByStep implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (startX < destX)
+					startX++;
+				else if (startX > destX)
+					startX--;
+				else if (startY > destY)
+					startY--;
+				else if (startY < destY)
+					startY++;
+				else if (startX == destX && startY == destY)
+					timer.stop();
+				repaint();
+			}
+		}
+
+		// class MoveDirectly implements ActionListener {
+		//
+		// public MoveDirectly() {
+		// startX = game.currentPlayer().getStartX();
+		// startY = game.currentPlayer().getStartY();
+		// destX = game.currentPlayer().getDestX();
+		// destY = game.currentPlayer().getDestY();
+		// }
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// if (startX < destX)
+		// startX++;
+		// if (startX > destX)
+		// startX--;
+		// if (startY > destY)
+		// startY--;
+		// if (startY < destY)
+		// startY++;
+		// repaint();
+		// if (startX == destX && startY == destY)
+		// timer.stop();
+		// }
+		// }
 	}
 
 	/** A Class for determine coordinate */

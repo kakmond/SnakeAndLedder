@@ -31,34 +31,29 @@ public class Board {
 
 		// Set and add Snake position
 		Snake[] snakes = { new Snake(squares[49], squares[4]), new Snake(squares[42], squares[16]),
-				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[15]),
-				new Snake(squares[86], squares[49]), new Snake(squares[83], squares[57]),
-				new Snake(squares[97], squares[40]) };
+				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[14]),
+				new Snake(squares[86], squares[48]), new Snake(squares[83], squares[57]),
+				new Snake(squares[97], squares[39]) };
 		for (Snake s : snakes)
 			addElement(s, s.getHead().getNumber());
 
 		// Set and add Ladder position
 		Ladder[] ladders = { new Ladder(squares[22], squares[1]), new Ladder(squares[58], squares[19]),
-				new Ladder(squares[44], squares[6]), new Ladder(squares[95], squares[56]),
-				new Ladder(squares[71], squares[52]), new Ladder(squares[91], squares[70]) };
+				new Ladder(squares[44], squares[5]), new Ladder(squares[95], squares[56]),
+				new Ladder(squares[71], squares[51]), new Ladder(squares[91], squares[70]) };
 		for (Ladder l : ladders)
 			addElement(l, l.getBottom().getNumber());
 
 		// Set Freeze position
-		Freeze[] freezes = {
-				new Freeze( squares[6] ),
-				new Freeze( squares[37] ),
-				new Freeze( squares[67] ),
-				new Freeze( squares[92] )
-		};
-		
+		Freeze[] freezes = { new Freeze(squares[6]), new Freeze(squares[37]), new Freeze(squares[67]),
+				new Freeze(squares[92]) };
+		for (Freeze f : freezes)
+			addElement(f, f.getFreezeSquare().getNumber());
+
 		// Set Backward position
-		Backward[] backwards = {
-				new Backward( squares[30] ),
-				new Backward( squares[57] ),
-				new Backward( squares[64] )
-		};
-		
+		Backward[] backwards = { new Backward(squares[30]), new Backward(squares[57]), new Backward(squares[64]) };
+		for (Backward b : backwards)
+			addElement(b, b.getBackwardSquare().getNumber());
 	}
 
 	public void addPlayer(Player player, int position) {
@@ -80,10 +75,9 @@ public class Board {
 		int pos = getPlayerPosition(piece);
 		squares[pos].removePiece(piece);
 		int next_pos = pos + steps;
-		if (next_pos >= SIZE - 1) {
-			squares[SIZE - 1].setGoal(true);
+		if (next_pos >= SIZE - 1)
 			addPlayer(piece, SIZE - 1);
-		} else
+		else
 			addPlayer(piece, next_pos);
 	}
 

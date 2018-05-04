@@ -9,7 +9,6 @@ import strategy.NormalDice;
 public class Player {
 
 	private String name;
-	private Color color;
 	private int index;
 
 	/** for smooth running */
@@ -46,10 +45,6 @@ public class Player {
 
 	public String getName() {
 		return this.name;
-	}
-
-	public Color getColor() {
-		return color;
 	}
 
 	public int getStartX() {

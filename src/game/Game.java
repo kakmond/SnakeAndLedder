@@ -47,6 +47,7 @@ public class Game extends Observable implements Runnable {
 		}
 		super.setChanged();
 		super.notifyObservers(commandID);
+
 	}
 
 	public void setPlayer(int num) {
@@ -58,7 +59,6 @@ public class Game extends Observable implements Runnable {
 			players[i].setStartX(board.getPlayerPostionX(players[i]));
 			players[i].setStartY(board.getPlayerPostionY(players[i]));
 		}
-		System.out.println("INIT");
 
 	}
 
@@ -79,16 +79,21 @@ public class Game extends Observable implements Runnable {
 	}
 
 	public void currentPlayerMoveByStep(int steps) throws InterruptedException {
-		for (int i = 0; i < steps; i++) {
+		for (int i = 0; i < Math.abs(steps); i++) {
 			currentPlayer().setStartX(getCurrentPlayerPostionX());
 			currentPlayer().setStartY(getCurrentPlayerPostionY());
-			board.movePlayerByStep(currentPlayer(), 1);
+			if (steps > 0) // move forward
+				board.movePlayerByStep(currentPlayer(), 1);
+			else // move backward
+				board.movePlayerByStep(currentPlayer(), -1);
 			currentPlayer().setDestX(getCurrentPlayerPostionX());
 			currentPlayer().setDestY(getCurrentPlayerPostionY());
 			setChanged();
 			notifyObservers();
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		}
+		currentPlayer().setStartX(getCurrentPlayerPostionX());
+		currentPlayer().setStartY(getCurrentPlayerPostionY());
 	}
 
 	public String currentPlayerName() {
@@ -100,8 +105,7 @@ public class Game extends Observable implements Runnable {
 	}
 
 	public int currentPlayerRollDice() {
-		this.currentPlayerDiceValue = currentPlayer().roll(die);
-		return this.currentPlayerDiceValue;
+		return this.currentPlayerDiceValue = currentPlayer().roll(die);
 	}
 
 	public boolean currentPlayerWin() {
@@ -140,13 +144,21 @@ public class Game extends Observable implements Runnable {
 				synchronized (this) {
 					wait();
 				}
-				currentPlayerMoveByStep(currentPlayerDiceValue);
-				gameLogic();
+				if (currentPlayerDiceValue != 0) {
+					currentPlayerMoveByStep(currentPlayerDiceValue);
+					gameLogic();
+				}
 				switchPlayer();
-
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				System.out.println("Interrubted!");
 			}
+	}
+
+	public void currentPlayerMove(int face) {
+		this.currentPlayerDiceValue = face;
+		synchronized (this) {
+			this.notify();
+		}
 	}
 }
