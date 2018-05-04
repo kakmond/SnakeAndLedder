@@ -14,6 +14,7 @@ public class Game extends Observable implements Runnable {
 	private int currentPlayerIndex;
 
 	private int currentPlayerDiceValue;
+	private Replay replay = Replay.getInstance();
 
 	public static final int NO_COMMAND = 0;
 	public static final int SNAKE_COMMAND = 1;
@@ -86,7 +87,7 @@ public class Game extends Observable implements Runnable {
 			currentPlayer().setDestY(getCurrentPlayerPostionY());
 			setChanged();
 			notifyObservers();
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		}
 	}
 
@@ -140,6 +141,7 @@ public class Game extends Observable implements Runnable {
 					wait();
 				}
 				currentPlayerMoveByStep(currentPlayerDiceValue);
+				replay.addAction( currentPlayer() , currentPlayerDiceValue );
 				gameLogic();
 				switchPlayer();
 
