@@ -266,30 +266,6 @@ public class SnakeGUI extends JFrame {
 			}
 		}
 
-		// class MoveDirectly implements ActionListener {
-		//
-		// public MoveDirectly() {
-		// startX = game.currentPlayer().getStartX();
-		// startY = game.currentPlayer().getStartY();
-		// destX = game.currentPlayer().getDestX();
-		// destY = game.currentPlayer().getDestY();
-		// }
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// if (startX < destX)
-		// startX++;
-		// if (startX > destX)
-		// startX--;
-		// if (startY > destY)
-		// startY--;
-		// if (startY < destY)
-		// startY++;
-		// repaint();
-		// if (startX == destX && startY == destY)
-		// timer.stop();
-		// }
-		// }
 	}
 
 	/** A Class for determine coordinate */

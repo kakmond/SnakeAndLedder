@@ -44,13 +44,13 @@ public class Board {
 		for (Ladder l : ladders)
 			addElement(l, l.getBottom().getNumber());
 
-		// Set Freeze position
+		// Set and add Freeze position
 		Freeze[] freezes = { new Freeze(squares[6]), new Freeze(squares[37]), new Freeze(squares[67]),
 				new Freeze(squares[92]) };
 		for (Freeze f : freezes)
 			addElement(f, f.getFreezeSquare().getNumber());
 
-		// Set Backward position
+		// Set and add Backward position
 		Backward[] backwards = { new Backward(squares[30]), new Backward(squares[57]), new Backward(squares[64]) };
 		for (Backward b : backwards)
 			addElement(b, b.getBackwardSquare().getNumber());

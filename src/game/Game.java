@@ -140,7 +140,6 @@ public class Game extends Observable implements Runnable {
 	public void run() {
 		while (!isEnd())
 			try {
-				System.out.println("WAITING!");
 				synchronized (this) {
 					wait();
 				}
@@ -151,7 +150,6 @@ public class Game extends Observable implements Runnable {
 				switchPlayer();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
-				System.out.println("Interrubted!");
 			}
 	}
 

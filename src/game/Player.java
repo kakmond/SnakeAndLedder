@@ -26,7 +26,6 @@ public class Player {
 		int r = (int) (Math.random() * 256);
 		int g = (int) (Math.random() * 256);
 		int b = (int) (Math.random() * 256);
-		color = new Color(r, g, b);
 	}
 
 	public void setStrategy(DiceStrategy strategy) {
