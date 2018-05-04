@@ -44,6 +44,12 @@ public class Board {
 		for (Ladder l : ladders)
 			addElement(l, l.getBottom().getNumber());
 
+		// Set Freeze position
+		Freeze[] freezes;
+		
+		// Set Backward position
+		Backward[] backwards;
+		
 	}
 
 	public void addPlayer(Player player, int position) {
