@@ -152,8 +152,9 @@ public class SnakeGUI extends JFrame {
 			// add(hero1);
 
 			JLabel bg = new JLabel("");
-			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/board.jpg")));
-			bg.setBounds(251, 0, 644, 647);
+			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
+			// bg.setBounds(251, 0, 644, 647);
+			bg.setBounds(250, 20, 644, 627);
 			add(bg);
 
 			setDoubleBuffered(true);
@@ -182,6 +183,11 @@ public class SnakeGUI extends JFrame {
 					g.drawString(game.currentPlayer().getName(), startX + 9, startY + 15);
 				}
 			}
+			/* for test */
+			// g.fillOval((268) + 62 * 9, 605 - 63 - (63 * 0), 25, 25);
+			// g.setColor(Color.black);
+			// g.drawString(game.currentPlayer().getName(), startX + 9, startY +
+			// 15);
 		}
 
 		@Override

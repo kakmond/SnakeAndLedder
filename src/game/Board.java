@@ -11,8 +11,8 @@ public class Board {
 
 		// Create Square in right Direction
 		int countRight = 1;
-		for (int y = 586; y >= 100; y = y - (2 * 60)) {
-			for (int x = 283; x <= 825; x = x + 60) {
+		for (int y = 605; y >= 100; y = y - (2 * 63)) {
+			for (int x = 268; x <= 830; x = x + 62) {
 				squares[countRight - 1] = new Square(countRight - 1, x, y);
 				countRight++;
 			}
@@ -21,8 +21,8 @@ public class Board {
 
 		// Create Square in left Direction
 		int countLeft = 11;
-		for (int y = 526; y >= 40; y = y - (2 * 60)) {
-			for (int x = 823; x >= 280; x = x - 60) {
+		for (int y = 542; y >= 35; y = y - (2 * 62)) {
+			for (int x = 826; x >= 268; x = x - 62) {
 				squares[countLeft - 1] = new Square(countLeft - 1, x, y);
 				countLeft++;
 			}
