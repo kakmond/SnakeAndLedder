@@ -30,17 +30,23 @@ public class Board {
 		}
 
 		// Set and add Snake position
-		Snake[] snakes = { new Snake(squares[49], squares[4]), new Snake(squares[42], squares[16]),
-				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[15]),
-				new Snake(squares[86], squares[49]), new Snake(squares[83], squares[57]),
-				new Snake(squares[97], squares[40]) };
+		Snake[] snakes = { new Snake(squares[49], squares[4]), 
+				new Snake(squares[42], squares[16]),
+				new Snake(squares[55], squares[7]), 
+				new Snake(squares[72], squares[14]),
+				new Snake(squares[86], squares[48]), 
+				new Snake(squares[83], squares[57]),
+				new Snake(squares[97], squares[39]) };
 		for (Snake s : snakes)
 			addElement(s, s.getHead().getNumber());
 
 		// Set and add Ladder position
-		Ladder[] ladders = { new Ladder(squares[22], squares[1]), new Ladder(squares[58], squares[19]),
-				new Ladder(squares[44], squares[6]), new Ladder(squares[95], squares[56]),
-				new Ladder(squares[71], squares[52]), new Ladder(squares[91], squares[70]) };
+		Ladder[] ladders = { new Ladder(squares[22], squares[1]), 
+				new Ladder(squares[58], squares[19]),
+				new Ladder(squares[44], squares[5]), 
+				new Ladder(squares[95], squares[56]),
+				new Ladder(squares[71], squares[51]), 
+				new Ladder(squares[91], squares[70]) };
 		for (Ladder l : ladders)
 			addElement(l, l.getBottom().getNumber());
 
