@@ -2,7 +2,7 @@ package game;
 
 import java.util.Observable;
 
-public class Game extends Observable {
+public class Game extends Observable implements Runnable {
 
 	private Player[] players;
 	private Die die;
@@ -12,16 +12,25 @@ public class Game extends Observable {
 
 	// private boolean waitForInput = true;
 
-	// private Thread gameThread = new Thread() {
-	// @Override
-	// public void run() {
-	// super.run();
-	// while (waitForInput) {
-	// // singleGameLoop();
-	// }
-	// }
-	// };
-	//
+	private Thread gameThread = new Thread() {
+		@Override
+		public void run() {
+			super.run();
+			while (!isEnd()) {
+				try {
+					System.out.println("WAITING!");
+					synchronized (this) {
+						super.wait();
+					}
+					System.out.println("NO MORE");
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					System.out.println("Interrubted!");
+				}
+			}
+		}
+	};
+
 	// public void start() {
 	// ended = false;
 	// gameThread.start();
@@ -69,26 +78,6 @@ public class Game extends Observable {
 	}
 
 	public void currentPlayerMove(int steps) {
-		// Thread moveThread = new Thread() {
-		//
-		// int i = 0;
-		//
-		// @Override
-		// public void run() {
-		// super.run();
-		// while (i < steps) {
-		// board.movePlayerByStep(currentPlayer(), 1);
-		// i++;
-		// try {
-		// Thread.sleep(1000);
-		// } catch (InterruptedException e) {
-		//
-		// }
-		//
-		// }
-		// }
-		// };
-		// moveThread.run();
 		board.movePlayerByStep(currentPlayer(), steps);
 		this.gameLogic();
 	}
@@ -117,7 +106,36 @@ public class Game extends Observable {
 		return board.getPlayerPostionX(currentPlayer());
 	}
 
+	public int getCurrentPlayerPostionX(Player p) {
+		return board.getPlayerPostionX(p);
+	}
+
 	public int getCurrentPlayerPostionY() {
 		return board.getPlayerPostionY(currentPlayer());
+	}
+
+	public int getCurrentPlayerPostionY(Player p) {
+		return board.getPlayerPostionY(p);
+	}
+
+	public Player[] getPlayers() {
+		return players;
+	}
+
+	@Override
+	public void run() {
+		while (!isEnd()) {
+			try {
+				System.out.println("WAITING!");
+				synchronized (this) {
+					wait();
+				}
+				System.out.println("NO MORE");
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				System.out.println("Interrubted!");
+			}
+		}
 	}
 }

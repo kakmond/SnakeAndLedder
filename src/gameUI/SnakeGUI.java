@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import game.Game;
+import game.Player;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,22 +31,29 @@ public class SnakeGUI extends JFrame implements Observer {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
+		Game game = new Game();
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SnakeGUI window = new SnakeGUI();
+					SnakeGUI window = new SnakeGUI(game);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 
+		Thread gameThread = new Thread(game);
+		gameThread.start();
 	}
 
 	/**
 	 * Create the application.
 	 */
-	public SnakeGUI() {
+	public SnakeGUI(Game game) {
+		this.game = game;
+		game.addObserver(this);
 		initialize();
 	}
 
@@ -53,14 +61,12 @@ public class SnakeGUI extends JFrame implements Observer {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		game = new Game();
-		game.addObserver(this);
 
 		renderer = new Renderer();
 
 		add(renderer);
 
-		game.setPlayer(1);
+		game.setPlayer(4);
 
 		addMouseListener(new MouseEvent());
 
@@ -102,6 +108,9 @@ public class SnakeGUI extends JFrame implements Observer {
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
 					game.currentPlayerMove(face);
+					synchronized (game) {
+						game.notify();
+					}
 					System.out.println(face);
 					if (face == 1) {
 						imageDice.setIcon(dice1);
@@ -143,12 +152,16 @@ public class SnakeGUI extends JFrame implements Observer {
 
 		private void paintPlayer(Graphics g) {
 
-			g.setColor(Color.BLACK);
-			int x = game.getCurrentPlayerPostionX();
-			int y = game.getCurrentPlayerPostionY();
-			g.fillOval(x, y, 25, 25);
-			g.setColor(Color.BLUE);
-			g.fillOval(x, y, 25, 25);
+			/* new code */
+			for (Player p : game.getPlayers()) {
+				Color playerColor = p.getColor();
+				int x = game.getCurrentPlayerPostionX(p);
+				int y = game.getCurrentPlayerPostionY(p);
+				g.setColor(playerColor);
+				g.fillOval(x, y, 25, 25);
+				g.setColor(Color.black);
+				g.drawString(p.getName(), x + 9, y + 15);
+			}
 		}
 	}
 
