@@ -10,11 +10,13 @@ public class Game extends Observable {
 	private boolean ended;
 	private int currentPlayerIndex;
 
+	// private boolean waitForInput = true;
+
 	// private Thread gameThread = new Thread() {
 	// @Override
 	// public void run() {
 	// super.run();
-	// while (!ended) {
+	// while (waitForInput) {
 	// // singleGameLoop();
 	// }
 	// }
@@ -67,7 +69,27 @@ public class Game extends Observable {
 	}
 
 	public void currentPlayerMove(int steps) {
-		this.board.movePlayerByStep(currentPlayer(), steps);
+		// Thread moveThread = new Thread() {
+		//
+		// int i = 0;
+		//
+		// @Override
+		// public void run() {
+		// super.run();
+		// while (i < steps) {
+		// board.movePlayerByStep(currentPlayer(), 1);
+		// i++;
+		// try {
+		// Thread.sleep(1000);
+		// } catch (InterruptedException e) {
+		//
+		// }
+		//
+		// }
+		// }
+		// };
+		// moveThread.run();
+		board.movePlayerByStep(currentPlayer(), steps);
 		this.gameLogic();
 	}
 

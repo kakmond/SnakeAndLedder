@@ -29,7 +29,4 @@ public class Player {
 		return color;
 	}
 
-	// public void movePlayerByStep(Board board, int steps) {
-	// board.movePlayerByStep(this, steps);
-	// }
 }
