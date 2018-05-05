@@ -25,6 +25,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
@@ -71,14 +72,12 @@ public class SnakeGUI extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		
 		renderer = new Renderer();
-		game.addObserver(renderer);
 
-		getContentPane().add(renderer);
-		getContentPane().setLayout(null);
-		
-		
-		
+		super.setLayout(new BorderLayout());
+		game.addObserver(renderer);
 		
 		
 	
@@ -174,6 +173,7 @@ public class SnakeGUI extends JFrame {
 				}
 			});
 
+			
 			JButton btnNewGame = new JButton("New Game");
 			btnNewGame.setBounds(10, 11, 160, 23);
 			add(btnNewGame);
