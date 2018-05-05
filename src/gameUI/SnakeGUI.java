@@ -108,8 +108,6 @@ public class SnakeGUI extends JFrame {
 		private JTextField textPlayerTurn = new JTextField("Player's turn");
 		private JTextField textPlayerStatus = new JTextField("Player's Status");
 		private JButton replayButton = new JButton("Replay");
-		private JButton saveButton = new JButton("Save");
-		private JButton loadButton = new JButton("Load");
 
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
 		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
@@ -157,13 +155,31 @@ public class SnakeGUI extends JFrame {
 			btnNewButton.setBounds(940, 500, 135, 67);
 			imageDice.setBounds(940, 320, 135, 194);
 
+			textPlayerTurn.setEditable(false);
+			textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
+			textPlayerTurn.setHorizontalAlignment(JTextField.CENTER);
+			textPlayerTurn.setBounds(940, 50, 135, 40);
+
+			textPlayerStatus.setEditable(false);
+			textPlayerStatus.setHorizontalAlignment(JTextField.CENTER);
+			textPlayerStatus.setBounds(940, 100, 135, 80);
+
+			replayButton.setBounds(940, 190, 135, 40);
+			replayButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Replay function
+				}
+			});
+			
 			/** roll the dice */
 			btnNewButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
+					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 					int face = game.currentPlayerRollDice();
 					game.currentPlayerMove(face);
-
 					/**
 					 * TODO:
 					 * 
@@ -194,47 +210,9 @@ public class SnakeGUI extends JFrame {
 				}
 			});
 
-			textPlayerTurn.setEditable(false);
-			textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
-			textPlayerTurn.setHorizontalAlignment(JTextField.CENTER);
-			textPlayerTurn.setBounds(940, 50, 135, 40);
-
-			textPlayerStatus.setEditable(false);
-			textPlayerStatus.setHorizontalAlignment(JTextField.CENTER);
-			textPlayerStatus.setBounds(940, 100, 135, 80);
-
-			replayButton.setBounds(940, 190, 135, 40);
-			replayButton.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// Replay function
-				}
-			});
-
-			saveButton.setBounds(940, 240, 135, 40);
-			saveButton.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// Save function
-				}
-			});
-
-			loadButton.setBounds(940, 290, 135, 40);
-			loadButton.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// Load function
-				}
-			});
-
 			add(textPlayerTurn);
 			add(textPlayerStatus);
 			add(replayButton);
-			add(saveButton);
-			add(loadButton);
 			add(imageDice);
 			add(btnNewButton);
 
