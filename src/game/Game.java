@@ -3,6 +3,7 @@ package game;
 import java.util.Observable;
 
 import gameUI.SnakeGUI;
+import replay.ReplayManager;
 import strategy.BackwardDice;
 import strategy.FreezeDice;
 
@@ -14,6 +15,7 @@ public class Game extends Observable {
 	private boolean ended;
 	private int currentPlayerIndex;
 	private int currentPlayerDiceValue;
+	private ReplayManager replay;
 
 	public static final int NO_COMMAND = 0;
 	public static final int SNAKE_COMMAND = 1;
@@ -24,7 +26,7 @@ public class Game extends Observable {
 	private Thread gameThread = new Thread() {
 		@Override
 		public void run() {
-			while (!isEnd()) {
+			while (true) {
 				try {
 					synchronized (gameThread) {
 						wait();
@@ -35,7 +37,6 @@ public class Game extends Observable {
 					}
 					if (currentPlayerWin()) {
 						end();
-						System.out.println("WIN");
 					} else
 						switchPlayer();
 				} catch (InterruptedException e) {
@@ -46,11 +47,12 @@ public class Game extends Observable {
 	};
 
 	public Game() {
-
+		replay = new ReplayManager();
 		ended = false;
 		die = new Die();
 		board = new Board();
 		currentPlayerIndex = 0;
+		this.gameThread.start();
 	}
 
 	private void gameLogic() {
@@ -79,14 +81,19 @@ public class Game extends Observable {
 	}
 
 	public void setPlayer(int num) {
+		replay = new ReplayManager();
+		if (isEnd())
+			ended = false;
 		players = new Player[num];
 		for (int i = 0; i < num; i++) {
 			String nameTemp = (i + 1) + "";
 			players[i] = new Player(nameTemp, i);
 			board.addPlayer(players[i], 0);
-			players[i].setStartX(board.getPlayerPostionX(players[i]));
-			players[i].setStartY(board.getPlayerPostionY(players[i]));
 		}
+	}
+
+	public void setNamePlayer(int num, String name) {
+		players[num].setName(name);
 	}
 
 	public boolean isEnd() {
@@ -127,6 +134,10 @@ public class Game extends Observable {
 
 	public String currentPlayerName() {
 		return currentPlayer().getName();
+	}
+
+	public int getPlayerPostion(Player p) {
+		return board.getPlayerPosition(p);
 	}
 
 	public int currentPlayerPosition() {
@@ -172,7 +183,29 @@ public class Game extends Observable {
 		}
 	}
 
-	public void start() {
-		this.gameThread.start();
+	public void setPlayersAtStart() {
+		for (int i = 0; i < players.length; i++) {
+			board.movePlayerToDest(players[i], 0);
+			players[i].setStartX(board.getPlayerPostionX(players[i]));
+			players[i].setStartY(board.getPlayerPostionY(players[i]));
+		}
+		setChanged();
+		notifyObservers();
 	}
+
+	public void replay() {
+		/** Set players to start point */
+		for (Player p : players) {
+			board.movePlayerToDest(p, 0);
+			p.setDestX(getCurrentPlayerPostionY());
+			p.setDestY(getCurrentPlayerPostionY());
+			p.setStartX(getCurrentPlayerPostionX());
+			p.setStartY(getCurrentPlayerPostionY());
+		}
+
+	}
+
+	// public void start() {
+	// replay = new ReplayManager();
+	// }
 }

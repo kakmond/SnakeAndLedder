@@ -58,7 +58,6 @@ public class SnakeGUI extends JFrame {
 				}
 			}
 		});
-		game.start();
 	}
 
 	/**
@@ -73,6 +72,8 @@ public class SnakeGUI extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
+		game.setPlayer(2);
 
 		renderer = new Renderer();
 
@@ -139,8 +140,6 @@ public class SnakeGUI extends JFrame {
 
 			setHero();
 
-			game.setPlayer(1);
-
 			startX = game.currentPlayer().getStartX();
 			startY = game.currentPlayer().getStartY();
 
@@ -165,7 +164,6 @@ public class SnakeGUI extends JFrame {
 			replayButton.setBounds(900, 50, 135, 50);
 			replayButton.setEnabled(false);
 			replayButton.addActionListener(new ActionListener() {
-
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Replay function
@@ -324,9 +322,11 @@ public class SnakeGUI extends JFrame {
 						txtPlayer[i].setEnabled(false);
 
 					// Set players name.
-					Player[] p = game.getPlayers();
 					for (int i = 0; i < game.getPlayers().length; i++)
-						p[i].setName(txtPlayer[i].getText().toString());
+						game.setNamePlayer(i, txtPlayer[i].getText().toString());
+
+					isMoveDirectly = true;
+					repaint();
 				}
 			});
 
@@ -491,6 +491,7 @@ public class SnakeGUI extends JFrame {
 					System.out.println("Let's go party. Going backward.");
 					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " Backward!!!\n\n");
 				}
+				updateConsoleHistory();
 				rollButton.setEnabled(true);
 			}
 
