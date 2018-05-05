@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
@@ -34,6 +35,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 
 public class SnakeGUI extends JFrame {
 
@@ -108,6 +110,8 @@ public class SnakeGUI extends JFrame {
 		private JTextField textPlayerTurn = new JTextField("Player's turn");
 		private JTextField textPlayerStatus = new JTextField("Player's Status");
 		private JButton replayButton = new JButton("Replay");
+		private JTextPane textConsole = new JTextPane();
+		private JScrollPane textScrollPane = new JScrollPane( textConsole );
 
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
 		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
@@ -132,6 +136,7 @@ public class SnakeGUI extends JFrame {
 		private int[] paddingImage = { 0, -20, 7, -20 };
 
 		private boolean isMoveDirectly = false;
+		private String consoleHistory = "";
 
 		public Renderer() {
 			timer = new Timer(5, new MoveByStep());
@@ -150,21 +155,20 @@ public class SnakeGUI extends JFrame {
 			// --------------------------------
 
 			JButton btnNewButton = new JButton("Roll");
-
 			btnNewButton.setPreferredSize(new Dimension(40, 0));
-			btnNewButton.setBounds(940, 500, 135, 67);
-			imageDice.setBounds(940, 320, 135, 194);
+			btnNewButton.setBounds(940, 600, 135, 67);
+			imageDice.setBounds(940, 430, 135, 194);
 
 			textPlayerTurn.setEditable(false);
 			textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 			textPlayerTurn.setHorizontalAlignment(JTextField.CENTER);
-			textPlayerTurn.setBounds(940, 50, 135, 40);
+			textPlayerTurn.setBounds(940, 10, 135, 40);
 
 			textPlayerStatus.setEditable(false);
 			textPlayerStatus.setHorizontalAlignment(JTextField.CENTER);
-			textPlayerStatus.setBounds(940, 100, 135, 80);
+			textPlayerStatus.setBounds(940, 60, 135, 80);
 
-			replayButton.setBounds(940, 190, 135, 40);
+			replayButton.setBounds(940, 150, 135, 40);
 			replayButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -173,13 +177,21 @@ public class SnakeGUI extends JFrame {
 				}
 			});
 			
+			textConsole.setEditable( false );
+			textScrollPane.setBounds( 920 , 200 , 250 , 250 );
+			
 			/** roll the dice */
 			btnNewButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 					int face = game.currentPlayerRollDice();
 					game.currentPlayerMove(face);
+					consoleHistory = consoleHistory.concat(
+							"Player's Turn : " + game.currentPlayerName() + "\n" +
+							"He/She rolls dice.\n" + 
+							"--> get " + face + " value(s).\n" +
+							"--> move to " + (game.currentPlayerPosition() + face) + " positions.\n\n"
+							);
 					/**
 					 * TODO:
 					 * 
@@ -207,11 +219,15 @@ public class SnakeGUI extends JFrame {
 					if (face == 6) {
 						imageDice.setIcon(dice6);
 					}
+					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
+					textConsole.setText( consoleHistory );
+					
 				}
 			});
 
 			add(textPlayerTurn);
 			add(textPlayerStatus);
+			add(textScrollPane);
 			add(replayButton);
 			add(imageDice);
 			add(btnNewButton);
