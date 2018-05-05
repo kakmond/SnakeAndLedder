@@ -74,7 +74,7 @@ public class Game extends Observable implements Runnable {
 	public Player currentPlayer() {
 		return players[currentPlayerIndex];
 	}
-	
+
 	public void switchPlayer() {
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
 	}
@@ -148,10 +148,14 @@ public class Game extends Observable implements Runnable {
 					currentPlayerMoveByStep(currentPlayerDiceValue);
 					gameLogic();
 				}
-				switchPlayer();
+				if (currentPlayerWin())
+					end();
+				else
+					switchPlayer();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
+		System.out.println("EXITED ");
 	}
 
 	public void currentPlayerMove(int face) {

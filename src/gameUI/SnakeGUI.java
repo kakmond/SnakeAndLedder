@@ -17,7 +17,6 @@ import javax.swing.WindowConstants;
 
 import game.Game;
 import game.Player;
-import game.PlayerHistory;
 import game.Replay;
 
 import javax.imageio.ImageIO;
@@ -146,11 +145,11 @@ public class SnakeGUI extends JFrame {
 			startY = game.currentPlayer().getStartY();
 
 			setLayout(null);
-			
+
 			// --------------------------------
 			// Right Controller
 			// --------------------------------
-			
+
 			JButton btnNewButton = new JButton("Roll");
 
 			btnNewButton.setPreferredSize(new Dimension(40, 0));
@@ -167,9 +166,11 @@ public class SnakeGUI extends JFrame {
 					/**
 					 * TODO:
 					 * 
-					 * Tell user if the face is 0 --> That means you are waiting for the train.
+					 * Tell user if the face is 0 --> That means you are waiting
+					 * for the train.
 					 * 
-					 * Tell user if the face is less than 0 --> That means you are drunk now.
+					 * Tell user if the face is less than 0 --> That means you
+					 * are drunk now.
 					 * 
 					 */
 					System.out.println(face);
@@ -204,31 +205,31 @@ public class SnakeGUI extends JFrame {
 			textPlayerStatus.setBounds(940, 100, 135, 80);
 
 			replayButton.setBounds(940, 190, 135, 40);
-			replayButton.addActionListener( new ActionListener() {
-				
+			replayButton.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Replay function
 				}
-			} );
+			});
 
 			saveButton.setBounds(940, 240, 135, 40);
-			saveButton.addActionListener( new ActionListener() {
-				
+			saveButton.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Save function
 				}
-			} );
+			});
 
 			loadButton.setBounds(940, 290, 135, 40);
-			loadButton.addActionListener( new ActionListener() {
-				
+			loadButton.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Load function
 				}
-			} );
+			});
 
 			add(textPlayerTurn);
 			add(textPlayerStatus);
@@ -244,89 +245,89 @@ public class SnakeGUI extends JFrame {
 
 			JButton btnNewGame = new JButton("New Game");
 			btnNewGame.setBounds(51, 11, 160, 23);
-			getContentPane().add(btnNewGame);
+			add(btnNewGame);
 
 			JLabel lblPlayerTurn = new JLabel("Player Turn");
 			lblPlayerTurn.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPlayerTurn.setBounds(93, 45, 67, 23);
-			getContentPane().add(lblPlayerTurn);
+			add(lblPlayerTurn);
 
 			JLabel lblImageIcon = new JLabel("Image Icon");
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
 			lblImageIcon.setBackground(Color.GREEN);
 			lblImageIcon.setForeground(Color.BLACK);
 			lblImageIcon.setBounds(82, 64, 95, 94);
-			getContentPane().add(lblImageIcon);
+			add(lblImageIcon);
 
 			JButton btnSelectNumberOf = new JButton("Select number of player");
 
 			btnSelectNumberOf.setBounds(51, 169, 160, 23);
-			getContentPane().add(btnSelectNumberOf);
+			add(btnSelectNumberOf);
 
 			JRadioButton rdbtnPlayers = new JRadioButton("2 Players");
 			rdbtnPlayers.setBounds(68, 199, 109, 23);
-			getContentPane().add(rdbtnPlayers);
+			add(rdbtnPlayers);
 
 			JRadioButton rdbtnPlayers_1 = new JRadioButton("3 Players");
 			rdbtnPlayers_1.setBounds(68, 225, 109, 23);
-			getContentPane().add(rdbtnPlayers_1);
+			add(rdbtnPlayers_1);
 
 			JRadioButton rdbtnPlayers_2 = new JRadioButton("4 Players");
 			rdbtnPlayers_2.setBounds(68, 251, 109, 23);
-			getContentPane().add(rdbtnPlayers_2);
+			add(rdbtnPlayers_2);
 
 			JButton btnEnterPlayerName = new JButton("Enter Player's Name");
 			btnEnterPlayerName.setBounds(51, 281, 160, 23);
-			getContentPane().add(btnEnterPlayerName);
+			add(btnEnterPlayerName);
 
 			txtPlayer = new JTextField();
 			txtPlayer.setText("Player1");
 			txtPlayer.setBounds(21, 345, 86, 20);
-			getContentPane().add(txtPlayer);
+			add(txtPlayer);
 			txtPlayer.setColumns(10);
 
 			txtPlayer_3 = new JTextField();
 			txtPlayer_3.setText("Player2");
 			txtPlayer_3.setColumns(10);
 			txtPlayer_3.setBounds(21, 432, 86, 20);
-			getContentPane().add(txtPlayer_3);
+			add(txtPlayer_3);
 
 			txtPlayer_2 = new JTextField();
 			txtPlayer_2.setText("Player3");
 			txtPlayer_2.setColumns(10);
 			txtPlayer_2.setBounds(21, 509, 86, 20);
-			getContentPane().add(txtPlayer_2);
+			add(txtPlayer_2);
 
 			txtPlayer_1 = new JTextField();
 			txtPlayer_1.setText("Player4");
 			txtPlayer_1.setColumns(10);
 			txtPlayer_1.setBounds(21, 594, 86, 20);
-			getContentPane().add(txtPlayer_1);
+			add(txtPlayer_1);
 
 			JLabel lblImage = new JLabel("image");
 			lblImage.setBounds(117, 315, 86, 80);
 			lblImage.setIcon(hero1);
-			getContentPane().add(lblImage);
+			add(lblImage);
 
 			JLabel label = new JLabel("image");
 			label.setBounds(109, 395, 102, 94);
 			label.setIcon(hero2);
-			getContentPane().add(label);
+			add(label);
 
 			JLabel label_1 = new JLabel("image");
 			label_1.setBounds(130, 479, 81, 80);
 			label_1.setIcon(hero3);
-			getContentPane().add(label_1);
+			add(label_1);
 
 			JLabel label_2 = new JLabel("image");
 			label_2.setBounds(117, 557, 102, 94);
 			label_2.setIcon(hero4);
-			getContentPane().add(label_2);
+			add(label_2);
 
 			// --------------------------------
 			// Middle Controller
 			// --------------------------------
-			
+
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
 			bg.setBounds(250, 20, 644, 627);
@@ -394,23 +395,23 @@ public class SnakeGUI extends JFrame {
 				int commandID = (int) arg;
 				if (commandID == Game.NO_COMMAND) {
 					textPlayerStatus.setText("Normal walking");
-					System.out.println( "Normal walking." );
+					System.out.println("Normal walking.");
 				} else if (commandID == Game.SNAKE_COMMAND) {
 					textPlayerStatus.setText("Facing Snake.");
-					System.out.println( "Facing snake." );
+					System.out.println("Facing snake.");
 					isMoveDirectly = true;
 					repaint();
 				} else if (commandID == Game.LADDER_COMMAND) {
 					textPlayerStatus.setText("Facing Ladder.");
-					System.out.println( "Facing ladder." );
+					System.out.println("Facing ladder.");
 					isMoveDirectly = true;
 					repaint();
 				} else if (commandID == Game.FREEZE_COMMAND) {
 					textPlayerStatus.setText("Freeze 1 turn.");
-					System.out.println( "The training is coming. Freeze 1 turn." );
+					System.out.println("The training is coming. Freeze 1 turn.");
 				} else if (commandID == Game.BACKWARD_COMMAND) {
 					textPlayerStatus.setText("Going Backward.");
-					System.out.println( "Let's go party. Going backward." );
+					System.out.println("Let's go party. Going backward.");
 				}
 
 			}
