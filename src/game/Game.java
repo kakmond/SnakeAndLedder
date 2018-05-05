@@ -2,6 +2,7 @@ package game;
 
 import java.util.Observable;
 
+import gameUI.SnakeGUI;
 import strategy.BackwardDice;
 import strategy.FreezeDice;
 
@@ -12,6 +13,7 @@ public class Game extends Observable implements Runnable {
 	private Board board;
 	private boolean ended;
 	private int currentPlayerIndex;
+	private boolean saveGameToReplay = true;
 
 	private int currentPlayerDiceValue;
 
@@ -21,7 +23,18 @@ public class Game extends Observable implements Runnable {
 	public static final int BACKWARD_COMMAND = 3;
 	public static final int FREEZE_COMMAND = 4;
 
+	// private Thread gameThread = new Thread() {
+	// @Override
+	// public void run() {
+	// super.run();
+	// while (running) {
+	// singleGameLoop();
+	// }
+	// }
+	// };
+
 	public Game() {
+
 		ended = false;
 		die = new Die();
 		board = new Board();
@@ -39,13 +52,15 @@ public class Game extends Observable implements Runnable {
 				board.movePlayerToDest(currentPlayer(), snake.getTail().getNumber());
 			} else if (commandID == LADDER_COMMAND) {
 				Ladder ladder = (Ladder) element;
-				board.movePlayerToDest(currentPlayer(), ladder.getTop().getNumber());
-			} else if (commandID == BACKWARD_COMMAND)
+				// board.movePlayerToDest(currentPlayer(),
+				// ladder.getTop().getNumber());
+				board.movePlayerToDest(currentPlayer(), 98);
+			} else if (commandID == BACKWARD_COMMAND) {
 				currentPlayer().setStrategy(new BackwardDice());
-			else if (commandID == FREEZE_COMMAND)
+			} else if (commandID == FREEZE_COMMAND) {
 				currentPlayer().setStrategy(new FreezeDice());
+			}
 		}
-
 		super.setChanged();
 		super.notifyObservers(commandID);
 
@@ -139,11 +154,12 @@ public class Game extends Observable implements Runnable {
 
 	@Override
 	public void run() {
-		while (!isEnd())
+		while (!isEnd()) {
 			try {
 				synchronized (this) {
 					wait();
 				}
+				SnakeGUI.replayButtonClose(true);
 				if (currentPlayerDiceValue != 0) {
 					currentPlayerMoveByStep(currentPlayerDiceValue);
 					gameLogic();
@@ -152,6 +168,8 @@ public class Game extends Observable implements Runnable {
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
+		}
+		SnakeGUI.replayButtonClose(false);
 	}
 
 	public void currentPlayerMove(int face) {

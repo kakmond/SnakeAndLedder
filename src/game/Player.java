@@ -1,8 +1,5 @@
 package game;
 
-import java.awt.Color;
-import java.util.Random;
-
 import strategy.DiceStrategy;
 import strategy.NormalDice;
 
