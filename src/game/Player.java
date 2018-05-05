@@ -78,4 +78,8 @@ public class Player {
 		this.destY = destY;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

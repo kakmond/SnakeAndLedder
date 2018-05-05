@@ -12,7 +12,6 @@ public class Game extends Observable implements Runnable {
 	private Board board;
 	private boolean ended;
 	private int currentPlayerIndex;
-	private boolean saveGameToReplay = true;
 
 	private int currentPlayerDiceValue;
 
@@ -46,6 +45,7 @@ public class Game extends Observable implements Runnable {
 			else if (commandID == FREEZE_COMMAND)
 				currentPlayer().setStrategy(new FreezeDice());
 		}
+
 		super.setChanged();
 		super.notifyObservers(commandID);
 
@@ -148,14 +148,10 @@ public class Game extends Observable implements Runnable {
 					currentPlayerMoveByStep(currentPlayerDiceValue);
 					gameLogic();
 				}
-				if (currentPlayerWin())
-					end();
-				else
-					switchPlayer();
+				switchPlayer();
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
-		System.out.println("EXITED ");
 	}
 
 	public void currentPlayerMove(int face) {
