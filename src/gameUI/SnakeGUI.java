@@ -41,6 +41,11 @@ public class SnakeGUI extends JFrame {
 	private JTextField txtPlayer_2;
 	private JTextField txtPlayer_1;
 
+	private ImageIcon hero1 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero1.png"));
+	private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
+	private ImageIcon hero3 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png"));
+	private ImageIcon hero4 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero4.png"));
+	
 	/**
 	 * Launch the application.
 	 */
@@ -78,10 +83,13 @@ public class SnakeGUI extends JFrame {
 		renderer = new Renderer();
 
 		super.setLayout(new BorderLayout());
+//		getContentPane().setLayout(null);
 		game.addObserver(renderer);
 
-		add(renderer);
+		getContentPane().add(renderer);
 
+		
+		
 		// --------------------------------
 		addMouseListener(new MouseEvent());
 
@@ -89,7 +97,7 @@ public class SnakeGUI extends JFrame {
 		super.setSize(1200, 700);
 		super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		renderer.requestFocus();
-
+		
 		super.setVisible(true);
 	}
 
@@ -106,6 +114,11 @@ public class SnakeGUI extends JFrame {
 		private ImageIcon dice5 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice5.jpeg"));
 		private ImageIcon dice6 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice6.jpeg"));
 
+		private ImageIcon hero1 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero1.png"));
+		private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
+		private ImageIcon hero3 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png"));
+		private ImageIcon hero4 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero4.png"));
+		
 		private Timer timer;
 
 		private int startX;
@@ -175,80 +188,86 @@ public class SnakeGUI extends JFrame {
 			});
 
 			JButton btnNewGame = new JButton("New Game");
-			btnNewGame.setBounds(10, 11, 160, 23);
-			add(btnNewGame);
+			btnNewGame.setBounds(51, 11, 160, 23);
+			getContentPane().add(btnNewGame);
 
 			JLabel lblPlayerTurn = new JLabel("Player Turn");
 			lblPlayerTurn.setHorizontalAlignment(SwingConstants.CENTER);
-			lblPlayerTurn.setBounds(60, 45, 67, 23);
-			add(lblPlayerTurn);
+			lblPlayerTurn.setBounds(93, 45, 67, 23);
+			getContentPane().add(lblPlayerTurn);
 
 			JLabel lblImageIcon = new JLabel("Image Icon");
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
 			lblImageIcon.setBackground(Color.GREEN);
 			lblImageIcon.setForeground(Color.BLACK);
-			lblImageIcon.setBounds(45, 86, 95, 94);
-			add(lblImageIcon);
+			lblImageIcon.setBounds(82, 64, 95, 94);
+			getContentPane().add(lblImageIcon);
 
 			JButton btnSelectNumberOf = new JButton("Select number of player");
-			btnSelectNumberOf.setBounds(10, 191, 160, 23);
-			add(btnSelectNumberOf);
+		
+		
+			btnSelectNumberOf.setBounds(51, 169, 160, 23);
+			getContentPane().add(btnSelectNumberOf);
 
 			JRadioButton rdbtnPlayers = new JRadioButton("2 Players");
-			rdbtnPlayers.setBounds(31, 237, 109, 23);
-			add(rdbtnPlayers);
+			rdbtnPlayers.setBounds(68, 199, 109, 23);
+			getContentPane().add(rdbtnPlayers);
 
 			JRadioButton rdbtnPlayers_1 = new JRadioButton("3 Players");
-			rdbtnPlayers_1.setBounds(31, 263, 109, 23);
-			add(rdbtnPlayers_1);
+			rdbtnPlayers_1.setBounds(68, 225, 109, 23);
+			getContentPane().add(rdbtnPlayers_1);
 
 			JRadioButton rdbtnPlayers_2 = new JRadioButton("4 Players");
-			rdbtnPlayers_2.setBounds(31, 289, 109, 23);
-			add(rdbtnPlayers_2);
+			rdbtnPlayers_2.setBounds(68, 251, 109, 23);
+			getContentPane().add(rdbtnPlayers_2);
 
 			JButton btnEnterPlayerName = new JButton("Enter Player's Name");
-			btnEnterPlayerName.setBounds(10, 344, 160, 23);
-			add(btnEnterPlayerName);
+			btnEnterPlayerName.setBounds(51, 281, 160, 23);
+			getContentPane().add(btnEnterPlayerName);
 
 			txtPlayer = new JTextField();
 			txtPlayer.setText("Player1");
-			txtPlayer.setBounds(10, 390, 86, 20);
-			add(txtPlayer);
+			txtPlayer.setBounds(21, 345, 86, 20);
+			getContentPane().add(txtPlayer);
 			txtPlayer.setColumns(10);
 
 			txtPlayer_3 = new JTextField();
 			txtPlayer_3.setText("Player2");
 			txtPlayer_3.setColumns(10);
-			txtPlayer_3.setBounds(10, 432, 86, 20);
-			add(txtPlayer_3);
+			txtPlayer_3.setBounds(21, 432, 86, 20);
+			getContentPane().add(txtPlayer_3);
 
 			txtPlayer_2 = new JTextField();
 			txtPlayer_2.setText("Player3");
 			txtPlayer_2.setColumns(10);
-			txtPlayer_2.setBounds(10, 479, 86, 20);
-			add(txtPlayer_2);
+			txtPlayer_2.setBounds(21, 509, 86, 20);
+			getContentPane().add(txtPlayer_2);
 
 			txtPlayer_1 = new JTextField();
 			txtPlayer_1.setText("Player4");
 			txtPlayer_1.setColumns(10);
-			txtPlayer_1.setBounds(10, 524, 86, 20);
-			add(txtPlayer_1);
+			txtPlayer_1.setBounds(21, 594, 86, 20);
+			getContentPane().add(txtPlayer_1);
 
 			JLabel lblImage = new JLabel("image");
-			lblImage.setBounds(106, 379, 47, 42);
-			add(lblImage);
+			lblImage.setBounds(117, 315, 86, 80);
+			lblImage.setIcon(hero1);
+			getContentPane().add(lblImage);
 
 			JLabel label = new JLabel("image");
-			label.setBounds(106, 421, 47, 42);
-			add(label);
+			label.setBounds(109, 395, 102, 94);
+			label.setIcon(hero2);
+			getContentPane().add(label);
 
 			JLabel label_1 = new JLabel("image");
-			label_1.setBounds(106, 468, 47, 42);
-			add(label_1);
+			label_1.setBounds(130, 479, 81, 80);
+			label_1.setIcon(hero3);
+			getContentPane().add(label_1);
 
 			JLabel label_2 = new JLabel("image");
-			label_2.setBounds(106, 513, 47, 42);
-			add(label_2);
+			label_2.setBounds(117, 557, 102, 94);
+			label_2.setIcon(hero4);
+			getContentPane().add(label_2);
 
 			// --------------------------------
 
