@@ -12,6 +12,7 @@ public class Game extends Observable implements Runnable {
 	private Board board;
 	private boolean ended;
 	private int currentPlayerIndex;
+	private boolean saveGameToReplay = true;
 
 	private int currentPlayerDiceValue;
 
@@ -73,7 +74,7 @@ public class Game extends Observable implements Runnable {
 	public Player currentPlayer() {
 		return players[currentPlayerIndex];
 	}
-
+	
 	public void switchPlayer() {
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
 	}
@@ -145,6 +146,9 @@ public class Game extends Observable implements Runnable {
 				}
 				if (currentPlayerDiceValue != 0) {
 					currentPlayerMoveByStep(currentPlayerDiceValue);
+					if( saveGameToReplay ) {
+						replayObj.addAction( currentPlayer() , currentPlayerDiceValue );
+					}
 					gameLogic();
 				}
 				switchPlayer();

@@ -58,7 +58,6 @@ public class Board {
 
 	public void addPlayer(Player player, int position) {
 		squares[position].addPlayer(player);
-
 	}
 
 	public void addElement(Element piece, int position) {

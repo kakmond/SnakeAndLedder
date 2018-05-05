@@ -10,10 +10,13 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import game.Game;
 import game.Player;
+import game.PlayerHistory;
+import game.Replay;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -84,6 +87,9 @@ public class SnakeGUI extends JFrame {
 		private JLabel imageDice = new JLabel("");
 		private JTextField textPlayerTurn = new JTextField("Player's turn");
 		private JTextField textPlayerStatus = new JTextField("Player's Status");
+		private JButton replayButton = new JButton( "Replay" );
+		private JButton saveButton = new JButton( "Save" );
+		private JButton loadButton = new JButton( "Load" );
 
 		// TODO: Use for loop to collect all faces in array.
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
@@ -119,8 +125,8 @@ public class SnakeGUI extends JFrame {
 			JButton btnNewButton = new JButton("Roll");
 
 			btnNewButton.setPreferredSize(new Dimension(40, 0));
-			btnNewButton.setBounds(940, 506, 135, 67);
-			imageDice.setBounds(940, 299, 135, 194);
+			btnNewButton.setBounds(940, 500, 135, 67);
+			imageDice.setBounds(940, 320, 135, 194);
 
 			/** roll the dice */
 			btnNewButton.addActionListener(new ActionListener() {
@@ -164,14 +170,30 @@ public class SnakeGUI extends JFrame {
 			textPlayerTurn.setEditable( false );
 			textPlayerTurn.setText( game.currentPlayerName() + "'s turn." );
 			textPlayerTurn.setHorizontalAlignment( JTextField.CENTER );
-			textPlayerTurn.setBounds(940, 100, 135, 97);
+			textPlayerTurn.setBounds(940, 50, 135, 40);
 			
 			textPlayerStatus.setEditable( false );
 			textPlayerStatus.setHorizontalAlignment( JTextField.CENTER );
-			textPlayerStatus.setBounds(940, 200, 135, 97);
+			textPlayerStatus.setBounds(940, 100, 135, 40);
+			
+			replayButton.setBounds(940, 150, 135, 40);
+			replayButton.addActionListener( new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			} );
+			
+			saveButton.setBounds(940, 200, 135, 40);
+			
+			loadButton.setBounds(940, 250, 135, 40);
 			
 			add(textPlayerTurn);
 			add(textPlayerStatus);
+			add(replayButton);
+			add( saveButton );
+			add( loadButton );
 			add(imageDice);
 			add(btnNewButton);
 
