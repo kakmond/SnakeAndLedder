@@ -6,15 +6,13 @@ import gameUI.SnakeGUI;
 import strategy.BackwardDice;
 import strategy.FreezeDice;
 
-public class Game extends Observable implements Runnable {
+public class Game extends Observable {
 
 	private Player[] players;
 	private Die die;
 	private Board board;
 	private boolean ended;
 	private int currentPlayerIndex;
-	private boolean saveGameToReplay = true;
-
 	private int currentPlayerDiceValue;
 
 	public static final int NO_COMMAND = 0;
@@ -23,15 +21,29 @@ public class Game extends Observable implements Runnable {
 	public static final int BACKWARD_COMMAND = 3;
 	public static final int FREEZE_COMMAND = 4;
 
-	// private Thread gameThread = new Thread() {
-	// @Override
-	// public void run() {
-	// super.run();
-	// while (running) {
-	// singleGameLoop();
-	// }
-	// }
-	// };
+	private Thread gameThread = new Thread() {
+		@Override
+		public void run() {
+			while (!isEnd()) {
+				try {
+					synchronized (gameThread) {
+						wait();
+					}
+					if (currentPlayerDiceValue != 0) {
+						currentPlayerMoveByStep(currentPlayerDiceValue);
+						gameLogic();
+					}
+					if (currentPlayerWin()) {
+						end();
+						System.out.println("WIN");
+					} else
+						switchPlayer();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+		}
+	};
 
 	public Game() {
 
@@ -75,7 +87,6 @@ public class Game extends Observable implements Runnable {
 			players[i].setStartX(board.getPlayerPostionX(players[i]));
 			players[i].setStartY(board.getPlayerPostionY(players[i]));
 		}
-
 	}
 
 	public boolean isEnd() {
@@ -84,6 +95,8 @@ public class Game extends Observable implements Runnable {
 
 	public void end() {
 		ended = true;
+		setChanged();
+		notifyObservers();
 	}
 
 	public Player currentPlayer() {
@@ -152,30 +165,14 @@ public class Game extends Observable implements Runnable {
 		return players;
 	}
 
-	@Override
-	public void run() {
-		while (!isEnd()) {
-			try {
-				synchronized (this) {
-					wait();
-				}
-				SnakeGUI.replayButtonClose(true);
-				if (currentPlayerDiceValue != 0) {
-					currentPlayerMoveByStep(currentPlayerDiceValue);
-					gameLogic();
-				}
-				switchPlayer();
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
-		SnakeGUI.replayButtonClose(false);
-	}
-
 	public void currentPlayerMove(int face) {
 		this.currentPlayerDiceValue = face;
-		synchronized (this) {
-			this.notify();
+		synchronized (this.gameThread) {
+			this.gameThread.notify();
 		}
+	}
+
+	public void start() {
+		this.gameThread.start();
 	}
 }

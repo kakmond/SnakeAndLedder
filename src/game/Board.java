@@ -54,6 +54,9 @@ public class Board {
 		Backward[] backwards = { new Backward(squares[30]), new Backward(squares[57]), new Backward(squares[64]) };
 		for (Backward b : backwards)
 			addElement(b, b.getBackwardSquare().getNumber());
+
+		// Set ending position
+		squares[squares.length - 1].setGoal(true);
 	}
 
 	public void addPlayer(Player player, int position) {

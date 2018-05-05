@@ -20,6 +20,7 @@ import game.Game;
 import game.Player;
 
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -40,13 +41,6 @@ public class SnakeGUI extends JFrame {
 
 	private Renderer renderer;
 	private Game game;
-	private JTextField txtPlayer1;
-	private JTextField txtPlayer2;
-	private JTextField txtPlayer3;
-	private JTextField txtPlayer4;
-	private static JButton replayButton;
-
-	private static String consoleHistory = "";
 
 	/**
 	 * Launch the application.
@@ -64,9 +58,7 @@ public class SnakeGUI extends JFrame {
 				}
 			}
 		});
-
-		Thread gameThread = new Thread(game);
-		gameThread.start();
+		game.start();
 	}
 
 	/**
@@ -91,7 +83,6 @@ public class SnakeGUI extends JFrame {
 		getContentPane().add(renderer);
 
 		// --------------------------------
-		addMouseListener(new MouseEvent());
 
 		super.setResizable(false);
 		super.setSize(1200, 700);
@@ -101,19 +92,13 @@ public class SnakeGUI extends JFrame {
 		super.setVisible(true);
 	}
 
-	public static void replayButtonClose(boolean b) {
-		if (b) {
-			replayButton.setEnabled(false);
-		} else {
-			replayButton.setEnabled(true);
-		}
-	}
-
-	public static void updateConsoleHistory(String s) {
-		consoleHistory = consoleHistory.concat(s);
-	}
-
 	class Renderer extends JPanel implements Observer {
+
+		private JButton replayButton;
+
+		private JTextField[] txtPlayer = new JTextField[4];
+
+		private JButton btnNewGame;
 
 		private JLabel imageDice = new JLabel("");
 		private JTextField textPlayerTurn = new JTextField("Player's turn");
@@ -146,6 +131,9 @@ public class SnakeGUI extends JFrame {
 
 		private boolean isMoveDirectly = false;
 
+		private JButton rollButton;
+		private String consoleHistory = "";
+
 		public Renderer() {
 			timer = new Timer(3, new MoveByStep());
 
@@ -162,7 +150,7 @@ public class SnakeGUI extends JFrame {
 			// Right Controller
 			// --------------------------------
 
-			JButton rollButton = new JButton("Roll");
+			rollButton = new JButton("Roll");
 			rollButton.setEnabled(false);
 			rollButton.setPreferredSize(new Dimension(40, 0));
 			rollButton.setBounds(900, 600, 280, 67);
@@ -192,13 +180,13 @@ public class SnakeGUI extends JFrame {
 
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
-					//
-					// int i = 0;
-					// if (i == 0) {
-					// game.currentPlayerMove(1);
-					// i++;
-					// } else
-					game.currentPlayerMove(face);
+
+					int i = 0;
+					if (i == 0) {
+						game.currentPlayerMove(1);
+						i++;
+					} else
+						game.currentPlayerMove(face);
 					consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 							+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> move to "
 							+ (game.currentPlayerPosition() + face + 1) + " positions.\n");
@@ -247,7 +235,7 @@ public class SnakeGUI extends JFrame {
 			// Left Controller
 			// --------------------------------
 
-			JButton btnNewGame = new JButton("New Game");
+			btnNewGame = new JButton("New Game");
 			btnNewGame.setBounds(51, 120, 160, 40);
 			add(btnNewGame);
 
@@ -279,29 +267,16 @@ public class SnakeGUI extends JFrame {
 			btnEnterPlayerName.setBounds(43, 281, 160, 23);
 			btnEnterPlayerName.setEnabled(false);
 
-			txtPlayer1 = new JTextField();
-			txtPlayer1.setText("P1 Name");
-			txtPlayer1.setBounds(21, 345, 86, 20);
-			txtPlayer1.setColumns(10);
-			txtPlayer1.setEnabled(false);
-
-			txtPlayer2 = new JTextField();
-			txtPlayer2.setText("P2 Name ");
-			txtPlayer2.setColumns(10);
-			txtPlayer2.setBounds(21, 432, 86, 20);
-			txtPlayer2.setEnabled(false);
-
-			txtPlayer3 = new JTextField();
-			txtPlayer3.setText("P3 Name");
-			txtPlayer3.setColumns(10);
-			txtPlayer3.setBounds(21, 509, 86, 20);
-			txtPlayer3.setEnabled(false);
-
-			txtPlayer4 = new JTextField();
-			txtPlayer4.setText("P4 Name");
-			txtPlayer4.setColumns(10);
-			txtPlayer4.setBounds(21, 594, 86, 20);
-			txtPlayer4.setEnabled(false);
+			/** initialize player text */
+			int padding = 0;
+			for (int i = 0; i < 4; i++) {
+				txtPlayer[i] = new JTextField();
+				txtPlayer[i].setText("P" + (i + 1));
+				txtPlayer[i].setBounds(21, 345 + padding, 86, 20);
+				txtPlayer[i].setColumns(10);
+				txtPlayer[i].setEnabled(true);
+				padding += 87;
+			}
 
 			JLabel lblImage1 = new JLabel("image");
 			lblImage1.setBounds(117, 315, 86, 80);
@@ -328,11 +303,12 @@ public class SnakeGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					// Create new game.
 					finishCreateGame();
-					repaint();
+					// repaint();
 				}
 
 				public void finishCreateGame() {
 					btnNewGame.setEnabled(false);
+					replayButton.setEnabled(false);
 					rollButton.setEnabled(true);
 
 					// Set players.
@@ -343,25 +319,14 @@ public class SnakeGUI extends JFrame {
 					else if (rdbtn4Players.isSelected())
 						game.setPlayer(4);
 
-					// TODO: make it easier.
 					// Disable player text field.
-					txtPlayer1.setEnabled(false);
-					txtPlayer2.setEnabled(false);
-					txtPlayer3.setEnabled(false);
-					txtPlayer4.setEnabled(false);
+					for (int i = 0; i < 4; i++)
+						txtPlayer[i].setEnabled(false);
 
 					// Set players name.
 					Player[] p = game.getPlayers();
-					for (int i = 0; i < game.getPlayers().length; i++) {
-						if (i == 0)
-							p[i].setName(txtPlayer1.getText());
-						if (i == 1)
-							p[i].setName(txtPlayer2.getText());
-						if (i == 2)
-							p[i].setName(txtPlayer3.getText());
-						if (i == 3)
-							p[i].setName(txtPlayer4.getText());
-					}
+					for (int i = 0; i < game.getPlayers().length; i++)
+						p[i].setName(txtPlayer[i].getText().toString());
 				}
 			});
 
@@ -371,10 +336,10 @@ public class SnakeGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					rdbtn3Players.setSelected(false);
 					rdbtn4Players.setSelected(false);
-					txtPlayer1.setEnabled(true);
-					txtPlayer2.setEnabled(true);
-					txtPlayer3.setEnabled(false);
-					txtPlayer4.setEnabled(false);
+					txtPlayer[0].setEnabled(true);
+					txtPlayer[1].setEnabled(true);
+					txtPlayer[2].setEnabled(false);
+					txtPlayer[3].setEnabled(false);
 				}
 			});
 
@@ -384,10 +349,10 @@ public class SnakeGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					rdbtn2Players.setSelected(false);
 					rdbtn4Players.setSelected(false);
-					txtPlayer1.setEnabled(true);
-					txtPlayer2.setEnabled(true);
-					txtPlayer3.setEnabled(true);
-					txtPlayer4.setEnabled(false);
+					txtPlayer[0].setEnabled(true);
+					txtPlayer[1].setEnabled(true);
+					txtPlayer[2].setEnabled(true);
+					txtPlayer[3].setEnabled(false);
 				}
 			});
 
@@ -397,24 +362,32 @@ public class SnakeGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					rdbtn2Players.setSelected(false);
 					rdbtn3Players.setSelected(false);
-					txtPlayer1.setEnabled(true);
-					txtPlayer2.setEnabled(true);
-					txtPlayer3.setEnabled(true);
-					txtPlayer4.setEnabled(true);
+					for (int i = 0; i < 4; i++)
+						txtPlayer[i].setEnabled(true);
 				}
 			});
+
+			/** initialize radio button into group */
+			ButtonGroup group = new ButtonGroup();
+			group.add(rdbtn2Players);
+			group.add(rdbtn3Players);
+			group.add(rdbtn4Players);
+			rdbtn2Players.setSelected(true);
 
 			add(btnNewGame);
 			add(lblImageIcon);
 			add(btnSelectNumberOf);
+
 			add(rdbtn2Players);
 			add(rdbtn3Players);
 			add(rdbtn4Players);
+
 			add(btnEnterPlayerName);
-			add(txtPlayer1);
-			add(txtPlayer4);
-			add(txtPlayer3);
-			add(txtPlayer2);
+
+			for (int i = 0; i < 4; i++) {
+				add(txtPlayer[i]);
+			}
+
 			add(lblImage1);
 			add(lblImage2);
 			add(lblImage3);
@@ -481,6 +454,7 @@ public class SnakeGUI extends JFrame {
 
 		@Override
 		public void update(Observable o, Object arg) {
+			rollButton.setEnabled(false);
 			// default moving.
 			isMoveDirectly = false;
 			startX = game.currentPlayer().getStartX();
@@ -488,15 +462,19 @@ public class SnakeGUI extends JFrame {
 			destX = game.currentPlayer().getDestX();
 			destY = game.currentPlayer().getDestY();
 
-			if (arg == null)
+			if (game.isEnd()) {
+				rollButton.setEnabled(false);
+				consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!!");
+				updateConsoleHistory();
+				replayButton.setEnabled(true);
+				btnNewGame.setEnabled(true);
+			} else if (arg == null)
 				timer.start();
-
 			else { /** check element */
 				int commandID = (int) arg;
-				if (commandID == Game.NO_COMMAND) {
-					// System.out.println("Normal walking.");
+				if (commandID == Game.NO_COMMAND)
 					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " normal walking.\n\n");
-				} else if (commandID == Game.SNAKE_COMMAND) {
+				else if (commandID == Game.SNAKE_COMMAND) {
 					System.out.println("Facing snake.");
 					isMoveDirectly = true;
 					repaint();
@@ -513,12 +491,12 @@ public class SnakeGUI extends JFrame {
 					System.out.println("Let's go party. Going backward.");
 					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " Backward!!!\n\n");
 				}
-				updateConsoleHistory();
+				rollButton.setEnabled(true);
 			}
+
 		}
 
 		class MoveByStep implements ActionListener {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (startX < destX)
@@ -537,33 +515,4 @@ public class SnakeGUI extends JFrame {
 
 	}
 
-	/** A Class for determine coordinate */
-	class MouseEvent implements MouseListener {
-
-		@Override
-		public void mouseClicked(java.awt.event.MouseEvent e) {
-			System.out.println(e.getX() + " " + e.getY());
-		}
-
-		@Override
-		public void mousePressed(java.awt.event.MouseEvent e) {
-
-		}
-
-		@Override
-		public void mouseReleased(java.awt.event.MouseEvent e) {
-
-		}
-
-		@Override
-		public void mouseEntered(java.awt.event.MouseEvent e) {
-
-		}
-
-		@Override
-		public void mouseExited(java.awt.event.MouseEvent e) {
-
-		}
-
-	}
 }
