@@ -48,7 +48,7 @@ public class SnakeGUI extends JFrame {
 	private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
 	private ImageIcon hero3 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png"));
 	private ImageIcon hero4 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero4.png"));
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -86,13 +86,11 @@ public class SnakeGUI extends JFrame {
 		renderer = new Renderer();
 
 		super.setLayout(new BorderLayout());
-//		getContentPane().setLayout(null);
+		// getContentPane().setLayout(null);
 		game.addObserver(renderer);
 
 		getContentPane().add(renderer);
 
-		
-		
 		// --------------------------------
 		addMouseListener(new MouseEvent());
 
@@ -100,7 +98,7 @@ public class SnakeGUI extends JFrame {
 		super.setSize(1200, 700);
 		super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		renderer.requestFocus();
-		
+
 		super.setVisible(true);
 	}
 
@@ -109,9 +107,9 @@ public class SnakeGUI extends JFrame {
 		private JLabel imageDice = new JLabel("");
 		private JTextField textPlayerTurn = new JTextField("Player's turn");
 		private JTextField textPlayerStatus = new JTextField("Player's Status");
-		private JButton replayButton = new JButton( "Replay" );
-		private JButton saveButton = new JButton( "Save" );
-		private JButton loadButton = new JButton( "Load" );
+		private JButton replayButton = new JButton("Replay");
+		private JButton saveButton = new JButton("Save");
+		private JButton loadButton = new JButton("Load");
 
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
 		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
@@ -124,7 +122,7 @@ public class SnakeGUI extends JFrame {
 		private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
 		private ImageIcon hero3 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png"));
 		private ImageIcon hero4 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero4.png"));
-		
+
 		private Timer timer;
 
 		private int startX;
@@ -148,6 +146,11 @@ public class SnakeGUI extends JFrame {
 			startY = game.currentPlayer().getStartY();
 
 			setLayout(null);
+			
+			// --------------------------------
+			// Right Controller
+			// --------------------------------
+			
 			JButton btnNewButton = new JButton("Roll");
 
 			btnNewButton.setPreferredSize(new Dimension(40, 0));
@@ -164,11 +167,9 @@ public class SnakeGUI extends JFrame {
 					/**
 					 * TODO:
 					 * 
-					 * Tell user if the face is 0 --> That means you are waiting
-					 * for the train.
+					 * Tell user if the face is 0 --> That means you are waiting for the train.
 					 * 
-					 * Tell user if the face is less than 0 --> That means you
-					 * are drunk now.
+					 * Tell user if the face is less than 0 --> That means you are drunk now.
 					 * 
 					 */
 					System.out.println(face);
@@ -193,28 +194,54 @@ public class SnakeGUI extends JFrame {
 				}
 			});
 
-			textPlayerTurn.setEditable( false );
-			textPlayerTurn.setText( game.currentPlayerName() + "'s turn." );
-			textPlayerTurn.setHorizontalAlignment( JTextField.CENTER );
+			textPlayerTurn.setEditable(false);
+			textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
+			textPlayerTurn.setHorizontalAlignment(JTextField.CENTER);
 			textPlayerTurn.setBounds(940, 50, 135, 40);
-			
-			textPlayerStatus.setEditable( false );
-			textPlayerStatus.setHorizontalAlignment( JTextField.CENTER );
-			textPlayerStatus.setBounds(940, 100, 135, 40);
-			
-			replayButton.setBounds(940, 150, 135, 40);
+
+			textPlayerStatus.setEditable(false);
+			textPlayerStatus.setHorizontalAlignment(JTextField.CENTER);
+			textPlayerStatus.setBounds(940, 100, 135, 80);
+
+			replayButton.setBounds(940, 190, 135, 40);
 			replayButton.addActionListener( new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+					// Replay function
 				}
 			} );
-			
-			saveButton.setBounds(940, 200, 135, 40);
-			
-			loadButton.setBounds(940, 250, 135, 40);
-			
+
+			saveButton.setBounds(940, 240, 135, 40);
+			saveButton.addActionListener( new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Save function
+				}
+			} );
+
+			loadButton.setBounds(940, 290, 135, 40);
+			loadButton.addActionListener( new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Load function
+				}
+			} );
+
+			add(textPlayerTurn);
+			add(textPlayerStatus);
+			add(replayButton);
+			add(saveButton);
+			add(loadButton);
+			add(imageDice);
+			add(btnNewButton);
+
+			// --------------------------------
+			// Left Controller
+			// --------------------------------
+
 			JButton btnNewGame = new JButton("New Game");
 			btnNewGame.setBounds(51, 11, 160, 23);
 			getContentPane().add(btnNewGame);
@@ -232,8 +259,7 @@ public class SnakeGUI extends JFrame {
 			getContentPane().add(lblImageIcon);
 
 			JButton btnSelectNumberOf = new JButton("Select number of player");
-		
-		
+
 			btnSelectNumberOf.setBounds(51, 169, 160, 23);
 			getContentPane().add(btnSelectNumberOf);
 
@@ -298,24 +324,9 @@ public class SnakeGUI extends JFrame {
 			getContentPane().add(label_2);
 
 			// --------------------------------
-
-			textPlayerTurn.setEditable(false);
-			textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
-			textPlayerTurn.setHorizontalAlignment(JTextField.CENTER);
-			textPlayerTurn.setBounds(940, 100, 135, 97);
-
-			textPlayerStatus.setEditable(false);
-			textPlayerStatus.setHorizontalAlignment(JTextField.CENTER);
-			textPlayerStatus.setBounds(940, 200, 135, 97);
-
-			add(textPlayerTurn);
-			add(textPlayerStatus);
-			add(replayButton);
-			add( saveButton );
-			add( loadButton );
-			add(imageDice);
-			add(btnNewButton);
-
+			// Middle Controller
+			// --------------------------------
+			
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
 			bg.setBounds(250, 20, 644, 627);
