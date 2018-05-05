@@ -394,24 +394,23 @@ public class SnakeGUI extends JFrame {
 				int commandID = (int) arg;
 				if (commandID == Game.NO_COMMAND) {
 					textPlayerStatus.setText("Normal walking");
-					// do nothing.
+					System.out.println( "Normal walking." );
 				} else if (commandID == Game.SNAKE_COMMAND) {
 					textPlayerStatus.setText("Facing Snake.");
+					System.out.println( "Facing snake." );
 					isMoveDirectly = true;
 					repaint();
-					// TODO: tell user, you are facing with snake.
 				} else if (commandID == Game.LADDER_COMMAND) {
 					textPlayerStatus.setText("Facing Ladder.");
+					System.out.println( "Facing ladder." );
 					isMoveDirectly = true;
 					repaint();
-					// TODO: tell user, you are facing with ladder.
 				} else if (commandID == Game.FREEZE_COMMAND) {
-					textPlayerStatus.setText("The train is coming.\nFreeze 1 turn.");
-					// TODO: tell user, the train is coming.
+					textPlayerStatus.setText("Freeze 1 turn.");
+					System.out.println( "The training is coming. Freeze 1 turn." );
 				} else if (commandID == Game.BACKWARD_COMMAND) {
-					textPlayerStatus.setText("Let's go party.\nGoing Backward.");
-					// TODO: tell user, someone invited you to join the beer
-					// party.
+					textPlayerStatus.setText("Going Backward.");
+					System.out.println( "Let's go party. Going backward." );
 				}
 
 			}

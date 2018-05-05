@@ -146,9 +146,6 @@ public class Game extends Observable implements Runnable {
 				}
 				if (currentPlayerDiceValue != 0) {
 					currentPlayerMoveByStep(currentPlayerDiceValue);
-					if( saveGameToReplay ) {
-						replayObj.addAction( currentPlayer() , currentPlayerDiceValue );
-					}
 					gameLogic();
 				}
 				switchPlayer();
