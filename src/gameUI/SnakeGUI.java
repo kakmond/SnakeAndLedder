@@ -39,10 +39,10 @@ public class SnakeGUI extends JFrame {
 
 	private Renderer renderer;
 	private Game game;
-	private JTextField txtPlayer;
-	private JTextField txtPlayer_3;
-	private JTextField txtPlayer_2;
-	private JTextField txtPlayer_1;
+	private JTextField txtPlayer1;
+	private JTextField txtPlayer2;
+	private JTextField txtPlayer3;
+	private JTextField txtPlayer4;
 
 	private ImageIcon hero1 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero1.png"));
 	private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
@@ -146,11 +146,11 @@ public class SnakeGUI extends JFrame {
 			startY = game.currentPlayer().getStartY();
 
 			setLayout(null);
-			
+
 			// --------------------------------
 			// Right Controller
 			// --------------------------------
-			
+
 			JButton btnNewButton = new JButton("Roll");
 
 			btnNewButton.setPreferredSize(new Dimension(40, 0));
@@ -204,31 +204,31 @@ public class SnakeGUI extends JFrame {
 			textPlayerStatus.setBounds(940, 100, 135, 80);
 
 			replayButton.setBounds(940, 190, 135, 40);
-			replayButton.addActionListener( new ActionListener() {
-				
+			replayButton.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Replay function
 				}
-			} );
+			});
 
 			saveButton.setBounds(940, 240, 135, 40);
-			saveButton.addActionListener( new ActionListener() {
-				
+			saveButton.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Save function
 				}
-			} );
+			});
 
 			loadButton.setBounds(940, 290, 135, 40);
-			loadButton.addActionListener( new ActionListener() {
-				
+			loadButton.addActionListener(new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Load function
 				}
-			} );
+			});
 
 			add(textPlayerTurn);
 			add(textPlayerStatus);
@@ -246,87 +246,169 @@ public class SnakeGUI extends JFrame {
 			btnNewGame.setBounds(51, 11, 160, 23);
 			getContentPane().add(btnNewGame);
 
-			JLabel lblPlayerTurn = new JLabel("Player Turn");
+			JLabel lblPlayerTurn = new JLabel("Player's Turn");
 			lblPlayerTurn.setHorizontalAlignment(SwingConstants.CENTER);
-			lblPlayerTurn.setBounds(93, 45, 67, 23);
-			getContentPane().add(lblPlayerTurn);
+			lblPlayerTurn.setBounds(82, 40, 100, 30);
 
 			JLabel lblImageIcon = new JLabel("Image Icon");
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
 			lblImageIcon.setBackground(Color.GREEN);
 			lblImageIcon.setForeground(Color.BLACK);
 			lblImageIcon.setBounds(82, 64, 95, 94);
-			getContentPane().add(lblImageIcon);
 
 			JButton btnSelectNumberOf = new JButton("Select number of player");
+			btnSelectNumberOf.setBounds(30, 169, 200, 30);
+			btnSelectNumberOf.setEnabled(false);
 
-			btnSelectNumberOf.setBounds(51, 169, 160, 23);
-			getContentPane().add(btnSelectNumberOf);
+			JRadioButton rdbtn2Players = new JRadioButton("2 Players");
+			rdbtn2Players.setBounds(68, 199, 109, 23);
 
-			JRadioButton rdbtnPlayers = new JRadioButton("2 Players");
-			rdbtnPlayers.setBounds(68, 199, 109, 23);
-			getContentPane().add(rdbtnPlayers);
+			JRadioButton rdbtn3Players = new JRadioButton("3 Players");
+			rdbtn3Players.setBounds(68, 225, 109, 23);
 
-			JRadioButton rdbtnPlayers_1 = new JRadioButton("3 Players");
-			rdbtnPlayers_1.setBounds(68, 225, 109, 23);
-			getContentPane().add(rdbtnPlayers_1);
-
-			JRadioButton rdbtnPlayers_2 = new JRadioButton("4 Players");
-			rdbtnPlayers_2.setBounds(68, 251, 109, 23);
-			getContentPane().add(rdbtnPlayers_2);
+			JRadioButton rdbtn4Players = new JRadioButton("4 Players");
+			rdbtn4Players.setBounds(68, 251, 109, 23);
 
 			JButton btnEnterPlayerName = new JButton("Enter Player's Name");
-			btnEnterPlayerName.setBounds(51, 281, 160, 23);
-			getContentPane().add(btnEnterPlayerName);
+			btnEnterPlayerName.setBounds(43, 281, 160, 23);
+			btnEnterPlayerName.setEnabled(false);
 
-			txtPlayer = new JTextField();
-			txtPlayer.setText("Player1");
-			txtPlayer.setBounds(21, 345, 86, 20);
-			getContentPane().add(txtPlayer);
-			txtPlayer.setColumns(10);
+			txtPlayer1 = new JTextField();
+			txtPlayer1.setText("P1 Name");
+			txtPlayer1.setBounds(21, 345, 86, 20);
+			txtPlayer1.setColumns(10);
+			txtPlayer1.setEnabled( false );
 
-			txtPlayer_3 = new JTextField();
-			txtPlayer_3.setText("Player2");
-			txtPlayer_3.setColumns(10);
-			txtPlayer_3.setBounds(21, 432, 86, 20);
-			getContentPane().add(txtPlayer_3);
+			txtPlayer2 = new JTextField();
+			txtPlayer2.setText("P2 Name ");
+			txtPlayer2.setColumns(10);
+			txtPlayer2.setBounds(21, 432, 86, 20);
+			txtPlayer2.setEnabled( false );
 
-			txtPlayer_2 = new JTextField();
-			txtPlayer_2.setText("Player3");
-			txtPlayer_2.setColumns(10);
-			txtPlayer_2.setBounds(21, 509, 86, 20);
-			getContentPane().add(txtPlayer_2);
+			txtPlayer3 = new JTextField();
+			txtPlayer3.setText("P3 Name");
+			txtPlayer3.setColumns(10);
+			txtPlayer3.setBounds(21, 509, 86, 20);
+			txtPlayer3.setEnabled( false );
 
-			txtPlayer_1 = new JTextField();
-			txtPlayer_1.setText("Player4");
-			txtPlayer_1.setColumns(10);
-			txtPlayer_1.setBounds(21, 594, 86, 20);
-			getContentPane().add(txtPlayer_1);
+			txtPlayer4 = new JTextField();
+			txtPlayer4.setText("P4 Name");
+			txtPlayer4.setColumns(10);
+			txtPlayer4.setBounds(21, 594, 86, 20);
+			txtPlayer4.setEnabled( false );
 
-			JLabel lblImage = new JLabel("image");
-			lblImage.setBounds(117, 315, 86, 80);
-			lblImage.setIcon(hero1);
-			getContentPane().add(lblImage);
+			JLabel lblImage1 = new JLabel("image");
+			lblImage1.setBounds(117, 315, 86, 80);
+			lblImage1.setIcon(hero1);
 
-			JLabel label = new JLabel("image");
-			label.setBounds(109, 395, 102, 94);
-			label.setIcon(hero2);
-			getContentPane().add(label);
+			JLabel lblImage2 = new JLabel("image");
+			lblImage2.setBounds(109, 395, 102, 94);
+			lblImage2.setIcon(hero2);
+			getContentPane().add(lblImage2);
 
-			JLabel label_1 = new JLabel("image");
-			label_1.setBounds(130, 479, 81, 80);
-			label_1.setIcon(hero3);
-			getContentPane().add(label_1);
+			JLabel lblImage3 = new JLabel("image");
+			lblImage3.setBounds(130, 479, 81, 80);
+			lblImage3.setIcon(hero3);
+			getContentPane().add(lblImage3);
 
-			JLabel label_2 = new JLabel("image");
-			label_2.setBounds(117, 557, 102, 94);
-			label_2.setIcon(hero4);
-			getContentPane().add(label_2);
+			JLabel lblImage4 = new JLabel("image");
+			lblImage4.setBounds(117, 557, 102, 94);
+			lblImage4.setIcon(hero4);
+			getContentPane().add(lblImage4);
+			
+			btnNewGame.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Create new game.
+					finishCreateGame();
+				}
+
+				public void finishCreateGame() {
+					btnNewGame.setEnabled(false);
+					
+					// Set players.
+					if( rdbtn2Players.isSelected() ) game.setPlayer( 2 );
+					else if( rdbtn3Players.isSelected() ) game.setPlayer( 3 );
+					else if( rdbtn4Players.isSelected() ) game.setPlayer( 4 );
+					
+					// Disable player text field.
+					txtPlayer1.setEnabled( false );
+					txtPlayer2.setEnabled( false );
+					txtPlayer3.setEnabled( false );
+					txtPlayer4.setEnabled( false );
+					
+					// Set players name.
+					Player[] p = game.getPlayers();
+					for( int i = 0 ; i < game.getPlayers().length ; i++ ) {
+						if( i == 0 ) p[i].setName( txtPlayer1.getText() );
+						if( i == 1 ) p[i].setName( txtPlayer2.getText() );
+						if( i == 2 ) p[i].setName( txtPlayer3.getText() );
+						if( i == 3 ) p[i].setName( txtPlayer4.getText() );
+					}
+				}
+			});
+			
+			rdbtn2Players.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rdbtn3Players.setSelected( false );
+					rdbtn4Players.setSelected( false );
+					txtPlayer1.setEnabled( true );
+					txtPlayer2.setEnabled( true );
+					txtPlayer3.setEnabled( false );
+					txtPlayer4.setEnabled( false );
+				}
+			});
+
+			rdbtn3Players.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rdbtn2Players.setSelected( false );
+					rdbtn4Players.setSelected( false );
+					txtPlayer1.setEnabled( true );
+					txtPlayer2.setEnabled( true );
+					txtPlayer3.setEnabled( true );
+					txtPlayer4.setEnabled( false );
+				}
+			});
+
+			rdbtn4Players.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rdbtn2Players.setSelected( false );
+					rdbtn3Players.setSelected( false );
+					txtPlayer1.setEnabled( true );
+					txtPlayer2.setEnabled( true );
+					txtPlayer3.setEnabled( true );
+					txtPlayer4.setEnabled( true );
+				}
+			});
+			
+			add(btnNewGame);
+			add(lblPlayerTurn);
+			add(lblImageIcon);
+			add(btnSelectNumberOf);
+			add(rdbtn2Players);
+			add(rdbtn3Players);
+			add(rdbtn4Players);
+			add(btnEnterPlayerName);
+			add(txtPlayer1);
+			add(txtPlayer4);
+			add(txtPlayer3);
+			add(txtPlayer2);
+			add(lblImage1);
+			add(lblImage2);
+			add(lblImage3);
+			add(lblImage4);
 
 			// --------------------------------
 			// Middle Controller
 			// --------------------------------
-			
+
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
 			bg.setBounds(250, 20, 644, 627);
@@ -394,23 +476,23 @@ public class SnakeGUI extends JFrame {
 				int commandID = (int) arg;
 				if (commandID == Game.NO_COMMAND) {
 					textPlayerStatus.setText("Normal walking");
-					System.out.println( "Normal walking." );
+					System.out.println("Normal walking.");
 				} else if (commandID == Game.SNAKE_COMMAND) {
 					textPlayerStatus.setText("Facing Snake.");
-					System.out.println( "Facing snake." );
+					System.out.println("Facing snake.");
 					isMoveDirectly = true;
 					repaint();
 				} else if (commandID == Game.LADDER_COMMAND) {
 					textPlayerStatus.setText("Facing Ladder.");
-					System.out.println( "Facing ladder." );
+					System.out.println("Facing ladder.");
 					isMoveDirectly = true;
 					repaint();
 				} else if (commandID == Game.FREEZE_COMMAND) {
 					textPlayerStatus.setText("Freeze 1 turn.");
-					System.out.println( "The training is coming. Freeze 1 turn." );
+					System.out.println("The training is coming. Freeze 1 turn.");
 				} else if (commandID == Game.BACKWARD_COMMAND) {
 					textPlayerStatus.setText("Going Backward.");
-					System.out.println( "Let's go party. Going backward." );
+					System.out.println("Let's go party. Going backward.");
 				}
 
 			}

@@ -77,5 +77,9 @@ public class Player {
 	public void setDestY(int destY) {
 		this.destY = destY;
 	}
+	
+	public void setName( String name ) {
+		this.name = name;
+	}
 
 }
