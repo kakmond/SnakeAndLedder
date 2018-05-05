@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.JFrame;
+
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -65,6 +67,8 @@ public class SnakeGUI extends JFrame {
 	private void initialize() {
 
 		renderer = new Renderer();
+
+		super.setLayout(new BorderLayout());
 		game.addObserver(renderer);
 
 		add(renderer);
@@ -136,8 +140,8 @@ public class SnakeGUI extends JFrame {
 					 * 
 					 * Tell user if the face is less than 0 --> That means you
 					 * are drunk now.
+					 * 
 					 */
-
 					System.out.println(face);
 					if (face == 1) {
 						imageDice.setIcon(dice1);
