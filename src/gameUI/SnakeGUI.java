@@ -9,6 +9,7 @@ import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import game.Game;
@@ -63,7 +64,6 @@ public class SnakeGUI extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
 		renderer = new Renderer();
 		game.addObserver(renderer);
 
@@ -80,8 +80,10 @@ public class SnakeGUI extends JFrame {
 	}
 
 	class Renderer extends JPanel implements Observer {
-
+		
 		private JLabel imageDice = new JLabel("");
+		private JTextField textPlayerTurn = new JTextField("Player's turn");
+		private JTextField textPlayerStatus = new JTextField("Player's Status");
 
 		// TODO: Use for loop to collect all faces in array.
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
@@ -104,7 +106,6 @@ public class SnakeGUI extends JFrame {
 		private boolean isMoveDirectly = false;
 
 		public Renderer() {
-
 			timer = new Timer(5, new MoveByStep());
 
 			setHero();
@@ -160,6 +161,17 @@ public class SnakeGUI extends JFrame {
 				}
 			});
 
+			textPlayerTurn.setEditable( false );
+			textPlayerTurn.setText( game.currentPlayerName() + "'s turn." );
+			textPlayerTurn.setHorizontalAlignment( JTextField.CENTER );
+			textPlayerTurn.setBounds(940, 100, 135, 97);
+			
+			textPlayerStatus.setEditable( false );
+			textPlayerStatus.setHorizontalAlignment( JTextField.CENTER );
+			textPlayerStatus.setBounds(940, 200, 135, 97);
+			
+			add(textPlayerTurn);
+			add(textPlayerStatus);
 			add(imageDice);
 			add(btnNewButton);
 
@@ -229,18 +241,23 @@ public class SnakeGUI extends JFrame {
 			else { /** check element */
 				int commandID = (int) arg;
 				if (commandID == Game.NO_COMMAND) {
+					textPlayerStatus.setText( "Normal walking" );
 					// do nothing.
 				} else if (commandID == Game.SNAKE_COMMAND) {
+					textPlayerStatus.setText( "Facing Snake." );
 					isMoveDirectly = true;
 					repaint();
 					// TODO: tell user, you are facing with snake.
 				} else if (commandID == Game.LADDER_COMMAND) {
+					textPlayerStatus.setText( "Facing Ladder." );
 					isMoveDirectly = true;
 					repaint();
 					// TODO: tell user, you are facing with ladder.
 				} else if (commandID == Game.FREEZE_COMMAND) {
+					textPlayerStatus.setText( "The train is coming.\nFreeze 1 turn." );
 					// TODO: tell user, the train is coming.
 				} else if (commandID == Game.BACKWARD_COMMAND) {
+					textPlayerStatus.setText( "Let's go party.\nGoing Backward." );
 					// TODO: tell user, someone invited you to join the beer
 					// party.
 				}
