@@ -2,6 +2,7 @@ package game;
 
 import java.util.Observable;
 
+import gameUI.SnakeGUI;
 import strategy.BackwardDice;
 import strategy.FreezeDice;
 
@@ -41,10 +42,12 @@ public class Game extends Observable implements Runnable {
 			} else if (commandID == LADDER_COMMAND) {
 				Ladder ladder = (Ladder) element;
 				board.movePlayerToDest(currentPlayer(), ladder.getTop().getNumber());
-			} else if (commandID == BACKWARD_COMMAND)
+			} else if (commandID == BACKWARD_COMMAND) {
 				currentPlayer().setStrategy(new BackwardDice());
-			else if (commandID == FREEZE_COMMAND)
+			}
+			else if (commandID == FREEZE_COMMAND) {
 				currentPlayer().setStrategy(new FreezeDice());
+			}
 		}
 		super.setChanged();
 		super.notifyObservers(commandID);
@@ -91,7 +94,7 @@ public class Game extends Observable implements Runnable {
 			currentPlayer().setDestY(getCurrentPlayerPostionY());
 			setChanged();
 			notifyObservers();
-			Thread.sleep(500);
+			Thread.sleep(100);
 		}
 		currentPlayer().setStartX(getCurrentPlayerPostionX());
 		currentPlayer().setStartY(getCurrentPlayerPostionY());
@@ -139,11 +142,12 @@ public class Game extends Observable implements Runnable {
 
 	@Override
 	public void run() {
-		while (!isEnd())
+		while (!isEnd()) {
 			try {
 				synchronized (this) {
 					wait();
 				}
+				SnakeGUI.replayButtonClose( true );
 				if (currentPlayerDiceValue != 0) {
 					currentPlayerMoveByStep(currentPlayerDiceValue);
 					gameLogic();
@@ -152,6 +156,8 @@ public class Game extends Observable implements Runnable {
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
+		}
+		SnakeGUI.replayButtonClose( false );
 	}
 
 	public void currentPlayerMove(int face) {
