@@ -26,6 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -127,6 +128,8 @@ public class SnakeGUI extends JFrame {
 		private JTextPane textConsole = new JTextPane();
 		private JScrollPane textScrollPane = new JScrollPane( textConsole );
 
+		private ImageIcon gameLogo = new ImageIcon(SnakeGUI.class.getResource("/resources/snlLogo.png"));
+		
 		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
 		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
 		private ImageIcon dice3 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice3.jpeg"));
@@ -248,18 +251,18 @@ public class SnakeGUI extends JFrame {
 			// --------------------------------
 
 			JButton btnNewGame = new JButton("New Game");
-			btnNewGame.setBounds(51, 11, 160, 23);
+			btnNewGame.setBounds(51, 120, 160, 40);
 			getContentPane().add(btnNewGame);
 
-			JLabel lblPlayerTurn = new JLabel("Player's Turn");
-			lblPlayerTurn.setHorizontalAlignment(SwingConstants.CENTER);
-			lblPlayerTurn.setBounds(82, 40, 100, 30);
-
-			JLabel lblImageIcon = new JLabel("Image Icon");
+			JLabel lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
 			lblImageIcon.setBackground(Color.GREEN);
 			lblImageIcon.setForeground(Color.BLACK);
-			lblImageIcon.setBounds(82, 64, 95, 94);
+			lblImageIcon.setBounds(20, 20, 210, 110);
+			Image image = gameLogo.getImage();
+			Image newimg = image.getScaledInstance(210, 110,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+			gameLogo = new ImageIcon(newimg);
+			lblImageIcon.setIcon( gameLogo );
 
 			JButton btnSelectNumberOf = new JButton("Select number of player");
 			btnSelectNumberOf.setBounds(30, 169, 200, 30);
@@ -396,7 +399,6 @@ public class SnakeGUI extends JFrame {
 			});
 			
 			add(btnNewGame);
-			add(lblPlayerTurn);
 			add(lblImageIcon);
 			add(btnSelectNumberOf);
 			add(rdbtn2Players);
