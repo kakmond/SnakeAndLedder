@@ -167,6 +167,12 @@ public class SnakeGUI extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Replay function
+					replayButton.setEnabled(false);
+					btnNewGame.setEnabled(false);
+					game.replay();
+					if (game.isReplay())
+						consoleHistory = consoleHistory.concat("==============Replay==============\n\n");
+					updateConsoleHistory();
 				}
 			});
 
@@ -188,17 +194,7 @@ public class SnakeGUI extends JFrame {
 					consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 							+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> move to "
 							+ (game.currentPlayerPosition() + face + 1) + " positions.\n");
-					/**
-					 * TODO:
-					 * 
-					 * Tell user if the face is 0 --> That means you are waiting
-					 * for the train.
-					 * 
-					 * Tell user if the face is less than 0 --> That means you
-					 * are drunk now.
-					 * 
-					 */
-					System.out.println(face);
+
 					if (face == 1) {
 						imageDice.setIcon(dice1);
 					}
@@ -464,7 +460,7 @@ public class SnakeGUI extends JFrame {
 
 			if (game.isEnd()) {
 				rollButton.setEnabled(false);
-				consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!!");
+				consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!! \n\n");
 				updateConsoleHistory();
 				replayButton.setEnabled(true);
 				btnNewGame.setEnabled(true);
@@ -473,23 +469,22 @@ public class SnakeGUI extends JFrame {
 			else { /** check element */
 				int commandID = (int) arg;
 				if (commandID == Game.NO_COMMAND)
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " normal walking.\n\n");
+					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " see nothing.\n\n");
 				else if (commandID == Game.SNAKE_COMMAND) {
-					System.out.println("Facing snake.");
 					isMoveDirectly = true;
 					repaint();
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " faces Snake.\n\n");
+					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " faces Snake (going down).\n\n");
 				} else if (commandID == Game.LADDER_COMMAND) {
-					System.out.println("Facing ladder.");
 					isMoveDirectly = true;
 					repaint();
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " faces Ladder.\n\n");
+					consoleHistory = consoleHistory
+							.concat(game.currentPlayerName() + " faces Ladder (climbing up).\n\n");
 				} else if (commandID == Game.FREEZE_COMMAND) {
-					System.out.println("The training is coming. Freeze 1 turn.");
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " Freeze!!!\n\n");
+					consoleHistory = consoleHistory.concat(
+							game.currentPlayerName() + " must wait for the train passing (freeze next turn)\n\n");
 				} else if (commandID == Game.BACKWARD_COMMAND) {
-					System.out.println("Let's go party. Going backward.");
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " Backward!!!\n\n");
+					consoleHistory = consoleHistory
+							.concat(game.currentPlayerName() + " get drunk now (going backward next turn)!!!\n\n");
 				}
 				updateConsoleHistory();
 				rollButton.setEnabled(true);

@@ -2,7 +2,7 @@ package game;
 
 import java.util.Observable;
 
-import gameUI.SnakeGUI;
+import replay.Memento;
 import replay.ReplayManager;
 import strategy.BackwardDice;
 import strategy.FreezeDice;
@@ -13,8 +13,11 @@ public class Game extends Observable {
 	private Die die;
 	private Board board;
 	private boolean ended;
+
 	private int currentPlayerIndex;
 	private int currentPlayerDiceValue;
+
+	private boolean isReplay;
 	private ReplayManager replay;
 
 	public static final int NO_COMMAND = 0;
@@ -27,32 +30,40 @@ public class Game extends Observable {
 		@Override
 		public void run() {
 			while (true) {
+				int diceValue = 0;
 				try {
-					synchronized (gameThread) {
-						wait();
-					}
-					if (currentPlayerDiceValue != 0) {
-						currentPlayerMoveByStep(currentPlayerDiceValue);
+					if (!isReplay || isEnd()) {
+						synchronized (gameThread) {
+							wait(); // wait for user roll dice.
+						}
+						diceValue = currentPlayerDiceValue;
+					} else if (replay.hasNext()) // load dice from replay
+						diceValue = getDiceValueFromMemento(replay.next());
+
+					if (diceValue != 0) {
+						currentPlayerMoveByStep(diceValue);
 						gameLogic();
 					}
-					if (currentPlayerWin()) {
+					if (currentPlayerWin())
 						end();
-					} else
+					else
 						switchPlayer();
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
+
 			}
 		}
 	};
 
 	public Game() {
 		replay = new ReplayManager();
+		isReplay = false;
 		ended = false;
 		die = new Die();
 		board = new Board();
 		currentPlayerIndex = 0;
-		this.gameThread.start();
+		gameThread.start();
 	}
 
 	private void gameLogic() {
@@ -82,6 +93,7 @@ public class Game extends Observable {
 
 	public void setPlayer(int num) {
 		replay = new ReplayManager();
+		isReplay = false;
 		if (isEnd())
 			ended = false;
 		players = new Player[num];
@@ -181,31 +193,42 @@ public class Game extends Observable {
 		synchronized (this.gameThread) {
 			this.gameThread.notify();
 		}
+		if (!isReplay) {
+			System.out.println("ADD");
+			this.replay.addReplay(saveStateToMemento());
+		}
+
 	}
 
-	public void setPlayersAtStart() {
-		for (int i = 0; i < players.length; i++) {
-			board.movePlayerToDest(players[i], 0);
-			players[i].setStartX(board.getPlayerPostionX(players[i]));
-			players[i].setStartY(board.getPlayerPostionY(players[i]));
-		}
-		setChanged();
-		notifyObservers();
+	public boolean isReplay() {
+		return this.isReplay;
 	}
 
 	public void replay() {
+		this.isReplay = true;
+		this.ended = false;
+		replay.resetIndex();
 		/** Set players to start point */
 		for (Player p : players) {
 			board.movePlayerToDest(p, 0);
-			p.setDestX(getCurrentPlayerPostionY());
+			p.setDestX(getCurrentPlayerPostionX());
 			p.setDestY(getCurrentPlayerPostionY());
 			p.setStartX(getCurrentPlayerPostionX());
 			p.setStartY(getCurrentPlayerPostionY());
 		}
-
+		currentPlayerIndex = 0;
+		setChanged();
+		notifyObservers();/** Load dice histories from ReplayManager */
+		synchronized (this.gameThread) {
+			this.gameThread.notify();
+		}
 	}
 
-	// public void start() {
-	// replay = new ReplayManager();
-	// }
+	public Memento saveStateToMemento() {
+		return new Memento(currentPlayerDiceValue);
+	}
+
+	public int getDiceValueFromMemento(Memento memento) {
+		return memento.getDiceValue();
+	}
 }
