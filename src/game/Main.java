@@ -1,17 +1,12 @@
 package game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
 
 	public static void main(String[] args) {
 
-		List<Element> test2 = new ArrayList<>();
-		// Element test = new Player("R");
-		// test2.add(test);
-
-		// System.out.println(test2.contains(test));
+		// Element test = new Snake(new Square(0, 2, 3), new Square(0, 2, 3));
+		// Ladder test2 = (Ladder) test;
+		// System.out.println(test2.getBottom().getNumber());
 
 	}
 }

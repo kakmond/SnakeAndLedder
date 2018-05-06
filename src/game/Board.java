@@ -11,8 +11,8 @@ public class Board {
 
 		// Create Square in right Direction
 		int countRight = 1;
-		for (int y = 586; y >= 100; y = y - (2 * 60)) {
-			for (int x = 283; x <= 825; x = x + 60) {
+		for (int y = 563; y >= 0; y = y - (2 * 62)) {
+			for (int x = 240; x <= 800; x = x + 62) {
 				squares[countRight - 1] = new Square(countRight - 1, x, y);
 				countRight++;
 			}
@@ -21,8 +21,8 @@ public class Board {
 
 		// Create Square in left Direction
 		int countLeft = 11;
-		for (int y = 526; y >= 40; y = y - (2 * 60)) {
-			for (int x = 823; x >= 280; x = x - 60) {
+		for (int y = 501; y >= 0; y = y - (2 * 62)) {
+			for (int x = 798; x >= 220; x = x - 62) {
 				squares[countLeft - 1] = new Square(countLeft - 1, x, y);
 				countLeft++;
 			}
@@ -31,31 +31,43 @@ public class Board {
 
 		// Set and add Snake position
 		Snake[] snakes = { new Snake(squares[49], squares[4]), new Snake(squares[42], squares[16]),
-				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[15]),
-				new Snake(squares[86], squares[49]), new Snake(squares[83], squares[57]),
-				new Snake(squares[97], squares[40]) };
+				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[14]),
+				new Snake(squares[86], squares[48]), new Snake(squares[83], squares[57]),
+				new Snake(squares[97], squares[39]) };
 		for (Snake s : snakes)
 			addElement(s, s.getHead().getNumber());
 
 		// Set and add Ladder position
 		Ladder[] ladders = { new Ladder(squares[22], squares[1]), new Ladder(squares[58], squares[19]),
-				new Ladder(squares[44], squares[6]), new Ladder(squares[95], squares[56]),
-				new Ladder(squares[71], squares[52]), new Ladder(squares[91], squares[70]) };
+				new Ladder(squares[44], squares[5]), new Ladder(squares[95], squares[56]),
+				new Ladder(squares[71], squares[51]), new Ladder(squares[91], squares[70]) };
 		for (Ladder l : ladders)
 			addElement(l, l.getBottom().getNumber());
 
+		// Set and add Freeze position
+		Freeze[] freezes = { new Freeze(squares[6]), new Freeze(squares[37]), new Freeze(squares[67]),
+				new Freeze(squares[92]) };
+		for (Freeze f : freezes)
+			addElement(f, f.getFreezeSquare().getNumber());
+
+		// Set and add Backward position
+		Backward[] backwards = { new Backward(squares[30]), new Backward(squares[57]), new Backward(squares[64]) };
+		for (Backward b : backwards)
+			addElement(b, b.getBackwardSquare().getNumber());
+
+		// Set ending position
+		squares[squares.length - 1].setGoal(true);
 	}
 
 	public void addPlayer(Player player, int position) {
 		squares[position].addPlayer(player);
-
 	}
 
 	public void addElement(Element piece, int position) {
 		squares[position].addElement(piece);
 	}
 
-	public void movePlayerByElement(Player piece, int dest) {
+	public void movePlayerToDest(Player piece, int dest) {
 		int pos = getPlayerPosition(piece);
 		squares[pos].removePiece(piece);
 		addPlayer(piece, dest);
@@ -65,10 +77,9 @@ public class Board {
 		int pos = getPlayerPosition(piece);
 		squares[pos].removePiece(piece);
 		int next_pos = pos + steps;
-		if (next_pos >= SIZE - 1) {
-			squares[SIZE - 1].setGoal(true);
+		if (next_pos >= SIZE - 1)
 			addPlayer(piece, SIZE - 1);
-		} else
+		else
 			addPlayer(piece, next_pos);
 	}
 
