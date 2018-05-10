@@ -13,7 +13,7 @@ public class Backward implements Element {
 	}
 
 	@Override
-	public int getCommandID() {
+	public int actionCommand() {
 		return Game.BACKWARD_COMMAND;
 	}
 

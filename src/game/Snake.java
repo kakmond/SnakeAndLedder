@@ -19,7 +19,7 @@ public class Snake implements Element {
 	}
 
 	@Override
-	public int getCommandID() {
+	public int actionCommand() {
 		return Game.SNAKE_COMMAND;
 	}
 

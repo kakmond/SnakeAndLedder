@@ -2,6 +2,6 @@ package game;
 
 public interface Element {
 
-	public int getCommandID();
+	public int actionCommand();
 
 }

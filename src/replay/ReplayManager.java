@@ -4,31 +4,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ReplayManager implements Iterable<PlayerHistory> {
+public class ReplayManager implements Iterator<Memento> {
 
-	private List<PlayerHistory> histories = new ArrayList<>();
+	private List<Memento> histories = new ArrayList<>();
+	private int index = 0;
 
-	public void addReplay(PlayerHistory history) {
+	public void addReplay(Memento history) {
 		this.histories.add(history);
 	}
 
+	public void resetIndex() {
+		this.index = 0;
+	}
+
 	@Override
-	public Iterator<PlayerHistory> iterator() {
-		return new Iterator<PlayerHistory>() {
+	public boolean hasNext() {
+		return index < histories.size();
+	}
 
-			private int index = 0;
-
-			@Override
-			public boolean hasNext() {
-				return index < histories.size();
-			}
-
-			@Override
-			public PlayerHistory next() {
-				return histories.get(index);
-			}
-
-		};
+	@Override
+	public Memento next() {
+		Memento m = histories.get(index);
+		index++;
+		return m;
 	}
 
 }
