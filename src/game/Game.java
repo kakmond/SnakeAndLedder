@@ -32,6 +32,7 @@ public class Game extends Observable {
 						wait();
 					}
 					if (currentPlayerDiceValue != 0) {
+						System.out.println( "Value = " + currentPlayerDiceValue );
 						currentPlayerMoveByStep(currentPlayerDiceValue);
 						gameLogic();
 					}
@@ -66,9 +67,9 @@ public class Game extends Observable {
 				board.movePlayerToDest(currentPlayer(), snake.getTail().getNumber());
 			} else if (commandID == LADDER_COMMAND) {
 				Ladder ladder = (Ladder) element;
-				// board.movePlayerToDest(currentPlayer(),
-				// ladder.getTop().getNumber());
-				board.movePlayerToDest(currentPlayer(), 98);
+				 board.movePlayerToDest(currentPlayer(),
+				 ladder.getTop().getNumber());
+				// board.movePlayerToDest(currentPlayer(), 98);
 			} else if (commandID == BACKWARD_COMMAND) {
 				currentPlayer().setStrategy(new BackwardDice());
 			} else if (commandID == FREEZE_COMMAND) {
@@ -115,6 +116,20 @@ public class Game extends Observable {
 	}
 
 	public void currentPlayerMoveByStep(int steps) throws InterruptedException {
+		
+		// Walk through the goal
+		if( currentPlayerPosition() + steps > ( board.SIZE - 1 ) ) {
+			int walkForwardToGoal = ( board.SIZE - 1 ) - currentPlayerPosition();
+			int walkBackFromGoal = steps - walkForwardToGoal;
+			int finalPosition =  ( board.SIZE - 1 ) - walkBackFromGoal;
+			if( finalPosition > currentPlayerPosition() ) {
+				steps = finalPosition - currentPlayerPosition();
+			}
+			else {
+				steps = (-1) * ( currentPlayerPosition() - finalPosition );
+			}
+		}
+		
 		for (int i = 0; i < Math.abs(steps); i++) {
 			currentPlayer().setStartX(getCurrentPlayerPostionX());
 			currentPlayer().setStartY(getCurrentPlayerPostionY());
@@ -126,7 +141,7 @@ public class Game extends Observable {
 			currentPlayer().setDestY(getCurrentPlayerPostionY());
 			setChanged();
 			notifyObservers();
-			Thread.sleep(500);
+			Thread.sleep(200);
 		}
 		currentPlayer().setStartX(getCurrentPlayerPostionX());
 		currentPlayer().setStartY(getCurrentPlayerPostionY());
