@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Timer;
@@ -42,24 +43,6 @@ public class SnakeGUI extends JFrame {
 
 	private Renderer renderer;
 	private Game game;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-
-		Game game = new Game();
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SnakeGUI window = new SnakeGUI(game);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -79,12 +62,9 @@ public class SnakeGUI extends JFrame {
 		renderer = new Renderer();
 
 		super.setLayout(new BorderLayout());
-		// getContentPane().setLayout(null);
 		game.addObserver(renderer);
 
 		getContentPane().add(renderer);
-
-		// --------------------------------
 
 		super.setResizable(false);
 		super.setSize(1200, 700);
@@ -107,16 +87,15 @@ public class SnakeGUI extends JFrame {
 		private JTextPane textConsole = new JTextPane();
 		private JScrollPane textScrollPane = new JScrollPane(textConsole);
 
+		private JRadioButton rdbtn2Players;
+		private JRadioButton rdbtn3Players;
+		private JRadioButton rdbtn4Players;
+
 		private ImageIcon gameLogo = new ImageIcon(SnakeGUI.class.getResource("/resources/snlLogo.png"));
 
 		private ImageIcon dice[] = new ImageIcon[6];
 
-		private ImageIcon hero1 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero1.png"));
-		private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
-		private ImageIcon hero3 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png"));
-		private ImageIcon hero4 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero4.png"));
-
-		private Timer timer;
+		private Timer timer; // animation
 
 		private int startX;
 		private int startY;
@@ -149,10 +128,6 @@ public class SnakeGUI extends JFrame {
 
 			setLayout(null);
 
-			// --------------------------------
-			// Right Controller
-			// --------------------------------
-
 			rollButton = new JButton("Roll");
 			rollButton.setEnabled(false);
 			rollButton.setPreferredSize(new Dimension(40, 0));
@@ -173,9 +148,12 @@ public class SnakeGUI extends JFrame {
 					// Replay function
 					replayButton.setEnabled(false);
 					btnNewGame.setEnabled(false);
+					rdbtn2Players.setEnabled(false);
+					rdbtn3Players.setEnabled(false);
+					rdbtn4Players.setEnabled(false);
 					game.replay();
 					if (game.isReplay())
-						consoleHistory = consoleHistory.concat("==============Replay==============\n\n");
+						consoleHistory = consoleHistory.concat("Replaying...\n\n");
 					updateConsoleHistory();
 				}
 			});
@@ -197,16 +175,20 @@ public class SnakeGUI extends JFrame {
 								+ "--> Move backward to " + (game.getCurrentPlayerPosition() + face + 1)
 								+ " positions.\n");
 					else if (game.getCurrentPlayerPosition() + face >= Board.SIZE)
-						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
-								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n"
-								+ "Get through ending point.\n" + "--> So move backward to "
-								+ (game.getCurrentPlayerPosition() + face + 1) + " positions.\n");
+						consoleHistory = consoleHistory
+								.concat("Player's Turn : " + game.currentPlayerName() + "\n" + "He/She rolls dice.\n"
+										+ "--> get " + face + " value(s).\n" + "Get through ending point.\n"
+										+ "--> So move backward to "
+										+ ((game.getCurrentPlayerPosition() + 1)
+												- (game.getCurrentPlayerPosition() + face - Board.SIZE))
+										+ " positions.\n");
 					else
 						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> Move forward to "
 								+ (game.getCurrentPlayerPosition() + face + 1) + " positions.\n");
 
 					game.currentPlayerMove(face);
+
 					if (face == 1)
 						imageDice.setIcon(dice[0]);
 					else if (face == 2)
@@ -231,13 +213,8 @@ public class SnakeGUI extends JFrame {
 			add(imageDice);
 			add(rollButton);
 
-			// --------------------------------
-			// Left Controller
-			// --------------------------------
-
 			btnNewGame = new JButton("New Game");
 			btnNewGame.setBounds(51, 120, 160, 40);
-			add(btnNewGame);
 
 			JLabel lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -254,13 +231,13 @@ public class SnakeGUI extends JFrame {
 			btnSelectNumberOf.setBounds(30, 169, 200, 30);
 			btnSelectNumberOf.setEnabled(false);
 
-			JRadioButton rdbtn2Players = new JRadioButton("2 Players");
+			rdbtn2Players = new JRadioButton("2 Players");
 			rdbtn2Players.setBounds(68, 199, 109, 23);
 
-			JRadioButton rdbtn3Players = new JRadioButton("3 Players");
+			rdbtn3Players = new JRadioButton("3 Players");
 			rdbtn3Players.setBounds(68, 225, 109, 23);
 
-			JRadioButton rdbtn4Players = new JRadioButton("4 Players");
+			rdbtn4Players = new JRadioButton("4 Players");
 			rdbtn4Players.setBounds(68, 251, 109, 23);
 
 			JButton btnEnterPlayerName = new JButton("Enter Player's Name");
@@ -278,27 +255,29 @@ public class SnakeGUI extends JFrame {
 				padding += 87;
 			}
 
+			// default text player
 			txtPlayer[3].setEnabled(false);
 			txtPlayer[2].setEnabled(false);
 
+			ImageIcon heroImage[] = new ImageIcon[4];
+			for (int i = 0; i < 4; i++)
+				heroImage[i] = new ImageIcon(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
+
 			JLabel lblImage1 = new JLabel("image");
 			lblImage1.setBounds(117, 315, 86, 80);
-			lblImage1.setIcon(hero1);
+			lblImage1.setIcon(heroImage[0]);
 
 			JLabel lblImage2 = new JLabel("image");
 			lblImage2.setBounds(109, 395, 102, 94);
-			lblImage2.setIcon(hero2);
-			getContentPane().add(lblImage2);
+			lblImage2.setIcon(heroImage[1]);
 
 			JLabel lblImage3 = new JLabel("image");
 			lblImage3.setBounds(130, 479, 81, 80);
-			lblImage3.setIcon(hero3);
-			getContentPane().add(lblImage3);
+			lblImage3.setIcon(heroImage[2]);
 
 			JLabel lblImage4 = new JLabel("image");
 			lblImage4.setBounds(117, 557, 102, 94);
-			lblImage4.setIcon(hero4);
-			getContentPane().add(lblImage4);
+			lblImage4.setIcon(heroImage[3]);
 
 			btnNewGame.addActionListener(new ActionListener() {
 
@@ -324,6 +303,10 @@ public class SnakeGUI extends JFrame {
 					// Disable player text field.
 					for (int i = 0; i < 4; i++)
 						txtPlayer[i].setEnabled(false);
+
+					rdbtn2Players.setEnabled(false);
+					rdbtn3Players.setEnabled(false);
+					rdbtn4Players.setEnabled(false);
 
 					// Set players name.
 					for (int i = 0; i < game.getPlayers().length; i++)
@@ -388,18 +371,13 @@ public class SnakeGUI extends JFrame {
 
 			add(btnEnterPlayerName);
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 4; i++)
 				add(txtPlayer[i]);
-			}
 
 			add(lblImage1);
 			add(lblImage2);
 			add(lblImage3);
 			add(lblImage4);
-
-			// --------------------------------
-			// Middle Controller
-			// --------------------------------
 
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
@@ -455,32 +433,41 @@ public class SnakeGUI extends JFrame {
 
 			if (game.isEnd()) {
 				rollButton.setEnabled(false);
-				consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!! \n\n");
+				if (!game.isReplay())
+					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!! \n\n");
 				updateConsoleHistory();
 				replayButton.setEnabled(true);
 				btnNewGame.setEnabled(true);
+				rdbtn2Players.setEnabled(true);
+				rdbtn3Players.setEnabled(true);
+				rdbtn4Players.setEnabled(true);
 			} else if (arg == null)
 				timer.start();
 			else { /** check element */
 				int commandID = (int) arg;
-				if (commandID == Game.NO_COMMAND)
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " see nothing.\n\n");
-				else if (commandID == Game.SNAKE_COMMAND) {
+				if (commandID == Game.NO_COMMAND) {
+					if (!game.isReplay())
+						consoleHistory = consoleHistory.concat(game.currentPlayerName() + " see nothing.\n\n");
+				} else if (commandID == Game.SNAKE_COMMAND) {
 					isMoveDirectly = true;
 					repaint();
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " faces Snake (going down).\n\n");
+					if (!game.isReplay())
+						consoleHistory = consoleHistory
+								.concat(game.currentPlayerName() + " faces Snake (going down).\n\n");
 				} else if (commandID == Game.LADDER_COMMAND) {
 					isMoveDirectly = true;
 					repaint();
-					consoleHistory = consoleHistory
-							.concat(game.currentPlayerName() + " faces Ladder (climbing up).\n\n");
+					if (!game.isReplay())
+						consoleHistory = consoleHistory
+								.concat(game.currentPlayerName() + " faces Ladder (climbing up).\n\n");
 				} else if (commandID == Game.FREEZE_COMMAND) {
-					consoleHistory = consoleHistory.concat(
-							game.currentPlayerName() + " must wait for the train passing. (freeze next turn)\n\n");
-				} else if (commandID == Game.BACKWARD_COMMAND) {
-					consoleHistory = consoleHistory
-							.concat(game.currentPlayerName() + " get drunk now!! (going backward next turn)\n\n");
-				}
+					if (!game.isReplay())
+						consoleHistory = consoleHistory.concat(
+								game.currentPlayerName() + " must wait for the train passing. (freeze next turn)\n\n");
+				} else if (commandID == Game.BACKWARD_COMMAND)
+					if (!game.isReplay())
+						consoleHistory = consoleHistory
+								.concat(game.currentPlayerName() + " get drunk now!! (going backward next turn)\n\n");
 				updateConsoleHistory();
 				rollButton.setEnabled(true);
 			}

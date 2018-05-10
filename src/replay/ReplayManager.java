@@ -13,10 +13,6 @@ public class ReplayManager implements Iterator<Memento> {
 		this.histories.add(history);
 	}
 
-	public int getDiceHistory(int index) {
-		return histories.get(index).getDiceValue();
-	}
-
 	public void resetIndex() {
 		this.index = 0;
 	}

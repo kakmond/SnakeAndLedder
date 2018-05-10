@@ -44,32 +44,26 @@ public class Player {
 		return startX;
 	}
 
-	public void setStartX(int startX) {
-		this.startX = startX;
-	}
-
 	public int getStartY() {
 		return startY;
 	}
 
-	public void setStartY(int startY) {
-		this.startY = startY;
+	public void setStartXY(int x, int y) {
+		this.startX = x;
+		this.startY = y;
 	}
 
 	public int getDestX() {
 		return destX;
 	}
 
-	public void setDestX(int destX) {
-		this.destX = destX;
-	}
-
 	public int getDestY() {
 		return destY;
 	}
 
-	public void setDestY(int destY) {
-		this.destY = destY;
+	public void setDestXY(int x, int y) {
+		this.destX = x;
+		this.destY = y;
 	}
 
 	public void setName(String name) {

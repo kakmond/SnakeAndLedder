@@ -27,17 +27,22 @@ public class Game extends Observable {
 	public static final int FREEZE_COMMAND = 4;
 
 	private Thread gameThread = new Thread() {
+
 		@Override
 		public void run() {
 			while (true) {
 				int diceValue = 0;
 				try {
-					if (!isReplay || isEnd()) {
+					if (!isReplay || ended) {
 						synchronized (gameThread) {
-							wait(); // wait for user roll dice.
+							wait(); // wait for user roll dice or any action.
 						}
-						diceValue = currentPlayerDiceValue;
-					} else if (replay.hasNext()) // load dice from replay
+						if (!isReplay) // get dice value from user
+							diceValue = currentPlayerDiceValue;
+						else
+							currentPlayerIndex = 0;
+					}
+					if (isReplay) // load dice value from replay
 						diceValue = getDiceValueFromMemento(replay.next());
 
 					if (diceValue != 0) {
@@ -86,6 +91,7 @@ public class Game extends Observable {
 		super.setChanged();
 		/** send commandID to notify which walk pattern should perform */
 		super.notifyObservers(commandID);
+
 	}
 
 	public void setPlayer(int num) {
@@ -124,6 +130,7 @@ public class Game extends Observable {
 	}
 
 	private void currentPlayerMoveByStep(int steps) throws InterruptedException {
+
 		// If walk through the goal.
 		if (getCurrentPlayerPosition() + steps > (board.SIZE - 1)) {
 			int walkForwardToGoal = (board.SIZE - 1) - getCurrentPlayerPosition();
@@ -136,20 +143,17 @@ public class Game extends Observable {
 		}
 
 		for (int i = 0; i < Math.abs(steps); i++) {
-			currentPlayer().setStartX(getCurrentPlayerPostionX());
-			currentPlayer().setStartY(getCurrentPlayerPostionY());
+			currentPlayer().setStartXY(getCurrentPlayerPostionX(), getCurrentPlayerPostionY());
 			if (steps > 0) // move forward
 				board.movePlayerByStep(currentPlayer(), 1);
 			else // move backward
 				board.movePlayerByStep(currentPlayer(), -1);
-			currentPlayer().setDestX(getCurrentPlayerPostionX());
-			currentPlayer().setDestY(getCurrentPlayerPostionY());
+			currentPlayer().setDestXY(getCurrentPlayerPostionX(), getCurrentPlayerPostionY());
 			setChanged();
 			notifyObservers();
-			Thread.sleep(500);
+			Thread.sleep(600);
 		}
-		currentPlayer().setStartX(getCurrentPlayerPostionX());
-		currentPlayer().setStartY(getCurrentPlayerPostionY());
+		currentPlayer().setStartXY(getCurrentPlayerPostionX(), getCurrentPlayerPostionY());
 	}
 
 	public String currentPlayerName() {
@@ -198,11 +202,11 @@ public class Game extends Observable {
 
 	public void currentPlayerMove(int face) {
 		this.currentPlayerDiceValue = face;
+		if (!isReplay)
+			this.replay.addReplay(saveStateToMemento());
 		synchronized (this.gameThread) {
 			this.gameThread.notify();
 		}
-		if (!isReplay)
-			this.replay.addReplay(saveStateToMemento());
 	}
 
 	public boolean isReplay() {
@@ -210,20 +214,17 @@ public class Game extends Observable {
 	}
 
 	public void replay() {
+		currentPlayerIndex = 0;
 		this.isReplay = true;
 		this.ended = false;
 		replay.resetIndex();
 		/** Set players to start point */
 		for (Player p : players) {
 			board.movePlayerToDest(p, 0);
-			p.setDestX(getCurrentPlayerPostionX());
-			p.setDestY(getCurrentPlayerPostionY());
-			p.setStartX(getCurrentPlayerPostionX());
-			p.setStartY(getCurrentPlayerPostionY());
+			p.setDestXY(board.getPlayerPostionX(p), board.getPlayerPostionY(p));
+			p.setStartXY(board.getPlayerPostionX(p), board.getPlayerPostionY(p));
 		}
-		currentPlayerIndex = 0;
-		setChanged();
-		notifyObservers();
+
 		/** Load dice histories from ReplayManager */
 		synchronized (this.gameThread) {
 			this.gameThread.notify();
