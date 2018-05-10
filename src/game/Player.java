@@ -20,9 +20,6 @@ public class Player {
 		this.index = index;
 		this.strategy = new NormalDice();
 		this.name = name;
-		int r = (int) (Math.random() * 256);
-		int g = (int) (Math.random() * 256);
-		int b = (int) (Math.random() * 256);
 	}
 
 	public void setStrategy(DiceStrategy strategy) {

@@ -7,6 +7,7 @@ public class Board {
 	private Square[] squares;
 
 	public Board() {
+
 		squares = new Square[Board.SIZE];
 
 		// Create Square in right Direction
@@ -63,7 +64,7 @@ public class Board {
 		squares[position].addPlayer(player);
 	}
 
-	public void addElement(Element piece, int position) {
+	private void addElement(Element piece, int position) {
 		squares[position].addElement(piece);
 	}
 

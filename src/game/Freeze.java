@@ -13,7 +13,7 @@ public class Freeze implements Element {
 	}
 
 	@Override
-	public int getCommandID() {
+	public int actionCommand() {
 		return Game.FREEZE_COMMAND;
 	}
 

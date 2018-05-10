@@ -16,6 +16,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import game.Board;
 import game.Game;
 import game.Player;
 
@@ -108,12 +109,7 @@ public class SnakeGUI extends JFrame {
 
 		private ImageIcon gameLogo = new ImageIcon(SnakeGUI.class.getResource("/resources/snlLogo.png"));
 
-		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
-		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
-		private ImageIcon dice3 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice3.jpeg"));
-		private ImageIcon dice4 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice4.jpeg"));
-		private ImageIcon dice5 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice5.jpeg"));
-		private ImageIcon dice6 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice6.jpeg"));
+		private ImageIcon dice[] = new ImageIcon[6];
 
 		private ImageIcon hero1 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero1.png"));
 		private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
@@ -138,7 +134,15 @@ public class SnakeGUI extends JFrame {
 		public Renderer() {
 			timer = new Timer(3, new MoveByStep());
 
-			setHero();
+			try {
+				for (int i = 0; i < 4; i++)
+					hero[i] = ImageIO.read(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			for (int i = 0; i < dice.length; i++)
+				dice[i] = new ImageIcon(SnakeGUI.class.getResource("/resources/dice" + (i + 1) + ".jpeg"));
 
 			startX = game.currentPlayer().getStartX();
 			startY = game.currentPlayer().getStartY();
@@ -184,38 +188,40 @@ public class SnakeGUI extends JFrame {
 
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
+					if (face == 0)
+						consoleHistory = consoleHistory
+								.concat("Player's Turn : " + game.currentPlayerName() + "\n" + "Freeze.\n\n");
+					else if (face < 0)
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She gets drunk and rolls dice.\n" + "--> get " + Math.abs(face) + " value(s).\n"
+								+ "--> Move backward to " + (game.getCurrentPlayerPosition() + face + 1)
+								+ " positions.\n");
+					else if (game.getCurrentPlayerPosition() + face >= Board.SIZE)
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n"
+								+ "Get through ending point.\n" + "--> So move backward to "
+								+ (game.getCurrentPlayerPosition() + face + 1) + " positions.\n");
+					else
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> Move forward to "
+								+ (game.getCurrentPlayerPosition() + face + 1) + " positions.\n");
 
-					int i = 0;
-					if (i == 0) {
-						game.currentPlayerMove(1);
-						i++;
-					} else
-						game.currentPlayerMove(face);
-					consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
-							+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> move to "
-							+ (game.currentPlayerPosition() + face + 1) + " positions.\n");
+					game.currentPlayerMove(face);
+					if (face == 1)
+						imageDice.setIcon(dice[0]);
+					else if (face == 2)
+						imageDice.setIcon(dice[1]);
+					else if (face == 3)
+						imageDice.setIcon(dice[2]);
+					else if (face == 4)
+						imageDice.setIcon(dice[3]);
+					else if (face == 5)
+						imageDice.setIcon(dice[4]);
+					else if (face == 6)
+						imageDice.setIcon(dice[5]);
 
-					if (face == 1) {
-						imageDice.setIcon(dice1);
-					}
-					if (face == 2) {
-						imageDice.setIcon(dice2);
-					}
-					if (face == 3) {
-						imageDice.setIcon(dice3);
-					}
-					if (face == 4) {
-						imageDice.setIcon(dice4);
-					}
-					if (face == 5) {
-						imageDice.setIcon(dice5);
-					}
-					if (face == 6) {
-						imageDice.setIcon(dice6);
-					}
 					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 					textConsole.setText(consoleHistory);
-
 				}
 			});
 
@@ -272,6 +278,9 @@ public class SnakeGUI extends JFrame {
 				padding += 87;
 			}
 
+			txtPlayer[3].setEnabled(false);
+			txtPlayer[2].setEnabled(false);
+
 			JLabel lblImage1 = new JLabel("image");
 			lblImage1.setBounds(117, 315, 86, 80);
 			lblImage1.setIcon(hero1);
@@ -296,11 +305,10 @@ public class SnakeGUI extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Create new game.
-					finishCreateGame();
-					// repaint();
+					createGame();
 				}
 
-				public void finishCreateGame() {
+				public void createGame() {
 					btnNewGame.setEnabled(false);
 					replayButton.setEnabled(false);
 					rollButton.setEnabled(true);
@@ -412,10 +420,6 @@ public class SnakeGUI extends JFrame {
 				paintHeroByStep(g);
 			else
 				paintHeroByDirectly(g);
-			// g.drawImage(hero[2], (240 + 7) + 62 * 8, 563, this);
-			// g.drawImage(hero[0], 240 + 62 * 9, (563), this);
-			// g.drawImage(hero[1], (240 - 20) + 62 * 9, 563 - 62 * 5, this);
-			// g.drawImage(hero[3], (240 - 20) + 62 * 0, 563, this);
 		}
 
 		private void paintHeroByStep(Graphics g) {
@@ -436,15 +440,6 @@ public class SnakeGUI extends JFrame {
 				else
 					g.drawImage(hero[p.getIndex()], game.getCurrentPlayerPostionX() + paddingImage[p.getIndex()],
 							game.getCurrentPlayerPostionY(), this);
-			}
-		}
-
-		private void setHero() {
-			try {
-				for (int i = 0; i < 4; i++)
-					hero[i] = ImageIO.read(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 
@@ -481,10 +476,10 @@ public class SnakeGUI extends JFrame {
 							.concat(game.currentPlayerName() + " faces Ladder (climbing up).\n\n");
 				} else if (commandID == Game.FREEZE_COMMAND) {
 					consoleHistory = consoleHistory.concat(
-							game.currentPlayerName() + " must wait for the train passing (freeze next turn)\n\n");
+							game.currentPlayerName() + " must wait for the train passing. (freeze next turn)\n\n");
 				} else if (commandID == Game.BACKWARD_COMMAND) {
 					consoleHistory = consoleHistory
-							.concat(game.currentPlayerName() + " get drunk now (going backward next turn)!!!\n\n");
+							.concat(game.currentPlayerName() + " get drunk now!! (going backward next turn)\n\n");
 				}
 				updateConsoleHistory();
 				rollButton.setEnabled(true);

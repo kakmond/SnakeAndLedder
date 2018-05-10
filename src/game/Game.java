@@ -71,24 +71,21 @@ public class Game extends Observable {
 		Square currentPlayerSquare = getCurrentPlayerSquare();
 		if (currentPlayerSquare.isElement()) {
 			Element element = currentPlayerSquare.getElement();
-			commandID = element.getCommandID();
+			commandID = element.actionCommand();
 			if (commandID == SNAKE_COMMAND) {
 				Snake snake = (Snake) element;
 				board.movePlayerToDest(currentPlayer(), snake.getTail().getNumber());
 			} else if (commandID == LADDER_COMMAND) {
 				Ladder ladder = (Ladder) element;
-				// board.movePlayerToDest(currentPlayer(),
-				// ladder.getTop().getNumber());
-				board.movePlayerToDest(currentPlayer(), 98);
-			} else if (commandID == BACKWARD_COMMAND) {
+				board.movePlayerToDest(currentPlayer(), ladder.getTop().getNumber());
+			} else if (commandID == BACKWARD_COMMAND)
 				currentPlayer().setStrategy(new BackwardDice());
-			} else if (commandID == FREEZE_COMMAND) {
+			else if (commandID == FREEZE_COMMAND)
 				currentPlayer().setStrategy(new FreezeDice());
-			}
 		}
 		super.setChanged();
+		/** send commandID to notify which walk pattern should perform */
 		super.notifyObservers(commandID);
-
 	}
 
 	public void setPlayer(int num) {
@@ -112,7 +109,7 @@ public class Game extends Observable {
 		return ended;
 	}
 
-	public void end() {
+	private void end() {
 		ended = true;
 		setChanged();
 		notifyObservers();
@@ -122,11 +119,22 @@ public class Game extends Observable {
 		return players[currentPlayerIndex];
 	}
 
-	public void switchPlayer() {
+	private void switchPlayer() {
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
 	}
 
-	public void currentPlayerMoveByStep(int steps) throws InterruptedException {
+	private void currentPlayerMoveByStep(int steps) throws InterruptedException {
+		// If walk through the goal.
+		if (getCurrentPlayerPosition() + steps > (board.SIZE - 1)) {
+			int walkForwardToGoal = (board.SIZE - 1) - getCurrentPlayerPosition();
+			int walkBackFromGoal = steps - walkForwardToGoal;
+			int finalPosition = (board.SIZE - 1) - walkBackFromGoal;
+			if (finalPosition > getCurrentPlayerPosition())
+				steps = finalPosition - getCurrentPlayerPosition();
+			else
+				steps = (-1) * (getCurrentPlayerPosition() - finalPosition);
+		}
+
 		for (int i = 0; i < Math.abs(steps); i++) {
 			currentPlayer().setStartX(getCurrentPlayerPostionX());
 			currentPlayer().setStartY(getCurrentPlayerPostionY());
@@ -152,7 +160,7 @@ public class Game extends Observable {
 		return board.getPlayerPosition(p);
 	}
 
-	public int currentPlayerPosition() {
+	public int getCurrentPlayerPosition() {
 		return board.getPlayerPosition(currentPlayer());
 	}
 
@@ -160,11 +168,11 @@ public class Game extends Observable {
 		return this.currentPlayerDiceValue = currentPlayer().roll(die);
 	}
 
-	public boolean currentPlayerWin() {
+	private boolean currentPlayerWin() {
 		return board.playerIsAtGoal(currentPlayer());
 	}
 
-	public Square getCurrentPlayerSquare() {
+	private Square getCurrentPlayerSquare() {
 		return board.getPlayerSquare(currentPlayer());
 	}
 
@@ -172,12 +180,12 @@ public class Game extends Observable {
 		return board.getPlayerPostionX(currentPlayer());
 	}
 
-	public int getPlayerPostionX(Player p) {
-		return board.getPlayerPostionX(p);
-	}
-
 	public int getCurrentPlayerPostionY() {
 		return board.getPlayerPostionY(currentPlayer());
+	}
+
+	public int getPlayerPostionX(Player p) {
+		return board.getPlayerPostionX(p);
 	}
 
 	public int getPlayerPostionY(Player p) {
@@ -193,11 +201,8 @@ public class Game extends Observable {
 		synchronized (this.gameThread) {
 			this.gameThread.notify();
 		}
-		if (!isReplay) {
-			System.out.println("ADD");
+		if (!isReplay)
 			this.replay.addReplay(saveStateToMemento());
-		}
-
 	}
 
 	public boolean isReplay() {
@@ -218,17 +223,18 @@ public class Game extends Observable {
 		}
 		currentPlayerIndex = 0;
 		setChanged();
-		notifyObservers();/** Load dice histories from ReplayManager */
+		notifyObservers();
+		/** Load dice histories from ReplayManager */
 		synchronized (this.gameThread) {
 			this.gameThread.notify();
 		}
 	}
 
-	public Memento saveStateToMemento() {
+	private Memento saveStateToMemento() {
 		return new Memento(currentPlayerDiceValue);
 	}
 
-	public int getDiceValueFromMemento(Memento memento) {
+	private int getDiceValueFromMemento(Memento memento) {
 		return memento.getDiceValue();
 	}
 }

@@ -19,7 +19,7 @@ public class Ladder implements Element {
 	}
 
 	@Override
-	public int getCommandID() {
+	public int actionCommand() {
 		return Game.LADDER_COMMAND;
 	}
 
