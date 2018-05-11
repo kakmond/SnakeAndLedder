@@ -2,19 +2,19 @@ package game;
 
 public class Ladder implements Element {
 
-	private Square top;
-	private Square bottom;
+	private int top;
+	private int bottom;
 
-	public Ladder(Square top, Square bottom) {
+	public Ladder(int top, int bottom) {
 		this.top = top;
 		this.bottom = bottom;
 	}
 
-	public Square getBottom() {
+	public int getBottom() {
 		return bottom;
 	}
 
-	public Square getTop() {
+	public int getTop() {
 		return top;
 	}
 

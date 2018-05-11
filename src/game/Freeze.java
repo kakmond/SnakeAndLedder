@@ -2,13 +2,13 @@ package game;
 
 public class Freeze implements Element {
 
-	private Square sq;
+	private int sq;
 
-	public Freeze(Square sq) {
+	public Freeze(int sq) {
 		this.sq = sq;
 	}
 
-	public Square getFreezeSquare() {
+	public int getFreezeSquare() {
 		return sq;
 	}
 

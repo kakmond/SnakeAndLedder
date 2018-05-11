@@ -2,13 +2,13 @@ package game;
 
 public class Backward implements Element {
 
-	private Square sq;
+	private int sq;
 
-	public Backward(Square sq) {
+	public Backward(int sq) {
 		this.sq = sq;
 	}
 
-	public Square getBackwardSquare() {
+	public int getBackwardSquare() {
 		return sq;
 	}
 

@@ -1,6 +1,5 @@
 package gameUI;
 
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -25,17 +24,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
@@ -138,9 +132,6 @@ public class SnakeGUI extends JFrame {
 			for (int i = 0; i < dice.length; i++)
 				dice[i] = new ImageIcon(SnakeGUI.class.getResource("/resources/dice" + (i + 1) + ".jpeg"));
 
-			startX = game.currentPlayer().getStartX();
-			startY = game.currentPlayer().getStartY();
-
 			setLayout(null);
 
 			rollButton = new JButton("Roll");
@@ -187,20 +178,19 @@ public class SnakeGUI extends JFrame {
 					else if (face < 0)
 						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 								+ "He/She gets drunk and rolls dice.\n" + "--> get " + Math.abs(face) + " value(s).\n"
-								+ "--> Move backward to " + (game.getCurrentPlayerPosition() + face + 1)
+								+ "--> Move backward to " + (game.getPlayerPostion(game.currentPlayer()) + face + 1)
 								+ " positions.\n");
-					else if (game.getCurrentPlayerPosition() + face >= Board.SIZE)
-						consoleHistory = consoleHistory
-								.concat("Player's Turn : " + game.currentPlayerName() + "\n" + "He/She rolls dice.\n"
-										+ "--> get " + face + " value(s).\n" + "Get through ending point.\n"
-										+ "--> So move backward to "
-										+ ((game.getCurrentPlayerPosition() + 1)
-												- (game.getCurrentPlayerPosition() + face - Board.SIZE))
-										+ " positions.\n");
+					else if (game.getPlayerPostion(game.currentPlayer()) + face >= Board.SIZE)
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n"
+								+ "Get through ending point.\n" + "--> So move backward to "
+								+ ((game.getPlayerPostion(game.currentPlayer()) + 1)
+										- (game.getPlayerPostion(game.currentPlayer()) + face - Board.SIZE))
+								+ " positions.\n");
 					else
 						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> Move forward to "
-								+ (game.getCurrentPlayerPosition() + face + 1) + " positions.\n");
+								+ (game.getPlayerPostion(game.currentPlayer()) + face + 1) + " positions.\n");
 
 					game.currentPlayerMove(face);
 
@@ -329,6 +319,7 @@ public class SnakeGUI extends JFrame {
 
 					isMoveDirectly = true;
 					repaint();
+					game.start();
 				}
 			});
 
@@ -399,6 +390,11 @@ public class SnakeGUI extends JFrame {
 			bg.setBounds(250, 20, 644, 627);
 			add(bg);
 
+			startX = game.currentPlayer().getStartX();
+			startY = game.currentPlayer().getStartY();
+			destX = game.currentPlayer().getDestX();
+			destY = game.currentPlayer().getDestY();
+
 			setDoubleBuffered(true);
 		}
 
@@ -420,8 +416,9 @@ public class SnakeGUI extends JFrame {
 				if (p != game.currentPlayer())
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
-				else
+				else {
 					g.drawImage(hero[p.getIndex()], startX + paddingImage[p.getIndex()], startY, this);
+				}
 			}
 		}
 
@@ -431,8 +428,9 @@ public class SnakeGUI extends JFrame {
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
 				else
-					g.drawImage(hero[p.getIndex()], game.getCurrentPlayerPostionX() + paddingImage[p.getIndex()],
-							game.getCurrentPlayerPostionY(), this);
+					g.drawImage(hero[p.getIndex()],
+							game.getPlayerPostionX(game.currentPlayer()) + paddingImage[p.getIndex()],
+							game.getPlayerPostionY(game.currentPlayer()), this);
 			}
 		}
 
