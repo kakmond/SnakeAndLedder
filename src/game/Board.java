@@ -7,6 +7,7 @@ public class Board {
 	private Square[] squares;
 
 	public Board() {
+
 		squares = new Square[Board.SIZE];
 
 		// Create Square in right Direction
@@ -29,34 +30,10 @@ public class Board {
 			countLeft = countLeft + 10;
 		}
 
-		// Set and add Snake position
-		Snake[] snakes = { new Snake(squares[49], squares[4]), new Snake(squares[42], squares[16]),
-				new Snake(squares[55], squares[7]), new Snake(squares[72], squares[14]),
-				new Snake(squares[86], squares[48]), new Snake(squares[83], squares[57]),
-				new Snake(squares[97], squares[39]) };
-		for (Snake s : snakes)
-			addElement(s, s.getHead().getNumber());
+	}
 
-		// Set and add Ladder position
-		Ladder[] ladders = { new Ladder(squares[22], squares[1]), new Ladder(squares[58], squares[19]),
-				new Ladder(squares[44], squares[5]), new Ladder(squares[95], squares[56]),
-				new Ladder(squares[71], squares[51]), new Ladder(squares[91], squares[70]) };
-		for (Ladder l : ladders)
-			addElement(l, l.getBottom().getNumber());
-
-		// Set and add Freeze position
-		Freeze[] freezes = { new Freeze(squares[6]), new Freeze(squares[37]), new Freeze(squares[67]),
-				new Freeze(squares[92]) };
-		for (Freeze f : freezes)
-			addElement(f, f.getFreezeSquare().getNumber());
-
-		// Set and add Backward position
-		Backward[] backwards = { new Backward(squares[30]), new Backward(squares[57]), new Backward(squares[64]) };
-		for (Backward b : backwards)
-			addElement(b, b.getBackwardSquare().getNumber());
-
-		// Set ending position
-		squares[squares.length - 1].setGoal(true);
+	public void setGoal(int position) {
+		this.squares[position].setGoal(true);
 	}
 
 	public void addPlayer(Player player, int position) {

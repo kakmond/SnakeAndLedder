@@ -2,18 +2,18 @@ package game;
 
 public class Backward implements Element {
 
-	private Square sq;
+	private int sq;
 
-	public Backward(Square sq) {
+	public Backward(int sq) {
 		this.sq = sq;
 	}
 
-	public Square getBackwardSquare() {
+	public int getBackwardSquare() {
 		return sq;
 	}
 
 	@Override
-	public int getCommandID() {
+	public int actionCommand() {
 		return Game.BACKWARD_COMMAND;
 	}
 

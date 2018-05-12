@@ -1,6 +1,5 @@
 package gameUI;
 
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -16,6 +15,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import game.Board;
 import game.Game;
 import game.Player;
 
@@ -24,16 +24,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
@@ -41,24 +37,6 @@ public class SnakeGUI extends JFrame {
 
 	private Renderer renderer;
 	private Game game;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-
-		Game game = new Game();
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SnakeGUI window = new SnakeGUI(game);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
@@ -78,12 +56,9 @@ public class SnakeGUI extends JFrame {
 		renderer = new Renderer();
 
 		super.setLayout(new BorderLayout());
-		// getContentPane().setLayout(null);
 		game.addObserver(renderer);
 
 		getContentPane().add(renderer);
-
-		// --------------------------------
 
 		super.setResizable(false);
 		super.setSize(1200, 700);
@@ -106,21 +81,15 @@ public class SnakeGUI extends JFrame {
 		private JTextPane textConsole = new JTextPane();
 		private JScrollPane textScrollPane = new JScrollPane(textConsole);
 
+		private JRadioButton rdbtn2Players;
+		private JRadioButton rdbtn3Players;
+		private JRadioButton rdbtn4Players;
+
 		private ImageIcon gameLogo = new ImageIcon(SnakeGUI.class.getResource("/resources/snlLogo.png"));
 
-		private ImageIcon dice1 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice1.jpg"));
-		private ImageIcon dice2 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice2.jpeg"));
-		private ImageIcon dice3 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice3.jpeg"));
-		private ImageIcon dice4 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice4.jpeg"));
-		private ImageIcon dice5 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice5.jpeg"));
-		private ImageIcon dice6 = new ImageIcon(SnakeGUI.class.getResource("/resources/dice6.jpeg"));
+		private ImageIcon dice[] = new ImageIcon[6];
 
-		private ImageIcon hero1 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero1.png"));
-		private ImageIcon hero2 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero2.png"));
-		private ImageIcon hero3 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero3.png"));
-		private ImageIcon hero4 = new ImageIcon(SnakeGUI.class.getResource("/resources/hero4.png"));
-
-		private Timer timer;
+		private Timer timer; // animation
 
 		private int startX;
 		private int startY;
@@ -136,18 +105,34 @@ public class SnakeGUI extends JFrame {
 		private String consoleHistory = "";
 
 		public Renderer() {
-			timer = new Timer(3, new MoveByStep());
+			timer = new Timer(3, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (startX < destX)
+						startX++;
+					else if (startX > destX)
+						startX--;
+					else if (startY > destY)
+						startY--;
+					else if (startY < destY)
+						startY++;
+					else if (startX == destX && startY == destY)
+						timer.stop();
+					repaint();
+				}
+			});
 
-			setHero();
+			try {
+				for (int i = 0; i < 4; i++)
+					hero[i] = ImageIO.read(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-			startX = game.currentPlayer().getStartX();
-			startY = game.currentPlayer().getStartY();
+			for (int i = 0; i < dice.length; i++)
+				dice[i] = new ImageIcon(SnakeGUI.class.getResource("/resources/dice" + (i + 1) + ".jpeg"));
 
 			setLayout(null);
-
-			// --------------------------------
-			// Right Controller
-			// --------------------------------
 
 			rollButton = new JButton("Roll");
 			rollButton.setEnabled(false);
@@ -167,6 +152,15 @@ public class SnakeGUI extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Replay function
+					replayButton.setEnabled(false);
+					btnNewGame.setEnabled(false);
+					rdbtn2Players.setEnabled(false);
+					rdbtn3Players.setEnabled(false);
+					rdbtn4Players.setEnabled(false);
+					game.replay();
+					if (game.isReplay())
+						consoleHistory = consoleHistory.concat("Replaying...\n\n");
+					updateConsoleHistory();
 				}
 			});
 
@@ -178,48 +172,43 @@ public class SnakeGUI extends JFrame {
 
 				public void actionPerformed(ActionEvent e) {
 					int face = game.currentPlayerRollDice();
+					if (face == 0)
+						consoleHistory = consoleHistory
+								.concat("Player's Turn : " + game.currentPlayerName() + "\n" + "Freeze.\n\n");
+					else if (face < 0)
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She gets drunk and rolls dice.\n" + "--> get " + Math.abs(face) + " value(s).\n"
+								+ "--> Move backward to " + (game.getPlayerPostion(game.currentPlayer()) + face + 1)
+								+ " positions.\n");
+					else if (game.getPlayerPostion(game.currentPlayer()) + face >= Board.SIZE)
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n"
+								+ "Get through ending point.\n" + "--> So move backward to "
+								+ ((game.getPlayerPostion(game.currentPlayer()) + 1)
+										- (game.getPlayerPostion(game.currentPlayer()) + face - Board.SIZE))
+								+ " positions.\n");
+					else
+						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
+								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> Move forward to "
+								+ (game.getPlayerPostion(game.currentPlayer()) + face + 1) + " positions.\n");
 
-					int i = 0;
-					if (i == 0) {
-						game.currentPlayerMove(1);
-						i++;
-					} else
-						game.currentPlayerMove(face);
-					consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
-							+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n" + "--> move to "
-							+ (game.currentPlayerPosition() + face + 1) + " positions.\n");
-					/**
-					 * TODO:
-					 * 
-					 * Tell user if the face is 0 --> That means you are waiting
-					 * for the train.
-					 * 
-					 * Tell user if the face is less than 0 --> That means you
-					 * are drunk now.
-					 * 
-					 */
-					System.out.println(face);
-					if (face == 1) {
-						imageDice.setIcon(dice1);
-					}
-					if (face == 2) {
-						imageDice.setIcon(dice2);
-					}
-					if (face == 3) {
-						imageDice.setIcon(dice3);
-					}
-					if (face == 4) {
-						imageDice.setIcon(dice4);
-					}
-					if (face == 5) {
-						imageDice.setIcon(dice5);
-					}
-					if (face == 6) {
-						imageDice.setIcon(dice6);
-					}
+					game.currentPlayerMove(face);
+
+					if (face == 1)
+						imageDice.setIcon(dice[0]);
+					else if (face == 2)
+						imageDice.setIcon(dice[1]);
+					else if (face == 3)
+						imageDice.setIcon(dice[2]);
+					else if (face == 4)
+						imageDice.setIcon(dice[3]);
+					else if (face == 5)
+						imageDice.setIcon(dice[4]);
+					else if (face == 6)
+						imageDice.setIcon(dice[5]);
+
 					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 					textConsole.setText(consoleHistory);
-
 				}
 			});
 
@@ -229,13 +218,8 @@ public class SnakeGUI extends JFrame {
 			add(imageDice);
 			add(rollButton);
 
-			// --------------------------------
-			// Left Controller
-			// --------------------------------
-
 			btnNewGame = new JButton("New Game");
 			btnNewGame.setBounds(51, 120, 160, 40);
-			add(btnNewGame);
 
 			JLabel lblImageIcon = new JLabel();
 			lblImageIcon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -252,13 +236,13 @@ public class SnakeGUI extends JFrame {
 			btnSelectNumberOf.setBounds(30, 169, 200, 30);
 			btnSelectNumberOf.setEnabled(false);
 
-			JRadioButton rdbtn2Players = new JRadioButton("2 Players");
+			rdbtn2Players = new JRadioButton("2 Players");
 			rdbtn2Players.setBounds(68, 199, 109, 23);
 
-			JRadioButton rdbtn3Players = new JRadioButton("3 Players");
+			rdbtn3Players = new JRadioButton("3 Players");
 			rdbtn3Players.setBounds(68, 225, 109, 23);
 
-			JRadioButton rdbtn4Players = new JRadioButton("4 Players");
+			rdbtn4Players = new JRadioButton("4 Players");
 			rdbtn4Players.setBounds(68, 251, 109, 23);
 
 			JButton btnEnterPlayerName = new JButton("Enter Player's Name");
@@ -276,35 +260,39 @@ public class SnakeGUI extends JFrame {
 				padding += 87;
 			}
 
+			// default text player
+			txtPlayer[3].setEnabled(false);
+			txtPlayer[2].setEnabled(false);
+
+			ImageIcon heroImage[] = new ImageIcon[4];
+			for (int i = 0; i < 4; i++)
+				heroImage[i] = new ImageIcon(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
+
 			JLabel lblImage1 = new JLabel("image");
 			lblImage1.setBounds(117, 315, 86, 80);
-			lblImage1.setIcon(hero1);
+			lblImage1.setIcon(heroImage[0]);
 
 			JLabel lblImage2 = new JLabel("image");
 			lblImage2.setBounds(109, 395, 102, 94);
-			lblImage2.setIcon(hero2);
-			getContentPane().add(lblImage2);
+			lblImage2.setIcon(heroImage[1]);
 
 			JLabel lblImage3 = new JLabel("image");
 			lblImage3.setBounds(130, 479, 81, 80);
-			lblImage3.setIcon(hero3);
-			getContentPane().add(lblImage3);
+			lblImage3.setIcon(heroImage[2]);
 
 			JLabel lblImage4 = new JLabel("image");
 			lblImage4.setBounds(117, 557, 102, 94);
-			lblImage4.setIcon(hero4);
-			getContentPane().add(lblImage4);
+			lblImage4.setIcon(heroImage[3]);
 
 			btnNewGame.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Create new game.
-					finishCreateGame();
-					// repaint();
+					createGame();
 				}
 
-				public void finishCreateGame() {
+				public void createGame() {
 					btnNewGame.setEnabled(false);
 					replayButton.setEnabled(false);
 					rollButton.setEnabled(true);
@@ -321,12 +309,17 @@ public class SnakeGUI extends JFrame {
 					for (int i = 0; i < 4; i++)
 						txtPlayer[i].setEnabled(false);
 
+					rdbtn2Players.setEnabled(false);
+					rdbtn3Players.setEnabled(false);
+					rdbtn4Players.setEnabled(false);
+
 					// Set players name.
 					for (int i = 0; i < game.getPlayers().length; i++)
 						game.setNamePlayer(i, txtPlayer[i].getText().toString());
 
 					isMoveDirectly = true;
 					repaint();
+					game.start();
 				}
 			});
 
@@ -384,23 +377,23 @@ public class SnakeGUI extends JFrame {
 
 			add(btnEnterPlayerName);
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 4; i++)
 				add(txtPlayer[i]);
-			}
 
 			add(lblImage1);
 			add(lblImage2);
 			add(lblImage3);
 			add(lblImage4);
 
-			// --------------------------------
-			// Middle Controller
-			// --------------------------------
-
 			JLabel bg = new JLabel("");
 			bg.setIcon(new ImageIcon(SnakeGUI.class.getResource("/resources/newBoard.jpeg")));
 			bg.setBounds(250, 20, 644, 627);
 			add(bg);
+
+			startX = game.currentPlayer().getStartX();
+			startY = game.currentPlayer().getStartY();
+			destX = game.currentPlayer().getDestX();
+			destY = game.currentPlayer().getDestY();
 
 			setDoubleBuffered(true);
 		}
@@ -416,10 +409,6 @@ public class SnakeGUI extends JFrame {
 				paintHeroByStep(g);
 			else
 				paintHeroByDirectly(g);
-			// g.drawImage(hero[2], (240 + 7) + 62 * 8, 563, this);
-			// g.drawImage(hero[0], 240 + 62 * 9, (563), this);
-			// g.drawImage(hero[1], (240 - 20) + 62 * 9, 563 - 62 * 5, this);
-			// g.drawImage(hero[3], (240 - 20) + 62 * 0, 563, this);
 		}
 
 		private void paintHeroByStep(Graphics g) {
@@ -427,8 +416,9 @@ public class SnakeGUI extends JFrame {
 				if (p != game.currentPlayer())
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
-				else
+				else {
 					g.drawImage(hero[p.getIndex()], startX + paddingImage[p.getIndex()], startY, this);
+				}
 			}
 		}
 
@@ -438,17 +428,9 @@ public class SnakeGUI extends JFrame {
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
 				else
-					g.drawImage(hero[p.getIndex()], game.getCurrentPlayerPostionX() + paddingImage[p.getIndex()],
-							game.getCurrentPlayerPostionY(), this);
-			}
-		}
-
-		private void setHero() {
-			try {
-				for (int i = 0; i < 4; i++)
-					hero[i] = ImageIO.read(SnakeGUI.class.getResource("/resources/hero" + (i + 1) + ".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
+					g.drawImage(hero[p.getIndex()],
+							game.getPlayerPostionX(game.currentPlayer()) + paddingImage[p.getIndex()],
+							game.getPlayerPostionY(game.currentPlayer()), this);
 			}
 		}
 
@@ -464,54 +446,45 @@ public class SnakeGUI extends JFrame {
 
 			if (game.isEnd()) {
 				rollButton.setEnabled(false);
-				consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!!");
+				if (!game.isReplay())
+					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " WIN!!! \n\n");
 				updateConsoleHistory();
 				replayButton.setEnabled(true);
 				btnNewGame.setEnabled(true);
+				rdbtn2Players.setEnabled(true);
+				rdbtn3Players.setEnabled(true);
+				rdbtn4Players.setEnabled(true);
 			} else if (arg == null)
 				timer.start();
 			else { /** check element */
 				int commandID = (int) arg;
-				if (commandID == Game.NO_COMMAND)
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " normal walking.\n\n");
-				else if (commandID == Game.SNAKE_COMMAND) {
-					System.out.println("Facing snake.");
+				if (commandID == Game.NO_COMMAND) {
+					if (!game.isReplay())
+						consoleHistory = consoleHistory.concat(game.currentPlayerName() + " see nothing.\n\n");
+				} else if (commandID == Game.SNAKE_COMMAND) {
 					isMoveDirectly = true;
 					repaint();
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " faces Snake.\n\n");
+					if (!game.isReplay())
+						consoleHistory = consoleHistory
+								.concat(game.currentPlayerName() + " faces Snake (going down).\n\n");
 				} else if (commandID == Game.LADDER_COMMAND) {
-					System.out.println("Facing ladder.");
 					isMoveDirectly = true;
 					repaint();
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " faces Ladder.\n\n");
+					if (!game.isReplay())
+						consoleHistory = consoleHistory
+								.concat(game.currentPlayerName() + " faces Ladder (climbing up).\n\n");
 				} else if (commandID == Game.FREEZE_COMMAND) {
-					System.out.println("The training is coming. Freeze 1 turn.");
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " Freeze!!!\n\n");
-				} else if (commandID == Game.BACKWARD_COMMAND) {
-					System.out.println("Let's go party. Going backward.");
-					consoleHistory = consoleHistory.concat(game.currentPlayerName() + " Backward!!!\n\n");
-				}
+					if (!game.isReplay())
+						consoleHistory = consoleHistory.concat(
+								game.currentPlayerName() + " must wait for the train passing. (freeze next turn)\n\n");
+				} else if (commandID == Game.BACKWARD_COMMAND)
+					if (!game.isReplay())
+						consoleHistory = consoleHistory
+								.concat(game.currentPlayerName() + " get drunk now!! (going backward next turn)\n\n");
 				updateConsoleHistory();
 				rollButton.setEnabled(true);
 			}
 
-		}
-
-		class MoveByStep implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (startX < destX)
-					startX++;
-				else if (startX > destX)
-					startX--;
-				else if (startY > destY)
-					startY--;
-				else if (startY < destY)
-					startY++;
-				else if (startX == destX && startY == destY)
-					timer.stop();
-				repaint();
-			}
 		}
 
 	}

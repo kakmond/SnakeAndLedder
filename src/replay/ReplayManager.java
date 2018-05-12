@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ReplayManager implements Iterable<PlayerHistory> {
+public class ReplayManager implements Iterable<Memento> {
 
-	private List<PlayerHistory> histories = new ArrayList<>();
+	private List<Memento> histories = new ArrayList<>();
 
-	public void addReplay(PlayerHistory history) {
+	public void addReplay(Memento history) {
 		this.histories.add(history);
 	}
 
 	@Override
-	public Iterator<PlayerHistory> iterator() {
-		return new Iterator<PlayerHistory>() {
+	public Iterator<Memento> iterator() {
+		return new Iterator<Memento>() {
 
 			private int index = 0;
 
@@ -24,10 +24,11 @@ public class ReplayManager implements Iterable<PlayerHistory> {
 			}
 
 			@Override
-			public PlayerHistory next() {
-				return histories.get(index);
+			public Memento next() {
+				Memento m = histories.get(index);
+				index++;
+				return m;
 			}
-
 		};
 	}
 
