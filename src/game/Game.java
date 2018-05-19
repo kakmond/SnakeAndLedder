@@ -20,7 +20,6 @@ public class Game extends Observable {
 	private int currentPlayerDiceValue;
 
 	private boolean isReplay;
-	private ReplayManager replayManager;
 	private Iterator<Memento> replayList;
 
 	public static final int NO_COMMAND = 0;
@@ -32,7 +31,6 @@ public class Game extends Observable {
 	private Thread gameThread;
 
 	public Game() {
-		replayManager = new ReplayManager();
 		isReplay = false;
 		ended = false;
 		die = new Die();
@@ -83,13 +81,16 @@ public class Game extends Observable {
 			else if (commandID == FREEZE_COMMAND)
 				currentPlayer().setStrategy(new FreezeDice());
 		}
+		if (board.playerIsAtGoal(currentPlayer()))
+			end();
+		else
+			switchPlayer();
 		super.setChanged();
 		/** send commandID to notify which walk pattern should perform */
 		super.notifyObservers(commandID);
 	}
 
 	public void setPlayer(int num) {
-		replayManager = new ReplayManager();
 		isReplay = false;
 		ended = false;
 		players = new Player[num];
@@ -126,10 +127,7 @@ public class Game extends Observable {
 							currentPlayerMoveByStep(diceValue);
 							gameLogic();
 						}
-						if (board.playerIsAtGoal(currentPlayer()))
-							end();
-						else
-							switchPlayer();
+
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
 					}
@@ -145,8 +143,6 @@ public class Game extends Observable {
 
 	private void end() {
 		ended = true;
-		setChanged();
-		notifyObservers();
 	}
 
 	public Player currentPlayer() {
@@ -179,7 +175,7 @@ public class Game extends Observable {
 			currentPlayer().setDestXY(getPlayerPostionX(currentPlayer()), getPlayerPostionY(currentPlayer()));
 			setChanged();
 			notifyObservers();
-			Thread.sleep(600);
+			Thread.sleep(500);
 		}
 		currentPlayer().setStartXY(getPlayerPostionX(currentPlayer()), getPlayerPostionY(currentPlayer()));
 	}
@@ -210,8 +206,6 @@ public class Game extends Observable {
 
 	public void currentPlayerMove(int face) {
 		this.currentPlayerDiceValue = face;
-		if (!isReplay)
-			this.replayManager.addReplay(saveStateToMemento());
 		synchronized (gameThread) {
 			gameThread.notify();
 		}
@@ -221,11 +215,11 @@ public class Game extends Observable {
 		return this.isReplay;
 	}
 
-	public void replay() {
+	public void replay(ReplayManager replay) {
 		currentPlayerIndex = 0;
 		this.isReplay = true;
 		this.ended = false;
-		this.replayList = replayManager.iterator();
+		this.replayList = replay.iterator();
 		/** Set players to start point */
 		for (Player p : players) {
 			board.movePlayerToDest(p, 0);
@@ -234,10 +228,6 @@ public class Game extends Observable {
 		}
 		/** Load dice histories from ReplayManager */
 		this.start();
-	}
-
-	private Memento saveStateToMemento() {
-		return new Memento(currentPlayerDiceValue);
 	}
 
 	private void getDiceValueFromMemento(Memento memento) {

@@ -18,6 +18,8 @@ import javax.swing.WindowConstants;
 import game.Board;
 import game.Game;
 import game.Player;
+import replay.Memento;
+import replay.ReplayManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
@@ -37,11 +39,13 @@ public class SnakeGUI extends JFrame {
 
 	private Renderer renderer;
 	private Game game;
+	private ReplayManager replayManager;
 
 	/**
 	 * Create the application.
 	 */
 	public SnakeGUI(Game game) {
+		replayManager = new ReplayManager();
 		this.game = game;
 		initialize();
 	}
@@ -141,7 +145,6 @@ public class SnakeGUI extends JFrame {
 			imageDice.setBounds(1050, 10, 135, 194);
 
 			textPlayerTurn.setEditable(false);
-			textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 			textPlayerTurn.setHorizontalAlignment(JTextField.CENTER);
 			textPlayerTurn.setBounds(900, 110, 135, 50);
 
@@ -157,7 +160,7 @@ public class SnakeGUI extends JFrame {
 					rdbtn2Players.setEnabled(false);
 					rdbtn3Players.setEnabled(false);
 					rdbtn4Players.setEnabled(false);
-					game.replay();
+					game.replay(replayManager);
 					if (game.isReplay())
 						consoleHistory = consoleHistory.concat("Replaying...\n\n");
 					updateConsoleHistory();
@@ -193,21 +196,21 @@ public class SnakeGUI extends JFrame {
 								+ (game.getPlayerPostion(game.currentPlayer()) + face + 1) + " positions.\n");
 
 					game.currentPlayerMove(face);
+					replayManager.addReplay(new Memento(face));
 
-					if (face == 1)
+					if (Math.abs(face) == 1)
 						imageDice.setIcon(dice[0]);
-					else if (face == 2)
+					else if (Math.abs(face) == 2)
 						imageDice.setIcon(dice[1]);
-					else if (face == 3)
+					else if (Math.abs(face) == 3)
 						imageDice.setIcon(dice[2]);
-					else if (face == 4)
+					else if (Math.abs(face) == 4)
 						imageDice.setIcon(dice[3]);
-					else if (face == 5)
+					else if (Math.abs(face) == 5)
 						imageDice.setIcon(dice[4]);
-					else if (face == 6)
+					else if (Math.abs(face) == 6)
 						imageDice.setIcon(dice[5]);
 
-					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 					textConsole.setText(consoleHistory);
 				}
 			});
@@ -319,7 +322,9 @@ public class SnakeGUI extends JFrame {
 
 					isMoveDirectly = true;
 					repaint();
+					replayManager = new ReplayManager();
 					game.start();
+					textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
 				}
 			});
 
@@ -483,6 +488,9 @@ public class SnakeGUI extends JFrame {
 								.concat(game.currentPlayerName() + " get drunk now!! (going backward next turn)\n\n");
 				updateConsoleHistory();
 				rollButton.setEnabled(true);
+
+				textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
+
 			}
 
 		}
