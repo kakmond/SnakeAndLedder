@@ -40,7 +40,7 @@ public class Game extends Observable {
 
 		// Set and add Snake position
 		Snake[] snakes = { new Snake(49, 4), new Snake(42, 16), new Snake(55, 7), new Snake(72, 14), new Snake(86, 48),
-				new Snake(83, 57), new Snake(97, 39) };
+				new Snake(83, 62), new Snake(97, 39) };
 		for (Snake s : snakes)
 			board.addElement(s, s.getHead());
 
@@ -126,7 +126,8 @@ public class Game extends Observable {
 						if (diceValue != 0) {
 							currentPlayerMoveByStep(diceValue);
 							gameLogic();
-						}
+						} else
+							switchPlayer();
 
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();

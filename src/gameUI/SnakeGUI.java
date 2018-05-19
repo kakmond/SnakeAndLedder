@@ -174,11 +174,13 @@ public class SnakeGUI extends JFrame {
 			rollButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
+
 					int face = game.currentPlayerRollDice();
-					if (face == 0)
+					if (face == 0) {
 						consoleHistory = consoleHistory
 								.concat("Player's Turn : " + game.currentPlayerName() + "\n" + "Freeze.\n\n");
-					else if (face < 0)
+						rollButton.setEnabled(true);
+					} else if (face < 0)
 						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 								+ "He/She gets drunk and rolls dice.\n" + "--> get " + Math.abs(face) + " value(s).\n"
 								+ "--> Move backward to " + (game.getPlayerPostion(game.currentPlayer()) + face + 1)
@@ -187,8 +189,7 @@ public class SnakeGUI extends JFrame {
 						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
 								+ "He/She rolls dice.\n" + "--> get " + face + " value(s).\n"
 								+ "Get through ending point.\n" + "--> So move backward to "
-								+ ((game.getPlayerPostion(game.currentPlayer()) + 1)
-										- (game.getPlayerPostion(game.currentPlayer()) + face - Board.SIZE))
+								+ (Board.SIZE - ((game.getPlayerPostion(game.currentPlayer()) + face + 1) - Board.SIZE))
 								+ " positions.\n");
 					else
 						consoleHistory = consoleHistory.concat("Player's Turn : " + game.currentPlayerName() + "\n"
@@ -417,18 +418,17 @@ public class SnakeGUI extends JFrame {
 		}
 
 		private void paintHeroByStep(Graphics g) {
-			for (Player p : game.getPlayers()) {
+			for (Player p : game.getPlayers())
 				if (p != game.currentPlayer())
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
-				else {
+				else
 					g.drawImage(hero[p.getIndex()], startX + paddingImage[p.getIndex()], startY, this);
-				}
-			}
+
 		}
 
 		private void paintHeroByDirectly(Graphics g) {
-			for (Player p : game.getPlayers()) {
+			for (Player p : game.getPlayers())
 				if (p != game.currentPlayer())
 					g.drawImage(hero[p.getIndex()], game.getPlayerPostionX(p) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(p), this);
@@ -436,7 +436,6 @@ public class SnakeGUI extends JFrame {
 					g.drawImage(hero[p.getIndex()],
 							game.getPlayerPostionX(game.currentPlayer()) + paddingImage[p.getIndex()],
 							game.getPlayerPostionY(game.currentPlayer()), this);
-			}
 		}
 
 		@Override
@@ -486,11 +485,11 @@ public class SnakeGUI extends JFrame {
 					if (!game.isReplay())
 						consoleHistory = consoleHistory
 								.concat(game.currentPlayerName() + " get drunk now!! (going backward next turn)\n\n");
-				updateConsoleHistory();
-				rollButton.setEnabled(true);
-
+				if (!game.isReplay()) {
+					updateConsoleHistory();
+					rollButton.setEnabled(true);
+				}
 				textPlayerTurn.setText(game.currentPlayerName() + "'s turn.");
-
 			}
 
 		}
