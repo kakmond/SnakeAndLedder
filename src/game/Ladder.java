@@ -19,7 +19,8 @@ public class Ladder implements Element {
 	}
 
 	@Override
-	public int actionCommand() {
+	public int actionCommand(Board board, Player player) {
+		board.movePlayerToDest(player, getTop());
 		return Game.LADDER_COMMAND;
 	}
 

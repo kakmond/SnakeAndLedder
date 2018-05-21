@@ -5,8 +5,6 @@ import java.util.Observable;
 
 import replay.Memento;
 import replay.ReplayManager;
-import strategy.BackwardDice;
-import strategy.FreezeDice;
 
 public class Game extends Observable {
 
@@ -36,7 +34,6 @@ public class Game extends Observable {
 		die = new Die();
 		board = new Board();
 		currentPlayerIndex = 0;
-		// gameThread.start();
 
 		// Set and add Snake position
 		Snake[] snakes = { new Snake(49, 4), new Snake(42, 16), new Snake(55, 7), new Snake(72, 14), new Snake(86, 48),
@@ -69,17 +66,7 @@ public class Game extends Observable {
 		Square currentPlayerSquare = board.getPlayerSquare(currentPlayer());
 		if (currentPlayerSquare.isElement()) {
 			Element element = currentPlayerSquare.getElement();
-			commandID = element.actionCommand();
-			if (commandID == SNAKE_COMMAND) {
-				Snake snake = (Snake) element;
-				board.movePlayerToDest(currentPlayer(), snake.getTail());
-			} else if (commandID == LADDER_COMMAND) {
-				Ladder ladder = (Ladder) element;
-				board.movePlayerToDest(currentPlayer(), ladder.getTop());
-			} else if (commandID == BACKWARD_COMMAND)
-				currentPlayer().setStrategy(new BackwardDice());
-			else if (commandID == FREEZE_COMMAND)
-				currentPlayer().setStrategy(new FreezeDice());
+			commandID = element.actionCommand(board, currentPlayer());
 		}
 		if (board.playerIsAtGoal(currentPlayer()))
 			end();
@@ -108,7 +95,6 @@ public class Game extends Observable {
 	}
 
 	public void start() {
-
 		gameThread = new Thread() {
 			@Override
 			public void run() {

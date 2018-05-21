@@ -1,7 +1,7 @@
 package game;
 
-import strategy.DiceStrategy;
-import strategy.NormalDice;
+import state.DiceState;
+import state.NormalDice;
 
 public class Player {
 
@@ -14,21 +14,21 @@ public class Player {
 	private int destX;
 	private int destY;
 
-	private DiceStrategy strategy;
+	private DiceState state;
 
 	public Player(String name, int index) {
+		this.state = new NormalDice();
 		this.index = index;
-		this.strategy = new NormalDice();
 		this.name = name;
 	}
 
-	public void setStrategy(DiceStrategy strategy) {
-		this.strategy = strategy;
+	public void setState(DiceState state) {
+		this.state = state;
 	}
 
 	public int roll(Die die) {
-		int val = this.strategy.roll(die);
-		this.setStrategy(new NormalDice());
+		int val = this.state.roll(die);
+		this.state = new NormalDice();
 		return val;
 	}
 

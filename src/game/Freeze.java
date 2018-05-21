@@ -1,5 +1,7 @@
 package game;
 
+import state.FreezeDice;
+
 public class Freeze implements Element {
 
 	private int sq;
@@ -13,7 +15,8 @@ public class Freeze implements Element {
 	}
 
 	@Override
-	public int actionCommand() {
+	public int actionCommand(Board board, Player player) {
+		player.setState(new FreezeDice());
 		return Game.FREEZE_COMMAND;
 	}
 

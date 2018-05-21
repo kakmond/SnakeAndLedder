@@ -1,8 +1,8 @@
-package strategy;
+package state;
 
 import game.Die;
 
-public interface DiceStrategy {
+public interface DiceState {
 
 	public int roll(Die die);
 
