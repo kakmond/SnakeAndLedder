@@ -464,25 +464,25 @@ public class SnakeGUI extends JFrame {
 				int commandID = (int) arg;
 				if (commandID == Game.NO_COMMAND) {
 					if (!game.isReplay())
-						consoleHistory = consoleHistory.concat("see nothing.\n\n");
+						consoleHistory = consoleHistory.concat("See nothing.\n\n");
 				} else if (commandID == Game.SNAKE_COMMAND) {
 					isMoveDirectly = true;
 					repaint();
 					if (!game.isReplay())
-						consoleHistory = consoleHistory.concat("player faces Snake (going down).\n\n");
+						consoleHistory = consoleHistory.concat("Player faces Snake (going down).\n\n");
 				} else if (commandID == Game.LADDER_COMMAND) {
 					isMoveDirectly = true;
 					repaint();
 					if (!game.isReplay())
-						consoleHistory = consoleHistory.concat("player faces Ladder (climbing up).\n\n");
+						consoleHistory = consoleHistory.concat("Player faces Ladder (climbing up).\n\n");
 				} else if (commandID == Game.FREEZE_COMMAND) {
 					if (!game.isReplay())
 						consoleHistory = consoleHistory
-								.concat("player must wait for the train passing. (freeze next turn)\n\n");
+								.concat("Player must wait for the train passing. (freeze next turn)\n\n");
 				} else if (commandID == Game.BACKWARD_COMMAND)
 					if (!game.isReplay())
 						consoleHistory = consoleHistory
-								.concat("player gets drunk now!! (going backward next turn)\n\n");
+								.concat("Player gets drunk now!! (going backward next turn)\n\n");
 				if (!game.isReplay()) {
 					updateConsoleHistory();
 					rollButton.setEnabled(true);
