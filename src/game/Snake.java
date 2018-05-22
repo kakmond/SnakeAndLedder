@@ -19,7 +19,8 @@ public class Snake implements Element {
 	}
 
 	@Override
-	public int actionCommand() {
+	public int actionCommand(Board board, Player player) {
+		board.movePlayerToDest(player, getTail());
 		return Game.SNAKE_COMMAND;
 	}
 

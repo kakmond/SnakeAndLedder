@@ -1,5 +1,7 @@
 package game;
 
+import state.BackwardDice;
+
 public class Backward implements Element {
 
 	private int sq;
@@ -13,7 +15,8 @@ public class Backward implements Element {
 	}
 
 	@Override
-	public int actionCommand() {
+	public int actionCommand(Board board, Player player) {
+		player.setState(new BackwardDice());
 		return Game.BACKWARD_COMMAND;
 	}
 

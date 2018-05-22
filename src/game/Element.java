@@ -2,6 +2,6 @@ package game;
 
 public interface Element {
 
-	public int actionCommand();
+	public int actionCommand(Board board, Player player);
 
 }
