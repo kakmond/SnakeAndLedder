@@ -48,7 +48,7 @@ Download the SnakesAndLadders.jar file or click this [link](SnakesAndLadders.jar
 
 - But if they roll the die and the steps are across the goal, they excessive steps will move players to go backward from this square.
 
-## Design Patters
+## Design Patterns
 
 - Varit
 
