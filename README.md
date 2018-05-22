@@ -20,7 +20,7 @@ Download the SnakesAndLadders.jar or click this [link](SnakesAndLadders.jar).
 
 - Normal square 
 
-this is normal square, nothing special.
+-- this is normal square, nothing special.
 
 - Ladder square 
 
