@@ -1,18 +1,18 @@
-# Snake and Ladder game 
+# Snake and Ladder game :game_die:
 
 This project is the part of Software Specification and Desgin course (01219243) at Kasetsart University.
 <p align="center">
   <img src="https://github.com/kakmond/SnakeAndLedder/blob/master/src/resources/newBoard.jpeg">
 </p>
 
-## Domain Model
+## Domain Model :page_with_curl:
 ![Domain](https://github.com/kakmond/SnakeAndLedder/blob/master/Domain%20Model.jpg)
 
-## UML Class Diagram
+## UML Class Diagram :page_facing_up:
 ![UML](https://github.com/kakmond/SnakeAndLedder/blob/master/UML%20Class%20Diagram.jpg)
 
 
-## Rules
+## Rules :warning:
 
 ### Normal square 
 
@@ -44,19 +44,21 @@ This project is the part of Software Specification and Desgin course (01219243) 
 
 - If player's position more than goal, player will move backward as the value that over the goal.
 
-## How to play
-
+## How to play :video_game:
+ 
 Download the SnakesAndLadders.jar file or click this [link](SnakesAndLadders.jar).
 
-## Design Patterns
+## Design Patterns :pencil2:
 
-- Varit
+- Observer design pattern
 
-- Varit
+- State and Strategy design pattern
 
-- Varit
+- Iterator design pattern 
 
-## Members
+- Memento design pattern
+
+## Members :mortar_board:
 
 - Wongsathorn Panichkurkul 5910545817
 - Sathira Kittisukmongkol 5910545868
