@@ -20,7 +20,7 @@ Download the SnakesAndLadders.jar file or click this [link](SnakesAndLadders.jar
 
 ### Normal square 
 
-- this is normal square, nothing special.
+- This is normal square, nothing special.
 
 ### Ladder square 
 
@@ -44,8 +44,15 @@ Download the SnakesAndLadders.jar file or click this [link](SnakesAndLadders.jar
 
 ### Goal square
 
-- If the players stop at this sqaure, they win!. 
+- If the players stop at this square, they win! 
 
 - But if they roll the die and the steps are across the goal, they excessive steps will move players to go backward from this square.
 
+## Design Patters
+
+- Varit
+
+- Varit
+
+- Varit
 
