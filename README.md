@@ -18,34 +18,34 @@ Download the SnakesAndLadders.jar or click this [link](SnakesAndLadders.jar).
 
 ## Rules
 
-- Normal square 
+### Normal square 
 
--- this is normal square, nothing special.
+- this is normal square, nothing special.
 
-- Ladder square 
+### Ladder square 
 
-If the players roll the die and stop at buttom of the ladder, they will move to top of the ladder. 
+- If the players roll the die and stop at buttom of the ladder, they will move to top of the ladder. 
 
-But if they stop at top of the ladder, nothing special.
+- But if they stop at top of the ladder, nothing special.
 
-- Snake square 
+### Snake square 
 
-If the players stop at the head of snake, they will move down to the square that snake's tail is located. 
+- If the players stop at the head of snake, they will move down to the square that snake's tail is located. 
 
-But if they stop at the tail of snake, nothing special.
+- But if they stop at the tail of snake, nothing special.
 
-- Freeze square 
+### Freeze square 
 
-If the players stop at this square, they cannot move in the next turn.
+- If the players stop at this square, they cannot move in the next turn.
 
-- Backward square 
+### Backward square 
 
-If the players stop at this square, for the next turn they will move backward.
+- If the players stop at this square, for the next turn they will move backward.
 
-- Goal square
+### Goal square
 
-If the players stop at this sqaure, they win!. 
+- If the players stop at this sqaure, they win!. 
 
-But if they roll the die and the steps are across the goal, they excessive steps will move players to go backward from this square.
+- But if they roll the die and the steps are across the goal, they excessive steps will move players to go backward from this square.
 
 
