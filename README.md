@@ -14,7 +14,7 @@ This project is the part of Software Specification and Desgin course (01219243) 
 
 ## How to play
 
-Download the SnakesAndLadders.jar or click this [link](SnakesAndLadders.jar).
+Download the SnakesAndLadders.jar file or click this [link](SnakesAndLadders.jar).
 
 ## Rules
 
