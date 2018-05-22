@@ -1,12 +1,16 @@
 # Snake and Ladder game 
 
 This project is the part of Software Specification and Desgin course (01219243) at Kasetsart University.
+<p align="center">
+  <img src="https://github.com/kakmond/SnakeAndLedder/blob/master/src/resources/newBoard.jpeg">
+</p>
 
-## Members
+## Domain Model
+![Domain](https://github.com/kakmond/SnakeAndLedder/blob/master/Domain%20Model.jpg)
 
-- Wongsathorn Panichkurkul 5910545817
-- Sathira Kittisukmongkol 5910545868
-- Varit Assavavisidchai 5910545833
+## UML Class Diagram
+![UML](https://github.com/kakmond/SnakeAndLedder/blob/master/UML%20Class%20Diagram.jpg)
+
 
 ## Rules
 
@@ -52,3 +56,8 @@ Download the SnakesAndLadders.jar file or click this [link](SnakesAndLadders.jar
 
 - Varit
 
+## Members
+
+- Wongsathorn Panichkurkul 5910545817
+- Sathira Kittisukmongkol 5910545868
+- Varit Assavavisidchai 5910545833
